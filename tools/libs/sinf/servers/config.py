@@ -16,6 +16,8 @@ with config_path.open("r", encoding="utf-8") as f:
     config_local = yaml.load(f, Loader=yaml.FullLoader)
 
 sqlite_path = sinftools_dir / "var/databases/fila.db"
+if not sqlite_path.parent.exists():
+    os.mkdir(sqlite_path.parent)
 database_url = f"sqlite:///{sqlite_path}"
 # database_url = config_local['database_url']
 iped_folder = Path(config_local['iped_folder'])
