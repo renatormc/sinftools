@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.twbsPagination.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" data-toggle="tooltip" title="ref: {{ chat.id }}">{{ chat.friendly_identifier }} ({{
+                        chat.source }})</a>
+                </li>
+                <li>
+                    <a href="participants{{ chat.id }}.html" data-toggle="tooltip" title="Participantes"><span
+                            class="glyphicon glyphicon-user"></span></a>
+                </li>
+                {% if total_audios > 0 %}
+                <li>
+                    <a href="audios{{ chat.id }}_page_1.html" data-toggle="tooltip" title="Audios da conversa"><span
+                            class="glyphicon glyphicon-headphones"><span
+                                class="badge">{{ total_audios }}</span></span></a>
+                </li>
+                {% endif %}
+                {% if total_images > 0 %}
+                <li>
+                    <a href="images{{ chat.id }}_page_1.html" data-toggle="tooltip" title="Imagens da conversa"><span
+                            class="glyphicon glyphicon-picture"><span class="badge">{{ total_images }}</span></a></span>
+                </li>
+                {% endif %}
+                {% if total_videos > 0 %}
+                <li>
+                    <a href="videos{{ chat.id }}_page_1.html" data-toggle="tooltip" title="Vídeos da conversa"><span
+                            class="glyphicon glyphicon-facetime-video"></span><span
+                            class="badge">{{ total_videos }}</span></a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid" id="mensagens">
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-header"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-footer"></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagem</h4>
+            </div>
+            <div class="modal-body">
+                <img src="#" id="imagemModal">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content text-center">
+            <div class="modal-body">
+                <button type="button" style="float: right;" class="btn btn-default" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <video src="#" controls id="videoElementModal" class="rm-video-element-modal">
+                    Seu navegador não suporta o elemento <code>video</code>.
+                </video>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</html>
+<script>
+    $(document).ready(function () {
+        $("#videoModal").on('hide.bs.modal', function () {
+            $("#videoElementModal").trigger('pause');
+        });
+    });
+    function imageClick(link) {
+        $("#imagemModal").attr("src", link);
+        $('#modalFoto').modal('toggle');
+    }
+
+    function videoClick(link) {
+        $("#videoElementModal").attr("src", link);
+        $("#videoModal").modal("toggle");
+        $("#videoElementModal").trigger('play');
+    }
+
+    var total_clicks_footer = 0;
+    var start_page = parseInt("{{ pagination['page'] }}");
+    var total_pages = parseInt("{{ pagination['pages'] }}");
+    $('#pagination-here-footer').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_footer += 1;
+            if (total_clicks_footer > 1) {
+                window.location.href = "chat{{ chat.id }}_page_" + page + ".html";
+            }
+        }
+    });
+    var total_clicks_header = 0;
+    $('#pagination-here-header').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_header += 1;
+            if (total_clicks_header > 1) {
+                window.location.href = "chat{{ chat.id }}_page_" + page + ".html";
+            }
+        }
+    });
+</script>
+
+<style>
+    .mensagem {
+        border-bottom: 1px solid #B3A9A9;
+        padding: 4px;
+    }
+
+    #mensagens {
+        margin-top: 60px;
+    }
+
+    .mensagem-excluida {
+        color: red;
+    }
+
+    .remetente {
+        font-weight: bold;
+    }
+
+    .horario {
+        float: right;
+    }
+
+    .avatar {
+        float: left;
+        display: block;
+        max-width: 80px;
+        margin-right: 4px;
+    }
+
+    .imagem {
+        max-width: 200px;
+    }
+
+    .imagem:hover {
+        cursor: pointer;
+    }
+
+    .video {
+        max-width: 200px;
+    }
+
+    .green {
+        background-color: rgb(226, 236, 226);
+    }
+
+    .mensagem-do-dono {
+        background-color: rgb(206, 218, 236);
+    }
+
+    .mensagem-de-outro {
+        background-color: white;
+    }
+
+    .glyphicon {
+        font-size: 1.5em;
+    }
+
+    #imagemModal {
+        max-width: 500px;
+        min-width: 200px;
+    }
+
+    .emoji {
+        width: 20px;
+    }
+
+    .quote {
+        margin-left: 5em;
+        margin-right: 5em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        border-left: 10px solid #ccc;
+        background: #ebf5de;
+    }
+
+    .badge {
+        background-color: red;
+    }
+
+    .mensagem {
+        border-bottom: 1px solid #B3A9A9;
+        padding: 4px;
+    }
+
+    #mensagens {
+        margin-top: 60px;
+    }
+
+    .mensagem-excluida {
+        color: red;
+    }
+
+    .remetente {
+        font-weight: bold;
+    }
+
+    .horario {
+        float: right;
+    }
+
+    .avatar {
+        float: left;
+        display: block;
+        max-width: 80px;
+        margin-right: 4px;
+    }
+
+    .imagem {
+        max-width: 200px;
+    }
+
+    .imagem:hover {
+        cursor: pointer;
+    }
+
+    .video {
+        max-width: 200px;
+    }
+
+    .green {
+        background-color: rgb(226, 236, 226);
+    }
+
+    .mensagem-do-dono {
+        background-color: rgb(206, 218, 236);
+    }
+
+    .mensagem-de-outro {
+        background-color: white;
+    }
+
+    .glyphicon {
+        font-size: 1.5em;
+    }
+
+    #imagemModal {
+        max-width: 500px;
+        min-width: 200px;
+    }
+
+    .emoji {
+        width: 20px;
+    }
+
+    .quote {
+        margin-left: 5em;
+        margin-right: 5em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        border-left: 10px solid #ccc;
+        background: #ebf5de;
+    }
+
+    .badge {
+        background-color: red;
+    }
+
+    .video {
+        max-width: 200px;
+
+    }
+
+    .video:hover {
+        cursor: pointer;
+    }
+
+    .video-thumbnail {
+        max-width: 300px;
+
+    }
+
+    .video-thumbnail:hover {
+        cursor: pointer;
+    }
+
+    table {
+        display: inline;
+    }
+
+    table td {
+        padding: 4px;
+    }
+
+    .emoji {
+        width: 20px;
+    }
+
+    .speech-bubble {
+        position: relative;
+        left: 90px;
+        border-radius: .4em;
+        background: rgb(215, 247, 210);
+        max-width: 500px;
+        min-height: 70px;
+        padding: 5px 5px 5px 5px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+    
+    .speech-bubble:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 0;
+        height: 0;
+        border: 20px solid transparent;
+        border-right-color: rgb(215, 247, 210);
+        border-left: 0;
+        border-top: 0;
+        margin-top: -10px;
+        margin-left: -20px;
+    }
+    
+    .speech-content {
+        padding: 5px;
+    }
+    
+    .speech-bubble .speech-from {
+        font-weight: bold;
+        position: absolute;
+        top: -20px;
+        left: 0px;
+    }
+    
+    .speech-bubble .speech-timestamp {
+        position: absolute;
+        bottom: -25px;
+        right: 0px;
+    }
+    
+    .speech-bubble .speech-action-button {
+        position: absolute;
+        bottom: -25px;
+        left: 0px;
+    }
+    
+    .speech-bubble .speech-avatar {
+        position: absolute;
+        width: 70px;
+        top: 50%;
+        left: -95px;
+        border-radius: 50%;
+        transform: translate(0%, -50%);
+        cursor: pointer;
+    }
+    
+    
+    .speech-bubble-owner {
+        position: relative;
+        left: 90px;
+        border-radius: .4em;
+        background: #cce3f8;
+        max-width: 500px;
+        min-height: 70px;
+        padding: 5px 5px 5px 5px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        margin-left: 40px;
+    }
+    
+    .speech-bubble-owner:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        width: 0;
+        height: 0;
+        border: 20px solid transparent;
+        border-left-color: #cce3f8;
+        border-right: 0;
+        border-top: 0;
+        margin-top: -10px;
+        margin-right: -20px;
+    }
+    
+    .speech-content {
+        padding: 5px;
+    }
+    
+    .speech-bubble-owner .speech-from {
+        font-weight: bold;
+        position: absolute;
+        top: -20px;
+        right: 0px;
+    }
+    
+    .speech-bubble-owner .speech-timestamp {
+        position: absolute;
+        bottom: -25px;
+        left: 0px;
+    }
+    
+    .speech-bubble-owner .speech-action-button {
+        position: absolute;
+        bottom: -25px;
+        right: 0px;
+    }
+    
+    .speech-bubble-owner .speech-avatar {
+        position: absolute;
+        width: 70px;
+        top: 50%;
+        right: -95px;
+        border-radius: 50%;
+        transform: translate(0%, -50%);
+        cursor: pointer;
+    }
+
+    .rm-image-thumbnail {
+        max-width: 100px;
+    }
+    
+    .rm-image-thumbnail:hover {
+        cursor: pointer;
+    }
+    
+    .rm-video-thumbnail {
+        max-width: 200px;
+    }
+    
+    .rm-video-attachment {
+        max-width: 200px;
+    }
+    
+    .rm-video-thumbnail:hover {
+        cursor: pointer;
+    }
+</style>

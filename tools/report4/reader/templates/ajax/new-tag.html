@@ -1,0 +1,26 @@
+{% set rid = random_id() %}
+<tr class="tr-tag" id="{{ rid }}">
+    <td hidden><input type="text" class="field-id" value="{{ tag.id if tag.id}}"></td>
+    <td> <input type="text" class="form-control field-name" value="{{ tag.name if tag.name }}"> </td>
+    <td> <textarea class="form-control field-description" name="" id="" cols="30"
+            rows="2">{{ tag.description if tag.description }}</textarea>
+    </td>
+    <td>
+        <div class="checkbox">
+            <label><input class="field-highlight" type="checkbox"
+                    {% if tag.highlight %}checked{%endif%}>Destaque</label>
+        </div>
+
+    </td>
+    <td>
+
+        <div class="input-group colorpicker-component">
+            <input type="text" class="form-control field-color" value="{{ tag.color if tag.color else '#000000' }}">
+
+            <span class="input-group-addon"><i></i></span>
+        </div>
+    </td>
+    <td>
+        <button class="btn btn-danger" onclick="deleteTag('{{rid}}')">Deletar</button>
+    </td>
+</tr>

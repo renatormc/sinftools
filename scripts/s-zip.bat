@@ -1,0 +1,1 @@
+""%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\sinf_zip\zip.py" %*

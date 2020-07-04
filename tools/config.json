@@ -1,0 +1,6 @@
+{
+    "url_frases_prontas": "http://10.129.3.14/api",
+    "url_api_updater": "http://10.129.3.14/static/others/sinftools_folder.html",
+    "url_new_realease": "http://localhost/new_release.php",
+    "pasta_servidor": "F:\\sinftools"
+}

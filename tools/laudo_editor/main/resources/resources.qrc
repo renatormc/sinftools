@@ -1,0 +1,18 @@
+<RCC>
+  <qresource prefix="icones">
+    <file>notebook.png</file>
+    <file>action.ico</file>
+    <file>pluguin.png</file>
+    <file>table.png</file>
+    <file>quadro.png</file>
+    <file>addword.ico</file>
+    <file>search.ico</file>
+    <file>foto.png</file>
+    <file>replacepicture.png</file>
+    <file>replaceall.png</file>
+    <file>replace.png</file>
+    <file>word.png</file>
+    <file>figura.png</file>
+    <file>imagens.png</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "${env:SINFTOOLS}\\Miniconda3\\python.exe",
+    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.preferredDarkColorTheme": "Visual Studio Dark"
+}

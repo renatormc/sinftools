@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% import "macros.html" as macros with context  %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+{% if chat %}
+<h3>{{ chat.friendly_identifier }}<span class="badge">{{ pagination['n_items'] }}</span></h3>
+{% else %}
+<h3>Mensagens de todos os chats <span class="badge">{{ pagination['n_items'] }}</span></h3>
+{% endif %}
+{% endblock %}
+{% block nav_bar_aditional %}
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs">
+                <li {% if not form.errors %}class="active" {% endif %}><a data-toggle="tab"
+                        href="#tabData">Mensagens</a></li>
+                <li {% if form.errors %}class="active" {% endif %}><a data-toggle="tab" href="#tabFilter"> <span
+                            class="glyphicon glyphicon-search"></span>Pesquisar</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tabData" class="tab-pane fade{% if not form.errors %}in active{% endif %}">
+                    <div class="rm-pagination-fixed">
+                        {{ macros.pagination_links(pagination, view=view, args=args ) }}
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <th></th>
+                            <th>
+                                <div class="dropdown">
+                                    <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                        data-toggle="dropdown">Marcar
+                                        <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" onclick="checkAll('Message')">Marcar todos nesta página</a></li>
+                                        <li><a href="#" onclick="checkAllComplete('Message')">Marcar todos filtrados</a>
+                                        </li>
+                                        <li><a href="#" onclick="uncheckAll('Message')">Desmarcar todos nesta página</a>
+                                        </li>
+                                        <li><a href="#" onclick="uncheckAllComplete('Message')">Desmarcar todos
+                                                filtrados</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="dropdown">
+                                    <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                        data-toggle="dropdown">Etiquetas
+                                        <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" onclick="addManyTags('Message')">Adicionar em todos nesta
+                                                página</a></li>
+                                        <li><a href="#" onclick="addManyTagsComplete('Message')">Adicionar em todos
+                                                filtrados</a>
+                                        </li>
+                                        <li><a href="#" onclick="removeManyTags('Message')">Remover de todos nesta
+                                                página</a></li>
+                                        <li><a href="#" onclick="removeManyTagsComplete('Message')">Remover de todos
+                                                filtrados</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </th>
+                            {% if not chat %}
+                            <th>Chat</th>
+                            {% endif %}
+                            <th></th>
+
+                        </thead>
+                        <tbody>
+                            {% for item in pagination['items'] %}
+                            <tr id="trItem{{ item.id }}" class="rm-item" item_id="{{ item.id }}">
+
+
+                                <td>
+                                    {{ loop.index + pagination.first }}
+                                </td>
+                                <td>
+
+                                    <input class="rm-check" type="checkbox" value=""
+                                        {% if item.checked %}checked{% endif %} rm_item_id="{{ item.id }}"
+                                        rm_class="Message">
+                                </td>
+                                <td class="rm-tags-container" id="tagsContainer{{ item.id }}">
+                                    {{ macros.toggle_tag_icon('Message', item) }}
+                                    {% for tag in item.tags %}
+                                    <span class="glyphicon glyphicon-tag rm-tag-id-{{ tag.id }}"
+                                        style="color: {{ tag.color }};"></span>
+                                    {% endfor %}
+                                </td>
+                                {% if chat is none %}
+                                <td>{{ item.chat.friendly_identifier }}</td>
+
+                                {% endif %}
+
+                                <td class="text-left col-sm-9">
+                                    {{ macros.speech_bubble(item, action_button=False if chat else True) }}</td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tabFilter" class="tab-pane fade  {% if form.errors %}in active{% endif %}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                            
+                                <form method="post" id="frmFilter" action="{{ request.url }}">
+                                    {{ form.hidden_tag() }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.body_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.body_not_contains) }}
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.chat_identifier_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.chat_identifier_not_contains) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.from_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.from_not_contains) }}
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.timestamp_start) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.timestamp_end) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.order) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <button class="btn btn-danger" type="submit">Pesquisar</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function chatDocxIndividual() {
+        $form = $("#frmFilter");
+        var aux = $form.attr('action');
+        $form.attr('action', "{{ url_for('ajax.chat_docx_individual') }}");
+        $form.submit();
+        $form.attr('action', aux);
+    }
+
+    function chatDocxComplete() {
+        bootbox.prompt("Entre um diretório existente (ex: C:\\temp)", function (directory) {
+            if (directory) {
+                $.get("{{ url_for('ajax.check_folder_existence') }}?path=" + directory, function (response) {
+                    if (response == 'false') {
+                        bootbox.alert("O diretório \"" + directory + "\" não existe. Entre um diretório existente.");
+                    } else {
+                        bootbox.confirm({
+                            message: "Este procedimento irá exportar todas as mensagens que atendem a condição dos filtros. Deseja continuar?",
+                            locale: 'pt-br',
+                            callback: function (result) {
+                                if (result) {
+                                    data = $("#frmFilter").serialize();
+                                    setLoadingIndicatorOn();
+                                    $.post("{{ url_for('ajax.chat_docx_complete') }}?directory=" + directory, $("#frmFilter").serialize()).done(function (response) {
+                                        bootbox.alert("Arquivos gerados com sucesso!");
+                                        setLoadingIndicatorOff();
+                                    }).fail(function (error) {
+                                        setLoadingIndicatorOff();
+                                        bootbox.alert("Houve um erro ao gerar os arquivos.");
+                                        console.log(error);
+                                    });;
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+        })
+    }
+</script>
+{% endblock %}

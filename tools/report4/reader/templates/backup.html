@@ -1,0 +1,127 @@
+{% extends 'files.html' %}
+{% block files %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <div class="dropdown">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Marcar
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="checkAll('File')">Marcar todos nesta página</a></li>
+                        <li><a href="#" onclick="checkAllComplete('File')">Marcar todos filtrados</a></li>
+                        <li><a href="#" onclick="uncheckAll('File')">Desmarcar todos nesta página</a></li>
+                        <li><a href="#" onclick="uncheckAllComplete('File')">Desmarcar todos filtrados</a>
+                        </li>
+                    </ul>
+                </div>
+            </th>
+            <th>
+                <div class="dropdown">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                        data-toggle="dropdown">Etiquetas
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="addManyTags('File')">Adicionar em todos nesta página</a>
+                        </li>
+                        <li><a href="#" onclick="addManyTagsComplete('File')">Adicionar em todos
+                                filtrados</a></li>
+                        <li><a href="#" onclick="removeManyTags('File')">Remover de todos nesta página</a>
+                        </li>
+                        <li><a href="#" onclick="removeManyTagsComplete('File')">Remover de todos
+                                filtrados</a></li>
+                    </ul>
+                </div>
+            </th>
+            <th></th>
+            <th>Vizualização</th>
+            <th>
+                <a href="#" onclick="orderBy('size', '{{form.order.data}}')">
+                    Tamanho
+                    {{ macros.ordered('size', form) }}
+                </a>
+            </th>
+            <th>
+                <a href="#" onclick="orderBy('filename', '{{form.order.data}}')">
+                    Nome
+                    {{ macros.ordered('filename', form) }}
+                </a>
+
+            </th>
+            <th>
+                <a href="#" onclick="orderBy('original_path', '{{form.order.data}}')">
+                    Caminho original
+                    {{ macros.ordered('original_path', form) }}
+                </a>
+
+            </th>
+            <th>
+                <a href="#" onclick="orderBy('creation_time', '{{form.order.data}}')">
+                    Data de criação
+                    {{ macros.ordered('creation_time', form) }}
+                </a>
+            </th>
+            <th>
+                <a href="#" onclick="orderBy('modify_time', '{{form.order.data}}')">
+                    Data de modificação
+                    {{ macros.ordered('modify_time', form) }}
+                </a>
+            </th>
+            <th>
+                <a href="#" onclick="orderBy('access_time', '{{form.order.data}}')">
+                    Data de acesso
+                    {{ macros.ordered('access_time', form) }}
+                </a>
+            </th>
+            <th>
+                <a href="#" onclick="orderBy('type_', '{{form.order.data}}')">
+                    Tipo
+                    {{ macros.ordered('type_', form) }}
+                </a>
+            </th>
+            <th>
+                <a href="#" onclick="orderBy('deleted_state', '{{form.order.data}}')">
+                    Deletado
+                    {{ macros.ordered('deleted_state', form) }}
+                </a>
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for item in pagination['items'] %}
+        <tr class="rm-item" item_id="{{ item.id }}">
+            <td>
+                {{ loop.index + pagination.first }}
+                <input class="rm-check" type="checkbox" value="" {% if item.checked %}checked{% endif %}
+                    rm_item_id="{{ item.id }}" rm_class="File">
+            </td>
+            <td class="rm-tags-container" id="tagsContainer{{ item.id }}">
+                <span class="glyphicon glyphicon-tag rm-tag-add" style="color: {{ current_tag.color }};"
+                    onclick="toggleOneTag('File', {{ item.id }})"></span>
+                {% for tag in item.tags %}
+                <span class="glyphicon glyphicon-tag rm-tag-id-{{ tag.id }}" style="color: {{ tag.color }};"></span>
+                {% endfor %}
+            </td>
+            <td>
+                {{ macros.action_button_file(item) }}
+            </td>
+            <td>
+                {{ file(item, action_button=False) }}
+            </td>
+            <td>{{ item.size|filesize }}</td>
+            <td>{{ item.filename|filename_max }}</td>
+            <td>{{ item.original_path }}</td>
+            <td>{{ item.creation_time|strftime_complete }}</td>
+            <td>{{ item.modify_time|strftime_complete }}</td>
+            <td>{{ item.access_time|strftime_complete }}</td>
+            <td>{{ item.type_}}</td>
+            <td>{{ item.deletado}}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Pesquisar por palavras chave em bate-papo</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+      
+                <h4>Clique na opção "Todas as mensagens" no menu:</h4>
+                <p><img src="{{ url_for('static', filename='tutorial_images/menu_all_messages.png') }}" alt=""></p>
+                <h4>Selecione a aba "Pesquisar"</h4>
+                <p><img src="{{ url_for('static', filename='tutorial_images/tab_search.png') }}" alt=""></p>
+                <h4>Entre o termo que deseja pesquisar e clique no botão "Pesquisar":</h4>
+                <p><img style="width: 400px;" src="{{ url_for('static', filename='tutorial_images/form_chat.png') }}" alt=""></p>
+                <h4>Regras</h4>
+                <ul>
+                    <li>Caso digite mais de um termo será pesquisado mensagens que contenham todos os termos digitados</li>
+                    <li>Caso deseje pesquisar por frases completas coloque entre aspas. Ex: "Vem aqui na minha casa"</li>
+                    <li>É possível utlizar expressões regulares. Veja o tópico específico para isso.</li>
+                </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

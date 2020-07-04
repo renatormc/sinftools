@@ -1,0 +1,72 @@
+{
+    "video": [
+        ".mp4",
+        ".m4a",
+        ".mov",
+        ".flv",
+        ".3gp",
+        ".avi",
+        ".mkv",
+        "dthumb"
+    ],
+    "image": [
+        ".jpg",
+        ".jpeg",
+        ".jfif",
+        ".pjpeg",
+        ".apng",
+        ".pjp",
+        ".png",
+        ".webp",
+        ".cnt",
+        ".ico",
+        ".cur",
+        ".svg",
+        ".tiff",
+        ".tif",
+        ".bmp"
+    ],
+    "audio": [
+        ".opus",
+        ".mp3",
+        ".aac",
+        ".wav",
+        ".aac"
+    ],
+    "browser_supported": {
+        "video": [
+            ".mp4",
+            ".m4a",
+            ".mov",
+            ".flv",
+            ".3gp",
+            ".avi",
+            ".mkv",
+            "dthumb"
+        ],
+        "image": [
+            ".jpeg",
+            ".jpg",
+            "jfif",
+            "pjpeg",
+            "pjp",
+            ".apng",
+            ".png",
+            ".bmp",
+            ".gif",
+            ".ico",
+            ".cur",
+            ".cnt",
+            ".tiff",
+            ".tif",
+            ".webp"
+        ],
+        "audio": [
+            ".opus",
+            ".mp3",
+            ".aac",
+            ".wav",
+            ".aac"
+        ]
+    }
+}

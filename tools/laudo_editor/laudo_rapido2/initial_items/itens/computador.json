@@ -1,0 +1,134 @@
+{
+    "label": "Computador",
+    "template": "computador.html",
+    "items": [
+        {
+            "type": "edit",
+            "name": "obj_name",
+            "label": "Nome do objeto",
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "combo",
+            "name": "tipo",
+            "label": "Tipo",
+            "list": [
+                "Desktop",
+                "Laptop",
+                "All in One"
+            ],
+            "editable": true,
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "edit",
+            "name": "modelo",
+            "label": "Modelo",
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "edit",
+            "name": "n_serie",
+            "label": "Número de série",
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "image_chooser",
+            "name": "foto_frontal",
+            "label": "Foto frontal",
+            "caption": "Foto frontal",
+            "row": 2,
+            "stretch": 1
+        },
+        {
+            "type": "image_chooser",
+            "name": "foto_posterior",
+            "label": "Foto posterior",
+            "caption": "Foto posterior",
+            "row": 3,
+            "stretch": 1
+        },
+        {
+            "type": "image_chooser",
+            "name": "foto_perfil",
+            "label": "Foto perfil",
+            "caption": "Foto de perfil",
+            "row": 4,
+            "stretch": 1
+        },
+        {
+            "type": "repeat",
+            "name": "memorias",
+            "label": "Memórias não voláteis",
+            "initial": 1,
+            "row": 5,
+            "stretch": 1,
+            "items": [
+                {
+                    "type": "edit",
+                    "name": "nome",
+                    "label": "Nome",
+                    "default": "",
+                    "row": 1,
+                    "stretch": 1
+                },
+                {
+                    "type": "combo",
+                    "name": "tipo",
+                    "label": "Tipo",
+                    "list": [
+                        "HDD",
+                        "SSD"
+                    ],
+                    "editable": true,
+                    "row": 1,
+                    "stretch": 1
+                },
+                {
+                    "type": "edit",
+                    "name": "marca",
+                    "label": "Marca",
+                    "default": "",
+                    "row": 1,
+                    "stretch": 1
+                },
+                {
+                    "type": "edit",
+                    "name": "modelo",
+                    "label": "Modelo",
+                    "default": "",
+                    "row": 1,
+                    "stretch": 1
+                },
+                {
+                    "type": "edit",
+                    "name": "capacidade",
+                    "label": "Capacidade Nominal",
+                    "default": "",
+                    "row": 2,
+                    "stretch": 1
+                },
+                {
+                    "type": "edit",
+                    "name": "n_serie",
+                    "label": "Número de série",
+                    "default": "",
+                    "row": 2,
+                    "stretch": 1
+                },
+                {
+                    "type": "image_chooser",
+                    "name": "foto",
+                    "label": "Foto",
+                    "default": "",
+                    "row": 3,
+                    "stretch": 1
+                }
+            ]
+        }
+    ]
+}

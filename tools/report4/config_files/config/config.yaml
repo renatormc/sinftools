@@ -1,0 +1,43 @@
+#Configurar de quais items deverão ser criados thumbnails os seus tamanhos e no caso dos vídeos a quantidade de linhas e colunas que definirá a quantidade de thumbs por vídeo
+thumbnails: 
+  video: true
+  image: true
+  image_thumb_size: 100
+  video_thumb_size: 100
+  n_rows: 3
+  n_cols: 3
+  extension: ".png"
+  
+#Tamanho máximo que os thumbs aparecerão na tela no browser no momento da análise em pixels
+thumbs_report:
+  image_width: 120
+  video_width: 200
+
+#Número de workers para processamento paralelo
+n_workers: 1
+
+grouped: false
+
+
+#Processamentos qeu serão executados, cada um corresponde a um processador
+processors: 
+  - FileDuplicates
+  - FriendlyIdentifier
+  - ProcessAvatars
+  - FileType
+  - ExtensionGenerator
+  - ThumbImage
+  - ThumbVideo
+  - ChatMessageCount
+  - Translations
+  - AddFileInfo
+  - ProprietaryFinder
+  - ChatRename
+  - ChatLastActivity
+
+online:
+  host: 10.129.3.104
+  port: 8080
+
+
+

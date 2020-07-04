@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.twbsPagination.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-header"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">Men.</th>
+                            <th class="col-md-2">Data/Hora</th>
+                            <th class="col-md-7">Texto</th>
+                            <th class="col-md-2">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key,value in pagination.df.iterrows() %}
+                        <tr>
+                            <td class="col-md-1">{{ value['id'] }}</td>
+                            <td class="col-md-2">{{ value['timestamp']|datetime }}</td>
+                            <td class="col-md-7">
+                                <p>{{ value['formatted_attachment_details']|removeNullsNan|replaceEmojiChat|safe }}</p>
+                                <p>{{ value['attachment']|removeNullsNan }}</p>
+                                <p>{{ value['body']|removeNullsNan|replaceEmojiChat|safe }}</p>
+                            </td>
+                            <td class="col-md-2">
+                                <a href="chat{{ value['chat_id'] }}_page_{{ value['page'] }}.html#men-{{value['id']}}">Ver na
+                            conversa</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-footer"></span>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+<script>
+    var total_clicks_footer = 0;
+    var start_page = parseInt("{{ pagination.page }}");
+    var total_pages = parseInt("{{ pagination.total_pages }}");
+    $('#pagination-here-footer').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function(event, page) {
+            total_clicks_footer += 1;
+            if (total_clicks_footer > 1) {
+                window.location.href = "linha-tempo_page_" + page + ".html";
+            }
+        }
+    });
+    var total_clicks_header = 0;
+    $('#pagination-here-header').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function(event, page) {
+            total_clicks_header += 1;
+            if (total_clicks_header > 1) {
+                window.location.href = "linha-tempo_page_" + page + ".html";
+            }
+        }
+    });
+</script>
+
+<style>
+    table {
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+    
+    .emoji {
+        width: 20px;
+    }
+</style>

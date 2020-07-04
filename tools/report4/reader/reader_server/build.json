@@ -1,0 +1,8 @@
+{
+  "widgets": [
+    {
+      "name": "reader_server",
+      "path": "."
+    }
+  ]
+}

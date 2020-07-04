@@ -1,0 +1,366 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls,
+  Vcl.ExtCtrls, System.IOUtils, System.StrUtils, System.Types, ShellApi;
+
+type
+  WaitMidiaThread = class(TThread)
+  protected
+    procedure Execute; override;
+  public
+    constructor Create;
+    // destructor Destroy; override;
+  end;
+
+  TForm1 = class(TForm)
+    lblMessage: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    pgbGeneral: TProgressBar;
+    pgbCurrent: TProgressBar;
+    btnChooseFolder: TButton;
+    Timer1: TTimer;
+    OpenDialog1: TOpenDialog;
+    Memo1: TMemo;
+    procedure Timer1Timer(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ShowBlinkingMessage(mess: String);
+    procedure ShowMessageFixed(mess: String);
+    procedure HideBlinkingMessage;
+    procedure btnChooseFolderClick(Sender: TObject);
+    // procedure CopyFileWithProgressBar1(Source, Destination: string);
+    function GetCurrentMidia: Integer;
+    procedure Finish;
+
+  private
+    message: String;
+    Drive: String;
+    DestinationFolder: String;
+    Midias: TStringList;
+    TempDir: String;
+    Thread: WaitMidiaThread;
+
+  public
+    WaitingMidia: Integer;
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+function RunProcess(FileName: string; ShowCmd: DWORD; wait: Boolean;
+  ProcID: PDWORD): Longword;
+var
+  StartupInfo: TStartupInfo;
+  ProcessInfo: TProcessInformation;
+begin
+  FillChar(StartupInfo, SizeOf(StartupInfo), #0);
+  StartupInfo.cb := SizeOf(StartupInfo);
+  StartupInfo.dwFlags := STARTF_USESHOWWINDOW or STARTF_FORCEONFEEDBACK;
+  StartupInfo.wShowWindow := ShowCmd;
+  if not CreateProcess(nil, @FileName[1], nil, nil, False, CREATE_NEW_CONSOLE or
+    NORMAL_PRIORITY_CLASS, nil, nil, StartupInfo, ProcessInfo) then
+    Result := WAIT_FAILED
+  else
+  begin
+    if wait = False then
+    begin
+      if ProcID <> nil then
+        ProcID^ := ProcessInfo.dwProcessId;
+      Result := WAIT_FAILED;
+      exit;
+    end;
+    WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
+    GetExitCodeProcess(ProcessInfo.hProcess, Result);
+  end;
+  if ProcessInfo.hProcess <> 0 then
+    CloseHandle(ProcessInfo.hProcess);
+  if ProcessInfo.hThread <> 0 then
+    CloseHandle(ProcessInfo.hThread);
+end;
+
+//function GetFileSize(const FileName: string): Int64;
+//var
+//  Reader: TFileStream;
+//begin
+//  Reader := TFile.OpenRead(FileName);
+//  try
+//    Result := Reader.Size;
+//  finally
+//    Reader.Free;
+//  end;
+//end;
+
+constructor WaitMidiaThread.Create;
+begin
+  inherited Create(True);
+end;
+
+// destructor WaitMidiaThread.Destroy;
+// var
+// Path: String;
+// begin
+// inherited;
+//
+// end;
+
+// function GetTotalBytesToCopy: longint;
+// var
+// I, J: Integer;
+// Files: String;
+// begin
+// result := 0;
+// for I := 0 to Form1.Midias.Count - 1 do
+// begin
+// Files := SplitString(Form1.Midias[I], ',');
+// for J := 0 to Length(Files) - 1 do
+// begin
+//
+// end;
+// end;
+// end;
+
+//function FileSize(const FileName: string): Int64;
+//var
+//  AttributeData: TWin32FileAttributeData;
+//begin
+//  if GetFileAttributesEx(PChar(FileName), GetFileExInfoStandard, @AttributeData) then
+//  begin
+//    Int64Rec(Result).Lo := AttributeData.nFileSizeLow;
+//    Int64Rec(Result).Hi := AttributeData.nFileSizeHigh;
+//  end
+//  else
+//    Result := -1;
+//end;
+
+function GetFileSizeEx(const AFileName: String): Int64;
+var
+SRec: TSearchRec;
+converter: Packed Record
+case Boolean of
+false: ( n: Int64 );
+true : ( low, high: DWORD );
+end;
+begin
+if FindFirst( AFileName, faAnyfile, SRec ) = 0 then
+begin
+converter.low := SRec.FindData.nFileSizeLow;
+converter.high:= SRec.FindData.nFileSizeHigh;
+Result:= converter.n;
+FindClose( SRec );
+end
+else
+Result := -1;
+end;
+
+procedure WaitMidiaThread.Execute;
+var
+  CurrentMidia: Integer;
+  I, J: Int64;
+  NumRead, NumWritten, DataSize: Integer;
+  // FileSize, CopiedSize: Int64;
+  Files: TStringDynArray;
+  PathFrom, PathTo, Path, Aux: String;
+  FromF, ToF: file of byte;
+  Buffer: array [0 .. 4096] of Char;
+  FileLength, CopiedSize: Int64;
+  TotalBytesToCopy: Int64;
+  ProcID: Cardinal;
+begin
+  inherited;
+
+  Path := TPath.Combine(Form1.Drive, '.sinf\current_midia.txt');
+
+  for I := 0 to Form1.Midias.Count - 1 do
+  begin
+
+    // Wait for mídia
+    Form1.ShowBlinkingMessage('Insira mídia ' + IntToStr(I + 1));
+    while True do
+    begin
+      if FileExists(Path) then
+      begin
+        CurrentMidia := Form1.GetCurrentMidia;
+        if (CurrentMidia = I + 1) then
+        begin
+          Form1.HideBlinkingMessage;
+          Form1.ShowMessageFixed('Copiando arquivos da mídia ' + IntToStr(I + 1)
+            + '. Aguarde...');
+          break;
+        end;
+        Sleep(300);
+      end;
+    end;
+
+    // Copy files
+    Files := SplitString(Form1.Midias[I], ',');
+    for J := 0 to Length(Files) - 1 do
+    begin
+      try
+        PathTo := TPath.Combine(Form1.TempDir, Files[J]);
+        PathFrom := TPath.Combine(Form1.Drive, '.sinf\' + Files[J]);
+        FileLength := GetFileSizeEx(PathFrom);
+//        ShowMessage(PathFrom + ' ' + IntToStr(FileLength));
+        AssignFile(FromF, PathFrom);
+        filemode := 0;
+        Reset(FromF);
+        AssignFile(ToF, PathTo);
+
+        Rewrite(ToF);
+        CopiedSize := 0;
+        while CopiedSize < FileLength do
+        begin
+          BlockRead(FromF, Buffer, SizeOf(Buffer), NumRead);
+          CopiedSize := CopiedSize + NumRead;
+          BlockWrite(ToF, Buffer, NumRead);
+          Form1.pgbCurrent.Position := Trunc(100 * (CopiedSize / FileLength));
+          Form1.pgbGeneral.Position :=
+            Trunc(100 * (1 / Form1.Midias.Count) *
+            (I + (1 / Length(Files) * (J + (CopiedSize / FileLength)))));
+        end;
+
+        CloseFile(FromF);
+        CloseFile(ToF);
+        filemode := 2;
+      except
+        on E: Exception do
+        begin
+          showmessage('Houve um erro ao tentar copiar os arquivos. Provavelmente a mídia ótica está com defeito.');
+
+        end;
+
+      end;
+
+    end;
+
+  end;
+  Path := '"' + TPath.Combine(Form1.TempDir, 'dados.exe') + '"';
+   Form1.ShowMessageFixed
+    ('Todos os arquivos copiados. Aguarde a descompactação.');
+  ProcID := 0;
+  RunProcess(Path + ' -o"' + Form1.DestinationFolder + '" -y', SW_SHOW,
+    True, @ProcID);
+  ShellExecute(Handle, 'open', 'explorer', PChar(Form1.DestinationFolder), '',
+    SW_SHOWNORMAL);
+  Form1.Finish;
+end;
+
+procedure TForm1.Finish;
+
+begin
+  Thread.Terminate;
+  Form1.Close;
+end;
+
+function TForm1.GetCurrentMidia;
+var
+  Path: String;
+begin
+  Path := TPath.Combine(Drive, '.sinf\current_midia.txt');
+  if FileExists(Path) then
+  begin
+    Result := StrTOInt(TFile.ReadAllText(Path));
+  end
+  else
+  begin
+    Result := -1;
+  end;
+end;
+
+procedure TForm1.ShowBlinkingMessage(mess: string);
+begin
+  message := mess;
+
+  Timer1.Enabled := True;
+  FlashWindow(Handle, True);
+  FlashWindow(Application.Handle, True);
+end;
+
+procedure TForm1.ShowMessageFixed(mess: string);
+begin
+  Timer1.Enabled := False;
+  lblMessage.Caption := mess;
+end;
+
+procedure TForm1.HideBlinkingMessage;
+begin
+  Timer1.Enabled := False;
+  lblMessage.Caption := '';
+end;
+
+procedure TForm1.btnChooseFolderClick(Sender: TObject);
+var
+  UserFolder: String;
+begin
+  UserFolder := GetEnvironmentVariable('USERPROFILE');
+  with TFileOpenDialog.Create(nil) do
+    try
+      try
+        Thread := WaitMidiaThread.Create;
+       
+        Title := 'Select Directory';
+        Options := [fdoPickFolders, fdoPathMustExist, fdoForceFileSystem];
+        // YMMV
+        OkButtonLabel := 'Select';
+        DefaultFolder := UserFolder;
+        FileName := UserFolder;
+        if Execute then
+        begin
+          DestinationFolder := FileName;
+          Memo1.Visible := False;
+          btnChooseFolder.Visible := False;
+          Label2.Visible := True;
+          Label3.Visible := True;
+          Height := 200;
+          pgbGeneral.Visible := True;
+          pgbCurrent.Visible := True;
+          Thread.Start;
+        end;
+      except
+        on E: Exception do
+        begin
+          Thread.Terminate;
+          showmessage(' Erro: ' + E.message);
+
+        end;
+
+      end;
+
+    finally
+      // Thread.Free;
+      Free;
+    end
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  message := 'Insira teste';
+  HideBlinkingMessage;
+  Drive := ParamStr(1); // 'K:\';
+  Midias := TStringList.Create;
+  Midias.LoadFromFile(Drive + '\.sinf\files.txt');
+  TempDir := TPath.GetTempPath;
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+begin
+  if lblMessage.Caption = '' then
+  begin
+    lblMessage.Caption := message;
+  end
+  else
+  begin
+    lblMessage.Caption := '';
+  end
+
+end;
+
+end.

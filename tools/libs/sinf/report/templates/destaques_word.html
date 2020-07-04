@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                {% for key,value in mensagens.iterrows() %}
+                <div class="container-fluid mensagem {% if value['user_message'] %} mensagem-do-dono {% else%} mensagem-de-outro {% endif %}" id="men-{{value['id']}}">
+                    <div class="nome-chat">
+                        &nbsp&nbsp&nbsp&nbsp <strong>Chat:</strong> {{ value['formatted_chat_name']|replaceEmojiChat|safe }}
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img src="Avatars/{{ value['avatar_from'] }}" onError="this.onerror=null;this.src='assets/desconhecido.png';" onclick="imageClick('Avatars/{{ value['avatar_from'] }}')" class="img-thumbnail avatar" alt="Desconhecido">
+                            <p style="text-align:left;">
+                                <span class="remetente" style="color: {{ value['color'] }};">{{ value['formatted_from']|replaceEmojiChat|safe }} </span> {% if value['message_deleted'] == 'Sim'%}<span class="mensagem-excluida">(Mensagem excluída)  </span>{%
+                                endif %}
+
+                                <span class="horario">
+                                    <small><span><span class="glyphicon glyphicon-time"></span>{{ value['timestamp']|datetime }}</span>
+                                </small><br> {% if mostrar_num_mensagem %}
+                                <span>&nbsp&nbspRef: {{ value['id'] }}</span> {% endif %}
+                                </span>
+                            </p>
+                            {% if value['attachment_link'] != ''%} {% if value['attachment_type'] == 'imagem'%}
+                            <p><img src="../{{ value['attachment_link'] }}" class="imagem" onclick="imageClick('../{{ value['attachment_link'] }}')"></p>
+                            {% elif value['attachment_type'] == 'audio' %}
+                            <p>
+                                <audio controls>
+                                <source src="../{{ value['attachment_link'] }}">
+                                Seu navegador não suporta o elemento <code>áudio</code>.
+                            </audio>
+                            </p>
+                            {% elif value['attachment_type'] == 'video' %}
+                            <p>
+                                <video src="../{{ value['attachment_link'] }}" class='video' controls>
+                                Seu navegador não suporta o elemento <code>video</code>.
+                            </video>
+                            </p>
+                            {% elif value['attachment_type'] == 'arquivo' %}
+                            <p>
+                                <a href="../{{ value['attachment_link'] }}"></a>
+                            </p>
+                            {% else %}
+                            <p>{{ value['attachment_link'] }}</p>
+                            {% endif %} {% elif value['attachment'] != '' %}
+                            <p>{{ value['attachment']|removeNullsNan }}</p>
+                            {% endif %} {% if value['body']%}
+                            <p>{{ value['body']|removeNullsNan|replaceEmojiChat|safe }}</p>
+                            {% endif %}
+
+                            <p>{{ value['formatted_attachment_details']|removeNullsNan|replaceEmojiChat|safe }}</p>
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Creates the bootstrap modal where the image will appear -->
+    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Fechar</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Imagem</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="#" id="imagemModal">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    function imageClick(link) {
+        $("#imagemModal").attr("src", link);
+        $('#modalFoto').modal('toggle');
+    }
+</script>
+
+<style>
+    p,
+    .nome-chat {
+        font-size: 12pt;
+    }
+    
+    .nome-chat {
+        background-color: rgb(244, 250, 232);
+    }
+    
+    .mensagem {
+        border-bottom: 1px solid #B3A9A9;
+        padding: 4px;
+    }
+    
+    .mensagem-excluida {
+        color: red;
+    }
+    
+    .remetente {
+        font-weight: bold;
+    }
+    
+    .horario {
+        float: right;
+    }
+    
+    .avatar {
+        float: left;
+        display: block;
+        max-width: 80px;
+        margin-right: 4px;
+    }
+    
+    .imagem {
+        max-width: 200px;
+    }
+    
+    .video {
+        max-width: 200px;
+    }
+    
+    .green {
+        background-color: rgb(226, 236, 226);
+    }
+    
+    .mensagem-do-dono {
+        background-color: rgb(206, 218, 236);
+    }
+    
+    .mensagem-de-outro {
+        background-color: white;
+    }
+    
+    .glyphicon {
+        font-size: 1.5em;
+    }
+    
+    #imagemModal {
+        max-width: 500px;
+        min-width: 200px;
+    }
+    
+    .emoji {
+        width: 20px;
+    }
+</style>

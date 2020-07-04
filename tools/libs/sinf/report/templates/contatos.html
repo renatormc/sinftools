@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Lista de contatos</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>Entradas</th>
+                            <th>Origem</th>
+                            <th>Deletado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key,value in df.iterrows() %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ value['name']|replaceEmojiChat|safe }}</td>
+                            <td>{{ value['entries'] }}</td>
+                            <td>{{ value['source'] }}</td>
+                            <td>{{ value['deleted'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+</script>
+
+<style>
+    .emoji {
+        width: 20px;
+    }
+</style>

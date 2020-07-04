@@ -1,0 +1,6 @@
+{
+    "user": "sinf_report",
+    "password": "sinf_report",
+    "postgres_bin_folder": "C:\\PostgreSQL\\pg10\\bin",
+    "mysql_bin_folder": "C:\\wamp64\\bin\\mysql\\mysql5.7.23\\bin"
+}

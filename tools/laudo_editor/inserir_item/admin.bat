@@ -1,0 +1,1 @@
+C:\ScriptsUFED\Miniconda3\python admin.py %*

@@ -1,0 +1,1 @@
+C:\ScriptsUFED\Miniconda3\Lib\site-packages\PyQt5\pyuic5 %~n0.ui -o %~n0.py -x

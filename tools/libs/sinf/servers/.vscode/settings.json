@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "${env:SINFTOOLS}\\Miniconda3\\python.exe",
+    "workbench.colorTheme": "Solarized Dark"
+}

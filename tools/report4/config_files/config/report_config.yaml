@@ -1,0 +1,17 @@
+#ítems por página
+per_page:
+  chat: 300
+  chat_list: 200
+  audio: 200
+  video: 200
+  image: 200
+  document: 300
+  sms: 200
+  call: 200
+  contact: 200
+  search: 300
+
+#Pasta na qual os relatórios devem ser gerados. Coloque 'device' ou 'read_source'
+#Se colocado 'device' será gerado um relatório para cada objeto
+#Se colocado 'read_source' será gerado um relatório para cada fonte de dados
+folder: 'device'

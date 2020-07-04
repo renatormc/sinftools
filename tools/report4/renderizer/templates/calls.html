@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Registros de chamadas</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>#</th>
+                        <th class="col-md-6">Contato</th>
+                        <th class="col-md-1">Tipo</th>
+                        <th class="col-md-3">Horario</th>
+                        <th class="col-md-1">Duracao</th>
+                        <th class="col-md-1">Deletado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for call in calls %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td class="col-md-6">
+                                {% for part in call.parties %}
+                                <p><strong>{{ part.role }}: </strong>{{ part.identifier }} {{ part.name if part.name}}</p>
+                                {% endfor %}
+                            </td>
+                            <td class="col-md-1">{{ call.type_ if call.type_ }}</td>
+                            <td class="col-md-3">{{ call.timestamp|datetime if call.timestamp}}</td>
+                            <td class="col-md-1">{{ call.duration if call.duration }}</td>
+                            <td class="col-md-1">{{ call.deleted_state }}</td>
+                        </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+</script>
+
+<style>
+    .emoji {
+        width: 20px;
+    }
+</style>

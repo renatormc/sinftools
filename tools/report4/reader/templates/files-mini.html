@@ -1,0 +1,72 @@
+{% extends 'files.html' %}
+{% block files %}
+<div class="divFiles">
+    <div class="row">
+        <div class="col-md-12 text-left">
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <div class="dropdown rm-inline">
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                data-toggle="dropdown">Marcar
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" onclick="checkAll('File')">Marcar todos nesta página</a>
+                                </li>
+                                <li><a href="#" onclick="checkAllComplete('File')">Marcar todos
+                                        filtrados</a></li>
+                                <li><a href="#" onclick="uncheckAll('File')">Desmarcar todos nesta
+                                        página</a></li>
+                                <li><a href="#" onclick="uncheckAllComplete('File')">Desmarcar todos
+                                        filtrados</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown rm-inline">
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                data-toggle="dropdown">Etiquetas
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" onclick="addManyTags('File')">Adicionar em todos nesta
+                                        página</a></li>
+                                <li><a href="#" onclick="addManyTagsComplete('File')">Adicionar em todos
+                                        filtrados</a></li>
+                                <li><a href="#" onclick="removeManyTags('File')">Remover de todos nesta
+                                        página</a></li>
+                                <li><a href="#" onclick="removeManyTagsComplete('File')">Remover de todos
+                                        filtrados</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% for item in pagination['items'] %}
+                        <div class="rm-file-container rm-item" item_id="{{ item.id }}">
+                            <strong>{{ loop.index + pagination['first'] }}</strong>
+                            <input class="rm-check" type="checkbox" value="" {% if item.checked %}checked{% endif %}
+                                rm_item_id="{{ item.id }}" rm_class="File">
+                            {{ macros.file(item) }}
+                            <div class="rm-tags-container" id="tagsContainer{{ item.id }}">
+                                {{ macros.toggle_tag_icon('File', item) }}
+                                <!-- <span class="glyphicon glyphicon-paperclip rm-tag-add" 
+                                    onclick="toggleOneTag('File', {{ item.id }})" data-toggle="tooltip" title="Adicionar ou remover etiqueta"></span> -->
+                                {% for tag in item.tags %}
+                                <span class="glyphicon glyphicon-tag rm-tag-id-{{ tag.id }}"
+                                    style="color: {{ tag.color }};"></span>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

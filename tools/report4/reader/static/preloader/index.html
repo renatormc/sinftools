@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Custom Loading Spinner With Sprite Animation Demos</title>
+
+    <!-- bootstrap not required -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jquery required -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+    <!-- the jquery.preloaders plugin -->
+    <script src="jquery.preloaders.js"></script>
+
+    <script>
+        $(function(){
+
+            // Basic example
+            $('.example1').click(function(){
+
+                $.preloader.start();
+
+                setTimeout(function(){
+                    $.preloader.stop();
+                }, 3000);
+
+            });
+
+            // Advanced example
+            $('.example2').click(function(){
+
+                $.preloader.start({
+                    modal: true,
+                    src : 'sprites2.png'
+                });
+
+                setTimeout(function(){
+                    $.preloader.stop();
+                }, 3000);
+
+            });
+
+            // With button example
+            $('.example3').click(function(){
+
+                var e = $('<div/>').css({'margin-left': '10px', 'display': 'inline-block', 'vertical-align': 'middle'}).insertAfter(this).preloader({src:'sprites.32.png'});
+
+                setTimeout(function(){
+                    e.preloader('stop');
+                }, 3000);
+
+            });
+
+        });
+    </script>
+    <style>
+    .container { margin-top: 100px; }
+    .page-header { margin-bottom: 50px; }
+</style>
+</head>
+<body>
+
+    <div class="container text-center">
+
+        <div class="page-header">
+            <h1>jQuery Preloaders.js <small>Custom Loading Spinner Demos</small></h1>
+        </div>
+
+        <button class="btn btn-primary example1">Test loading</button>
+
+        <button class="btn btn-info example2">Test loading with modal</button>
+
+        <button class="btn btn-danger example3">Test loading on button</button>
+
+    </div>
+
+
+</body>
+</html>

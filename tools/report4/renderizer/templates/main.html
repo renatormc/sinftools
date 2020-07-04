@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="html_files/assets/jquery-3.2.1.min.js"></script>
+    <script src="html_files/assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="html_files/assets/bootstrap-3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" target="iframe-mutante" href="html_files/home.html">Dados</a>
+            </div>
+            <ul class="nav navbar-nav">
+                {% if 'chat' in items_available  %}
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span
+                            class="glyphicon glyphicon-send"></span> Bate-papos
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for source in sources %}
+                        <li>
+                            <a href="html_files/chats_{{ source }}.html" target="iframe-mutante" data-toggle="tooltip"
+                                title="{{ app }}">{{ source }}</a>
+                        </li>
+                        {% endfor %}
+                        <!-- <li>
+                            <a href="html_files/timeline_page_1.html" target="iframe-mutante" data-toggle="tooltip"
+                                title="Linha do tempo"><span class="glyphicon glyphicon-time"></span>Linha do tempo</a>
+                        </li> -->
+                    </ul>
+                </li>
+                {% endif %}
+                {% if  'sms' in items_available %}
+                <li>
+                    <a href="html_files/smss.html" target="iframe-mutante" data-toggle="tooltip"
+                        title="Mensagens SMS"><span class="glyphicon glyphicon-envelope"></span> Mensagens SMS</a>
+                </li>
+                {% endif %}
+                {% if 'call' in items_available %}
+                <li>
+                    <a href="html_files/calls.html" target="iframe-mutante" data-toggle="tooltip"
+                        title="Mensagens SMS"><span class="glyphicon glyphicon-list"></span> Registros de chamadas</a>
+                </li>
+                {% endif %}
+                {% if 'contact' in items_available %}
+                <li>
+                    <a href="html_files/contacts.html" target="iframe-mutante" data-toggle="tooltip"
+                        title="Mensagens SMS"><span class="glyphicon glyphicon-user"></span> Lista de contatos</a>
+                </li>
+                {% endif %}
+                {% if 'image' in items_available %}
+                <li>
+                    <a href="html_files/general-images_page_1.html" target="iframe-mutante" data-toggle="tooltip"
+                        title="Imagens gerais"><span class="glyphicon glyphicon-picture"></span> Imagens</a>
+                </li>
+                {% endif %}
+                {% if  'video' in items_available %}
+                <li>
+                    <a href="html_files/general-videos_page_1.html" target="iframe-mutante" data-toggle="tooltip"
+                        title="Vídeos gerais"><span class="glyphicon glyphicon-facetime-video"></span> Vídeos</a>
+                </li>
+                {% endif %}
+                {% if 'audio' in items_available %}
+                <li>
+                    <a href="html_files/general-audios_page_1.html" target="iframe-mutante" data-toggle="tooltip"
+                        title="Áudios gerais"><span class="glyphicon glyphicon-headphones"></span> Áudios</a>
+                </li>
+                {% endif %}
+                {% if 'document' in items_available %}
+                <li>
+                    <a href="html_files/general-documents_page_1.html" target="iframe-mutante" data-toggle="tooltip"
+                        title="Outros arquivos"><span class="glyphicon glyphicon-folder-open"></span> Outros arquivos</a>
+                </li>
+                {% endif %}
+                {% if tags_highlight %}
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span
+                            class="glyphicon glyphicon-send"></span>Destaques
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for tag in tags_highlight %}
+                        <li>
+                            <a href="html_files/highlights_{{ tag.name|cleanText }}.html"
+                                target="iframe-mutante">{{ tag.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </nav>
+    <div class="container-fluid" id="mutante">
+        <div class="row">
+            <div class="col-md-12">
+                <iframe id="iframe-mutante" name="iframe-mutante" src="html_files/home.html"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+</script>
+
+<style>
+    #mutante {
+        /*height: 95vh;*/
+        margin-top: 60px;
+    }
+
+    #iframe-mutante {
+        width: 100%;
+        height: 95vh;
+    }
+</style>

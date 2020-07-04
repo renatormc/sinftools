@@ -1,0 +1,20 @@
+#Identificador da fonte de dados, não altere este valor, este valor é gerado automaticamente
+identifier: null
+#Tipo da fonte. Utilize xml_ufed, sqlite, spi_tools, fbmessenger, fbmessenger2, sqlite_iphone, whatsapp_dr_phone ou files_folder
+source_type: xml_ufed
+#Arquivo de dados, no caso do UFED é o arquivo do tipo XML. As outras fontes não utilizam então somente mude caso seja ufed
+data_file: null
+#Se marcado como true esta fonte será lida e processada na próxima execução
+process: true
+
+#Nome da fonte do bate-papo em caso de fonte diferente de UFED
+chat_source: WhatsApp_
+
+#Somente será utilizado caso o source_type seja spi_tools. Trata-se da expressão regular que será utilizada para efetuar o 
+#parsing dos arquivos de texto gerados pelo spi_tools, coloque uma das expressões abaixo. Caso nenhuma das listadas abaixo servir é necessário solicitar a inclusão de novas no sistema
+# (?P<timestamp>(\d{2}/\d{2}/\d{4})\s(\d{1,2}:\d{2}))\s?(-(?P<from>.*?):)?\s?(?P<body>.*)                    ex: 12/12/2019 12:45
+# (?P<timestamp>(\d{2}/\d{2}/\d{2})\s(\d{1,2}:\d{2}))\s?(-(?P<from>.*?):)?\s?(?P<body>.*)                    ex: 12/12/19 12:45
+# (?P<timestamp>(\d{2}/\d{2}/\d{2})\,\s(\d{1,2}:\d{2}))\s?(-(?P<from>.*?):)?\s?(?P<body>.*)                   ex: 12/12/19, 12:45
+# (?P<timestamp>(\d{2}/\d{2}/\d{2})\s(\d{1,2}:\d{2} ((PM)|(AM))))\s?(-(?P<from>.*?):)?\s?(?P<body>.*)        ex: 12/12/19 12:45 AM
+regex_spi_tools: (?P<timestamp>(\d{2}/\d{2}/\d{4})\s(\d{1,2}:\d{2}))\s?(-(?P<from>.*?):)?\s?(?P<body>.*)
+

@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>pluguin.png</file>
+  </qresource>
+</RCC>

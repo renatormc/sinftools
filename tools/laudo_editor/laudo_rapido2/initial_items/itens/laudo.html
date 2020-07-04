@@ -1,0 +1,77 @@
+<body>
+    <replace marker="#rg#">{{ rg }}</replace>
+    <replace marker="#sinf#">{{ sinf }}</replace>
+    <replace marker="#ano#">{{ ano }}</replace>
+    <replace marker="#requisitante#">{{ requisitante['value'] }}</replace>
+  
+    <table border="false" style="Tabela 2">
+        {% if procedimento %}
+        <tr>
+            <td w="1/4" font-size="12">Procedimento</td>
+            <td w="3/4" font-size="12">{{ procedimento }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td w="1/4" font-size="12">Requisitante</td>
+            <td w="3/4" font-size="12">{{ requisitante.value }}</td>
+        </tr>
+        {% if pessoas_envolvidas %}
+        <tr>
+            <td w="1/4" font-size="12">Pessoas envolvidas</td>
+            <td w="3/4" font-size="12">
+                {% for pessoa in pessoas_envolvidas %}
+                <p {% if loop.index == 1 %}enter="false"{% endif %} indent="false">{{ pessoa.nome }} ({{ pessoa.papel }})</p>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+        {% if processo_judicial %}
+        <tr>
+            <td w="1/4" font-size="12">Processo judicial</td>
+            <td w="3/4" font-size="12">{{ processo_judicial }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td w="1/4" font-size="12">Peritos Criminais</td>
+            <td w="3/4" font-size="12">#peritos#</td>
+        </tr>
+        <tr>
+            <td w="1/4" font-size="12">Inicio do exame</td>
+            <td w="3/4" font-size="12">{{ data_exame|data_simples }}</td>
+        </tr>
+    </table>
+   
+    <h1>HISTÓRICO</h1>
+    <p >
+        {% if forma_requisicao == 'ODIN' %}
+        Em atendimento à requisição de perícia realizada via sistema ODIN (ocorrência nº {{ documento_requisicao }}),
+        datada de {{ data_requisicao|data_mes_extenso }}, que tem como responsável a pessoa de {{ requisitante_pessoa.value }},
+        {% elif forma_requisicao == 'ofício' %}
+        Em atendimento à requisição de perícia realizada via ofício nº {{ documento_requisicao }},
+        datado de {{ data_requisicao|data_mes_extenso }}, assinado {{ male_female(requisitante_pessoa, 'pelo', 'pela') }}
+        {{ requisitante_pessoa.value }},
+        {% elif forma_requisicao == 'memorando' %}
+        Em atendimento à requisição de perícia realizada via memorando nº {{ documento_requisicao }},
+        datado de {{ data_requisicao|data_mes_extenso }}, assinado {{ male_female(requisitante_pessoa, 'pelo', 'pela') }}
+        {{ requisitante_pessoa.value }}, {% endif %}
+        foi procedido exame pericial em {{ qtd_objetos }} ({{ qtd_objetos|get_extenso }})
+        {{ plural('aparelho', qtd_objetos) }} de telefonia celular, que
+        {% if qtd_objetos > 1 %}foram apresentados{% else%}foi apresentado {%endif%} à Seção de Informática
+        Forense em {{ data_entrada|data_mes_extenso }}.
+    </p>
+    <h1>OBJETIVO/QUESITOS</h1>
+    {% if qtd_objetos > 1 %}
+    <p >O presente trabalho tem por objetivo extrair os dados dos aparelhos.</p>
+    {% else %}
+    <p>O presente trabalho tem por objetivo extrair os dados do aparelho.</p>
+    {% endif %}
+    {% if qtd_objetos > 1 %}
+    <h1>OBJETOS EXAMINADOS</h1>
+    {% else %}
+    <h1>OBJETO EXAMINADO</h1>
+    {% endif %}
+    <h1>EXAMES</h1>
+    <h1>CONSIDERAÇÕES FINAIS</h1>
+   
+
+</body>

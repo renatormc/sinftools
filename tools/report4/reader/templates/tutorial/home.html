@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" id="homeContainer">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <img class="logo-sptc" src="{{ url_for('static', filename='image/logo.jpg') }}" alt="">
+            <br>
+            <h3>Analisador de dados forenses</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <h3>Tutoriais</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% for file in files_general %}
+                        <h4><a href="{{ url_for('static', filename='tutorial_videos/geral/' + file.name) }}"
+                                target="_blank">{{ file.stem }}</a> </h4>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% if files_peritos %}
+                <tr>
+                    <td>
+                        <h3>Outros tutoriais</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% for file in files_peritos %}
+                        <h4><a href="{{ url_for('static', filename='tutorial_videos/peritos/' + file.name) }}"
+                                target="_blank">{{ file.stem }}</a> </h4>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+
+        </div>
+    </div>
+
+</div>
+<style>
+    #homeContainer {
+        padding-top: 50px;
+    }
+
+    .logo-sptc {
+        width: 100px;
+    }
+</style>
+{% endblock %}

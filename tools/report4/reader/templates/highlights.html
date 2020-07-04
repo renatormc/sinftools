@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% import "macros.html" as macros with context  %}
+{% block content %}
+<div class="container">
+    <div class="well">
+            <div class="row">
+                    <div class="col-md-12">
+                        <h3 id="identificador">{{ tag.name }}</h3>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>{{ tag.description }}</p>
+                    </div>
+                </div>
+    </div>
+    
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel-group">
+                {% if smss %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Mensagens SMS</div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="col-md-6">Corpo</th>
+                                    <th class="col-md-2">Partes</th>
+                                    <th class="col-md-2">Horário</th>
+                                    <th class="col-md-1">Pasta</th>
+                                    <th class="col-md-1">Deletado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sms in smss %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td class="col-md-6">{{ sms.body }}</td>
+                                    <td class="col-md-2">
+                                        {% for part in sms.parties %}
+                                        <p><strong>{{ part.role }}: </strong>{{ part.identifier }}
+                                            {{ part.name if part.name}}
+                                        </p>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="col-md-2">{{ sms.timestamp|strftime_complete }}</td>
+                                    <td class="col-md-1">{{ sms.folder }}</td>
+                                    <td class="col-md-1">{{ sms.deleted_state }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if messages %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Mensagens de bate-papo</div>
+                    <div class="panel-body">
+                        {% for message in messages %}
+                        <div class="rm-chat-highlight-container">
+                            {{ macros.speech_bubble(message, action_button=True) }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if files %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Arquivos</div>
+                    <div class="panel-body">
+                        {% for file in files %}
+                        <div class="rm-file-container">
+                            {{ macros.file(file, action_button=True)}}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

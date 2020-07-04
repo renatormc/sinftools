@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}
+<h3>Etiquetas</h3>
+{% endblock %}
+{% block content %}
+<div class="container" id="app">
+   
+    <div class="row">
+        <div class="col-md-12">
+            [[tags]]
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Destaque</th>
+                    <th>Cor</th>
+                    <th></th>
+                </tr>
+              
+                <tr class="tr-tag" v-for="(tag, index) in tags">
+                    <td> <input type="text" class="form-control field-name" v-model=tag.name> </td>
+                    <td> <textarea class="form-control field-description" cols="30"
+                            rows="2" v-model="tag.description"></textarea>
+                    </td>
+                    <td>
+                        <div class="checkbox">
+                            <label><input class="field-highlight" type="checkbox" v-model="tag.highlight">Destaque</label>
+                        </div>
+                
+                    </td>
+                    <td>
+                
+                        <div class="input-group colorpicker-component">
+                            <input type="text" class="form-control field-color" v-model.lazy="tag.color">
+                
+                            <span class="input-group-addon"><i></i></span>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @click="deleteTag(index)">Deletar</button>
+                    </td>
+                </tr>
+                
+                <tr id="trLast">
+                    <td colspan="4">
+                        <button class="btn btn-info" onclick="addTag()">Criar nova</button>
+                        <button class="btn btn-warning" onclick="save()">Salvar</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br>
+
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        delimiters: ['[[', ']]'],
+        data: {
+            tags: {{ tags|tojson }}
+        },
+        methods: {
+            
+            deleteTag: function(index){
+                this.tags.splice(index, 1);
+            }
+            
+        },
+        computed: {
+
+            
+        },
+        mounted: function(){
+            $('.colorpicker-component').colorpicker();
+        }
+    })
+</script>
+<style>
+    #tagsContainer{
+        padding-top: 30px;
+    }
+</style>
+{% endblock %}

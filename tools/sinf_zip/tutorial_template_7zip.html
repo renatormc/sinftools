@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8" />
+
+<head>
+    <title>Page Title</title>
+</head>
+
+<body>
+
+    <h2>
+        Devido ao grande volume de dados eles foram compactados e divididos em {{ n_midias }} mídias óticas. Para
+        efetuar a
+        descompactação faça o seguinte:
+    </h2>
+    <p class="instructions">
+        Crie uma nova pasta em um local de sua preferência no seu computador e copie para ela todos os arquivos listados
+        na
+        tabela a seguir.
+    </p>
+    <p>
+        <table>
+            <tr>
+                <th>Mídia</th>
+                <th>Arquivos</th>
+            </tr>
+            {% for midia in midias %}
+            <tr>
+                <td>{{ midia['name'] }}</td>
+                <td>
+                    {% for file in midia['files'] %}
+                    <p> {{ file }}</p>
+
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+    <p class="instructions">
+        Após ter copiados todos os arquivos dê dois cliques no arquivo "dados.exe"
+    </p>
+
+    <style>
+        body {
+            padding: 50px 50px 50px 50px;
+        }
+
+        .instructions {
+            font-size: 15pt;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-top: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+
+
+</body>
+
+</html>

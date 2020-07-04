@@ -1,0 +1,7 @@
+1- Copie a pasta sinftools (a pasta onde se encontra este arquivo) para um local de sua preferência
+2- Abra o Powershell em MODO ADMINISTRADOR na pasta para onde você copiou e execute o arquivo "install.ps1"
+
+OBS:
+Caso apareça a mensagem de que a execução de scripts está desabilitada em seu Powershell, utilize o seguinte comando para habilitar:
+
+	set-executionpolicy remotesigned

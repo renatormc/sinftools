@@ -1,0 +1,79 @@
+<body>
+    <replace marker="#relator#">{{ __relator['value'] }}</replace>
+    <replace marker="#revisor#">{{ revisor['value'] }}</replace>
+    {% if qtd_midias > 0 %}
+    <p enter="false">Os dados extraídos dos modelos periciados se encontram em anexo ao laudo transcritos em
+        {{ qtd_midias }}
+        ({{ qtd_midias|get_extenso(female=True) }}) {{ plural('mídia', qtd_midias) }} {{ plural('ótica', qtd_midias) }}.
+        Para cada arquivo gravado foi gerado o código hash SHA-512 para futura certificação. Tais códigos foram salvos
+        no
+        arquivo Hash.txt também incluso {{ plural('na', qtd_midias) }} {{ plural('mídia', qtd_midias) }}.
+        O código hash do arquivo Hash.txt segue no quadro a seguir.</p>
+    <table caption-label="Quadro" caption="Hash do arquivo “Hash.txt“" caption-col-width="0.85">
+        <tr>
+            <td w="0.85" font-size="12" font-name="Calibri Light" alignment="center">{{ hash|not_null }}</td>
+        </tr>
+    </table>
+    {% endif %}
+    <p>
+        O material examinado acompanha a via do laudo destinada {{male_female(requisitante, 'ao', 'à')}} {{ requisitante.value }}.
+    </p>
+    <p>
+        É o que se tem a relatar.
+    </p>
+    <br />
+    <p alignment="right">
+        Goiânia, {{ data_finalizacao|data_mes_extenso }}.
+    </p>
+    <br />
+    <table border="false">
+        {% if revisor %}
+        <tr>
+            <td w="0.5" alignment="center" style="false">
+                <text>{{ __relator['value'] }}</text>
+                <br />
+                {% if __relator['category'] == "M" %}
+                <text font-size="10">Perito Criminal Relator</text>
+                {% else %}
+                <text font-size="10">Perita Criminal Relatora</text>
+                {% endif %}
+            </td>
+            <td w="0.5" alignment="center" style="false">
+                <set-setyle>Normal</set-setyle>
+                <text>{{ revisor['value'] }}</text>
+                <br />
+                {% if revisor['category'] == "M" %}
+                <text font-size="10">Perito Criminal Revisor</text>
+                {% else %}
+                <text font-size="10">Perita Criminal Revisora</text>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td w="1" alignment="center" style="false">
+                <text>{{ __relator['value'] }}</text>
+                <br />
+                {% if __relator['category'] == "M" %}
+                <text font-size="10">Perito Criminal Relator</text>
+                {% else %}
+                <text font-size="10">Perita Criminal Relatora</text>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+    </table>
+    {% if qtd_midias > 0 %}
+    <replace marker="#midias_item#">{% if qtd_midias > 1 %}Os dados extraídos do aparelho foram gravados em mídias
+        óticas que acompanham o laudo.{% else %}Os dados extraídos do aparelho foram gravados em uma mídia ótica que
+        acompanha o laudo.{%endif%}</replace>
+    {% endif %}
+
+    <goto slot="#peritos#">
+        <p indent="false" enter="false">{{ __relator.value }} ({{ male_female(__relator, 'Relator', 'Relatora') }})</p>
+        {% if revisor %}
+        <p indent="false">{% if revisor %}{{ revisor.value }} ({{ male_female(revisor, 'Revisor', 'Revisora') }}){% endif %}</p>
+        {% endif %}
+    </goto>
+
+</body>

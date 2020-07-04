@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Objetos</th>
+                        <th>Marcados como</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn-xs" @click="checkAllDevices">Marcar
+                                    todos
+                                </button>
+                                <button type="button" class="btn btn-primary btn-xs" @click="uncheckAllDevices">
+                                    Desmarcar todos
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" v-model="show_filter"
+                                   placeholder="Digite algo para filtrar">
+
+
+                        </td>
+                        <td>Deixe todos vazios caso não deseje filtrar por etiqueta.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            <div class="checkbox" v-for="(device, index) in devices_filtered">
+                                 @{index + 1}
+                                <label><input v-model="device.checked" type="checkbox"/>@{device.folder}</label>
+                            </div>
+                        </td>
+                        <td>
+
+                            <div class="checkbox" v-for="(tag, index) in tags">
+                                @{index + 1}
+                                <label><input type="checkbox" v-model="tag.checked"/>@{tag.name}</label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" @click="submit">Gravar</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['@{', '}'],
+            data: {
+                devices: {{ data.devices|tojson }},
+                tags: {{ data.tags|tojson }},
+                show_filter: ""
+            },
+            methods: {
+                submit: function () {
+                    self = this;
+                    var filters = {
+                        devices: [],
+                        tags: []
+                    }
+                    for (var i = 0; i < self.devices.length; i++) {
+                        if (!self.devices[i].checked) {
+                            filters.devices.push(self.devices[i].id);
+                        }
+                    }
+                    for (var i = 0; i < self.tags.length; i++) {
+                        if (self.tags[i].checked) {
+                            filters.tags.push(self.tags[i].id);
+                        }
+                    }
+                    postJson("{{ url_for('views.filters_post') }}", filters);
+
+
+                },
+                checkAllDevices: function () {
+
+                    this.devices_filtered.forEach(function (device) {
+                        device.checked = true;
+                    });
+
+                },
+                uncheckAllDevices: function () {
+                    this.devices_filtered.forEach(function (device) {
+                        device.checked = false;
+                    });
+                }
+            },
+            computed: {
+
+                devices_filtered: function () {
+                    self = this;
+                    return this.devices.filter(function (device) {
+                        return device.folder.includes(self.show_filter);
+                    });
+                }
+            }
+        })
+    </script>
+{% endblock %}

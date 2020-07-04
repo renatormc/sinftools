@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="assets/jquery-3.2.1.min.js"></script>
+<script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+              <h4>{{ chat_name }}({{ app }})</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% for participante in participantes %}
+                    {% if participante['identificador_formatado'] != '' %}
+                    <div class="container-fluid participante">
+                        <div class="row">
+                            <div class="col-md-12">
+                            
+                                <img src="Avatars/{{ participante.avatar_participante }}" onError="this.onerror=null;this.src='assets/desconhecido.png';" class="img-thumbnail avatar" alt="Desconhecido">
+                                <p>{{ participante['identificador_formatado']|replaceEmojiChat|safe}}</p>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+       
+    </div>
+
+    <!-- Creates the bootstrap modal where the image will appear -->
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+            </div>
+            <div class="modal-body">
+                <img src="#" id="imagemModal" >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+
+</script>
+
+<style>
+    .participante{
+        border-bottom: 1px solid #B3A9A9;
+        padding: 4px;
+    }
+    .avatar{
+        float:left;
+        display: block;
+        max-width: 80px;
+        margin-right: 4px;
+    }
+
+    .emoji{
+        width: 20px;
+    }
+</style>

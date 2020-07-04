@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}
+<h3>Etiquetas</h3>
+{% endblock %}
+{% block content %}
+<div class="container" id="app">
+   
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Destaque</th>
+                    <th>Cor</th>
+                    <th></th>
+                </tr>
+                {% for tag in tags %}
+               {% include 'ajax/new-tag.html' %}
+                {% endfor %}
+                <tr id="trLast">
+                    <td colspan="4">
+                        <button class="btn btn-info" onclick="addTag()">Criar nova</button>
+                        <button class="btn btn-warning" onclick="save()">Salvar</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br>
+
+</div>
+
+<script>
+    function save() {
+        var tags = [];
+        $(".tr-tag").each(function (index) {
+            tags.push({
+                id: $(this).find(".field-id").val(),
+                name: $(this).find(".field-name").val(),
+                description: $(this).find(".field-description").val(),
+                highlight: $(this).find(".field-highlight").is(':checked'),
+                color: $(this).find(".field-color").colorpicker('getValue', 'dfg')
+            });
+        });
+        $.post("{{ url_for('ajax.tags_post') }}",{
+            tags: JSON.stringify(tags)
+        }, function(response){
+            window.open("{{ url_for('views.tags') }}", "_self");
+        })
+    }
+
+    function addTag(){
+        $.get("{{ url_for('ajax.new_tag') }}", function(response){
+            $("#trLast").before(response);
+            $('.colorpicker-component').colorpicker();
+        })
+        
+    }
+
+    function deleteTag(id){
+        $("#" + id).remove();
+    }
+
+
+    $(function () {
+        $('.colorpicker-component').colorpicker();
+    });
+
+</script>
+<style>
+    #tagsContainer{
+        padding-top: 30px;
+    }
+</style>
+{% endblock %}

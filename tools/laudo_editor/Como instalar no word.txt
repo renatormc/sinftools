@@ -1,0 +1,6 @@
+1) Abra o Word e clique Alt + F11
+2) Do lado esquerdo clique com o botão esquerdo do mouse em cima de "Normal" e selecione importar arquivo e escolha 
+o arquivo "C:\sinftools\tools\laudo_editor\ModuloWord.bas"
+3) Em seguida para utilizar as funções basta clicar Alt + F8 e uma janela aparecerá com a lista das macros existentes
+
+OBS: Para funcionar a inserção de fotos, quadros e figuras é necessários que já esteja cadastradas as legendas "FOTO", "QUADRO" e "FIGURA"

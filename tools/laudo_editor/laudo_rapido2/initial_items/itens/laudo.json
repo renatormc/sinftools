@@ -1,0 +1,162 @@
+{
+    "label": "",
+    "template": "laudo.html",
+    "items": [
+        {
+            "name": "sinf",
+            "type": "edit",
+            "label": "sinf",
+            "row": 1,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "rg",
+            "type": "edit",
+            "label": "RG",
+            "row": 1,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "ano",
+            "type": "edit",
+            "label": "Ano",
+            "row": 1,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "procedimento",
+            "type": "edit",
+            "label": "Procedimento",
+            "row": 1,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "requisitante",
+            "type": "cat_edit",
+            "list": "gender",
+            "label": "Requisitante",
+            "row": 2,
+            "stretch": 0,
+            "default": {
+                "value": "",
+                "category": "F"
+            }
+        },
+        {
+            "name": "requisitante_pessoa",
+            "type": "cat_edit",
+            "list": "gender",
+            "label": "Pessoa que requisitou",
+            "row": 2,
+            "stretch": 0,
+            "default": {
+                "value": "",
+                "category": "F"
+            }
+        },
+        {
+            "name": "processo_judicial",
+            "type": "edit",
+            "label": "Processo judicial",
+            "row": 3,
+            "stretch": 0,
+            "default": ""
+        },
+      
+        {
+            "name": "forma_requisicao",
+            "type": "combo",
+            "label": "Requisitado via",
+            "list": [
+                "ODIN",
+                "ofício",
+                "memorando"
+            ],
+            "row": 3,
+            "stretch": 0,
+            "default": "ODIN"
+        },
+        {
+            "name": "documento_requisicao",
+            "type": "edit",
+            "label": "Nº do documento",
+            "row": 3,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "data_exame",
+            "type": "edit",
+            "label": "Data da perícia",
+            "mask": "00/00/0000",
+            "converter": ["str2datetime", "%d/%m/%Y"],
+            "row": 4,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "data_requisicao",
+            "type": "edit",
+            "label": "Data da requisição",
+            "mask": "00/00/0000",
+            "converter": ["str2datetime", "%d/%m/%Y"],
+            "row": 4,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "data_entrada",
+            "type": "edit",
+            "label": "Data de recebimento dos objetos",
+            "mask": "00/00/0000",
+            "converter": ["str2datetime", "%d/%m/%Y"],
+            "row": 4,
+            "stretch": 0,
+            "default": ""
+        },
+        {
+            "name": "qtd_objetos",
+            "type": "spinbox",
+            "min": 1,
+            "label": "Qtd Objetos",
+            "row": 4,
+            "stretch": 0
+        },
+        {
+            "name": "pessoas_envolvidas",
+            "type": "repeat",
+            "widget_template": "pessoa_envolvida",
+            "label": "Pessoas envolvidas",
+            "row": 5,
+            "stretch": 0,
+            "items": [
+                {
+                    "name": "nome",
+                    "type": "edit",
+                    "label": "Pessoa",
+                    "min_width": 300,
+                    "row": 1,
+                    "stretch": 0,
+                    "default": ""
+                },
+                {
+                    "name": "papel",
+                    "type": "combo",
+                    "label": "Papel",
+                    "editable": true,
+                    "list": [
+                        "Autor",
+                        "Vítima"
+                    ],
+                    "row": 2,
+                    "stretch": 0,
+                    "default": "Autor"
+                }
+            ]
+        }
+    ]
+}

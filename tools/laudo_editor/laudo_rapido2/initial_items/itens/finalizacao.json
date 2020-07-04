@@ -1,0 +1,39 @@
+{
+    "label": "Finalização",
+    "template": "finalizacao.html",
+    "items": [
+        {
+            "type": "combo",
+            "name": "revisor",
+            "label": "Revisor",
+            "list": "peritos",
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "edit",
+            "name": "data_finalizacao",
+            "label": "Data finalização",
+            "mask": "00/00/0000",
+            "converter": ["str2datetime", "%d/%m/%Y"],
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "spinbox",
+            "name": "qtd_midias",
+            "label": "Quantidade de mídias óticas",
+            "min": 0,
+            "default": 0,
+            "row": 1,
+            "stretch": 0
+        },
+        {
+            "type": "text",
+            "name": "hash",
+            "label": "Hash",
+            "row": 2,
+            "stretch": 1
+        }
+    ]
+}

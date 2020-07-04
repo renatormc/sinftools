@@ -1,0 +1,1 @@
+C:\ScriptsUFED\Miniconda3\Lib\site-packages\PyQt5\pyuic5 MainWindow.ui -o ui_MainWindow.py -x

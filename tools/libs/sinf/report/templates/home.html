@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.twbsPagination.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img src="assets/sptc_logo.jpg" alt="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Relatório simplificado</h1>
+                <p>Este relatório traz uma vizualização mais amigável dos dados extraídos. Para informações mais detalhadas é necessário consultar o relatório técnico.</p>
+
+            </div>
+        </div>
+        {% if config_custom['info']['RG'] != '' or config_custom['info']['SINF'] != '' or config_custom['info']['objeto'] != '' %}
+        <div class="row">
+            <div class="col-md-6 col col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Informações do caso</div>
+                    <div class="panel-body">
+                        <p><strong>RG: </strong> {{ config_custom['info']['RG'] }}</p>
+                        <p><strong>SINF: </strong> {{ config_custom['info']['SINF'] }}</p>
+                        <p><strong>Objeto periciado: </strong> {{ config_custom['info']['objeto'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-warning" role="alert">
+                    <h4><strong>Atenção!</strong><br> Abra este relatório utilizando o navegador Google Chrome ou Mozilla Firefox. Caso seja utilizado outro navegador poderá haver problemas na reprodução de áudios e vídeos.
+                    </h4>
+
+                </div>
+                <p>Para vizualizar os dados selecione um ítem na barra de navegação no topo da página.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+
+<style>
+
+</style>

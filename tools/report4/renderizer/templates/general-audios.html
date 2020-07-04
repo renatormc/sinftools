@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.twbsPagination.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Todas os áudios(Geral)</h3>
+        </div>
+        <div class="col-sm-8 text-right">
+            <span id="pagination-here-header"></span>
+        </div>
+    </div>
+    <div class="row">
+        {% for file in pagination['items'] %}
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="../{{ file.path|urlFile }}">
+                            Seu navegador não suporta o elemento <code>áudio</code>.
+                        </audio>
+                        <p class="filename">{{ file.filename|maxCaracters(40) }}</p>
+                        {% if file.message_id %}
+                            <p>
+                                <a href="chat{{ file.message.chat.id }}_page_{{ file.message.page_renderized }}.html#men-{{ file.message.id }}">Ver
+                                    na
+                                    conversa</a>
+                            </p>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <span id="pagination-here-footer"></span>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
+<script>
+    var total_clicks_footer = 0;
+    var start_page = parseInt("{{ pagination['page'] }}");
+    var total_pages = parseInt("{{ pagination['pages'] }}");
+    $('#pagination-here-footer').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_footer += 1;
+            if (total_clicks_footer > 1) {
+                window.location.href = "general-audios_page_" + page + ".html";
+            }
+        }
+    });
+    var total_clicks_header = 0;
+    $('#pagination-here-header').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_header += 1;
+            if (total_clicks_header > 1) {
+                window.location.href = "general-audios_page_" + page + ".html";
+            }
+        }
+    });
+</script>
+
+<style>
+    table {
+        display: inline;
+    }
+
+    .filename {
+        font-size: 8pt;
+    }
+</style>

@@ -1,0 +1,211 @@
+{% macro pagination_links(pagination, view, args) -%}
+{% if pagination['pages'] > 1 %}
+<ul class="pagination">
+    {% for link in pagination['links'] %}
+    {%  set page = link['page']%}
+    <li {% if link['active'] %}class="active" {% elif link['disabled'] %}class="disabled" {% endif %}><a href="#"
+            class="{{ link['class'] }}" onclick="loadOtherPage('{{ url_for(view, page=page, **args) }}')"
+            {% if 'class' in link.keys() %}class="{{ link['class'] }}" {% endif %}>
+            {{ link['html'] }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{%- endmacro %}
+
+{% macro toggle_tag_icon(classname, item) -%}
+ <i class="fas fa-user-tag rm-tag-add" onclick="toggleOneTag('{{classname}}', {{ item.id }})"
+    data-toggle="tooltip" title="Adicionar ou remover etiqueta"></i>
+{%- endmacro %}
+
+{% macro ordered(field, form) -%}
+{% if form.order.data == field + ' asc' %}
+<span class="glyphicon glyphicon-arrow-up"></span>
+{% elif form.order.data == field + ' desc' %}
+<span class="glyphicon glyphicon-arrow-down"></span>
+{% endif%}
+{%- endmacro %}
+
+{% macro file(item, chat_body=False, action_button=True) -%}
+{% if item.type_ == 'image' %}
+<p>
+
+    <img src="{% if item.has_thumb %}{{ url_for_local(item.thumb_path) }}{% else %}{{ url_for_local(item.path) }}{% endif %}"
+        class="rm-image-thumbnail img-thumbnail" onclick="imageClick('{{ url_for_local(item.path) }}')" />
+
+</p>
+
+{% elif item.type_ == 'audio' %}
+<p>
+    <audio controls preload="none">
+        <source src="{{ url_for_local(item.path) }}" />
+        Seu navegador não suporta o elemento <code>áudio</code>.
+    </audio>
+</p>
+{% elif item.type_ == 'video' %}
+<p>
+    {% if item.has_thumb %}
+
+    <img src="{{ url_for_local(item.thumb_path) }}" class="rm-video-thumbnail video-thumbnail"
+        onclick="videoClick('{{ url_for_local(item.path) }}')" />
+    {% else %}
+    <video src="{{ url_for_local(item.path) }}" class="video rm-video-attachment" controls>
+        Seu navegador não suporta o elemento <code>video</code>.
+    </video>
+    {% endif %}
+</p>
+{% elif item.type_ == 'file' %}
+<p>
+    <a href="{{ url_for_local(item.path) }}">{{ item.filename }}</a>
+</p>
+{% else %}
+<p>{{ url_for_local(item.path) }}</p>
+<p>{{ item.details }}</p>
+
+{% endif %}
+<!-- {% if not chat_body %}
+<p class="rm-filename">{{ item.filename|filename_max }}</p>
+{% endif %} -->
+{% if action_button %}
+{{ action_button_file(item) }}
+<!-- <div class="dropdown rm-dropdown-hover">
+
+    <button class="btn btn-primary dropdown-toggle" type="button" style="width: 100%;" data-toggle="dropdown">
+        Ação<span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu">
+        <li><a href="#" onclick="openFile({{ item.id }})"><span class="glyphicon glyphicon-play"></span>Abrir com
+                programa padrão</a></li>
+        <li><a href="#" onclick="openFileWith({{ item.id }})"> <span
+                    class="glyphicon glyphicon-menu-hamburger"></span>Abir com</a>
+        </li>
+        <li><a href="#" onclick="showInFolder({{ item.id }})"> <span class="glyphicon glyphicon-folder-open"></span>Ver
+                na pasta</a>
+        </li>
+        {% if not chat_body and item.message_id %}
+        <li><a href="#" onclick="seeInChat({{ item.message_id }})"><span class="glyphicon glyphicon-eye-open"></span>Ver
+                na conversa</a>
+        </li>
+        <li><a href="#" onclick="seeInChat({{ item.message_id }}, '_blank')"><span
+                    class="glyphicon glyphicon-eye-open"></span>Ver
+                na conversa em nova aba</a>
+        </li>
+        {% endif %}
+    </ul>
+
+</div> -->
+{% endif %}
+
+{%- endmacro %}
+
+{% macro action_button_file(item) %}
+<div class="dropdown rm-dropdown-hover">
+
+    <button class="btn btn-primary dropdown-toggle" type="button" style="width: 100%;" data-toggle="dropdown">
+        Ação<span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu">
+        {% if item.type_ == 'video' %}
+        <li><a href="#" onclick="videoClick('{{ url_for_local(item.path) }}'); return false;"><span
+                    class="glyphicon glyphicon-play"></span>Executar</a></li>
+        {% elif item.type_ == 'image' %}
+        <li><a href="#" onclick="imageClick('{{ url_for_local(item.path) }}'); return false;"><span
+                    class="glyphicon glyphicon-play"></span>Ampliar</a></li>
+        {% endif %}
+        {% if not settings.online %}
+        <li><a href="#" onclick="openFile({{ item.id }}); return false;"><span
+                    class="glyphicon glyphicon-play"></span>Abrir com
+                programa padrão</a></li>
+        <li><a href="#" onclick="openFileWith({{ item.id }}); return false;"> <span
+                    class="glyphicon glyphicon-menu-hamburger"></span>Abrir
+                com</a>
+        </li>
+        <li><a href="#" onclick="showInFolder({{ item.id }}); return false;"> <span
+                    class="glyphicon glyphicon-folder-open"></span>Ver
+                na pasta</a>
+        </li>
+        {% endif %}
+        {% if not chat_body and item.message_id %}
+        <li><a href="#" onclick="seeInChat({{ item.message_id }}); return false;"><span
+                    class="glyphicon glyphicon-eye-open"></span>Ver
+                na conversa</a>
+        </li>
+        <li><a href="#" onclick="seeInChat({{ item.message_id }}, '_blank'); return false;"><span
+                    class="glyphicon glyphicon-eye-open"></span>Ver
+                na conversa em nova aba</a>
+        </li>
+        {% endif %}
+    </ul>
+
+</div>
+{%- endmacro%}
+
+
+{% macro speech_bubble(message, highlight=False, action_button=False) -%}
+<div {% if message.from_.proprietary %}class="speech-bubble-owner" {%else%}class="speech-bubble" {%endif%}
+    id="itemMessage{{ message.id }}">
+
+    {% if action_button %}
+
+    <div class="dropdown speech-action-button">
+        <button class="btn btn-danger dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Ver na conversa
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#" onclick="seeInChat({{ message.id }}); return false;">Aba corrente</a></li>
+            <li><a href="#" onclick="seeInChat({{ message.id }}, '_blank'); return false;">Nova aba</a></li>
+
+        </ul>
+    </div>
+    {% endif %}
+
+    <img src="{{ url_for_local(message.from_.avatar_path) }}"
+        onclick="imageClick('{{url_for_local(message.from_.avatar_path)}}')" class="speech-avatar" alt="">
+    <p style="text-align:left;">
+        <span class="speech-from" style="color: {{ message.color }};">{{
+                        message.from_.friendly_identifier }} </span>
+        {% if message.deleted_state|is_deleted %}
+        <span class="mensagem-excluida">(Mensagem excluída)</span>
+        {% endif %}
+
+    </p>
+    <div class="speech-content">
+        {% for attachment in message.attachments %}
+        {% if attachment.path %}
+        <div class="rm-file-container">
+            {{ file(attachment, chat_body=True) }}
+        </div>
+
+        {% else %}
+        <p> &ltAnexo indisponível&gt </p>
+        {% endif %}
+        {% endfor %}
+
+        {% if message.body %}
+        {{ message.body }}
+        {% endif %}
+
+        {% if highlight %}
+        <p>
+            <div class="highlight-speech-add">
+                <strong>Chat: </strong> <span
+                    class="bubble-chat-identifier">{{ message.chat.friendly_identifier }}</span>
+                <a href="#" onclick="seeInChat({{ message.id }})">Ver na conversa</a>
+            </div>
+        </p>
+        {% endif %}
+
+    </div>
+
+    <span class="speech-timestamp">
+        <small>
+            <span data-toggle="tooltip" title="ref: {{ message.id }}">
+                <span class="glyphicon glyphicon-time"></span>
+                {{ message.timestamp|strftime_complete }}
+            </span>
+        </small><br>
+    </span>
+</div>
+
+{%- endmacro %}

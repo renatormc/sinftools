@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Mensagens SMS</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="col-md-6">Corpo</th>
+                    <th class="col-md-2">Partes</th>
+                    <th class="col-md-2">Horário</th>
+                    <th class="col-md-1">Pasta</th>
+                    <th class="col-md-1">Deletado</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sms in smss %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="col-md-6">{{ sms.body }}</td>
+                    <td class="col-md-2">
+                        {% for part in sms.parties %}
+                        <p><strong>{{ part.role }}: </strong>{{ part.identifier }} {{ part.name if part.name}}</p>
+                        {% endfor %}
+                    </td>
+                    <td class="col-md-2">{{ sms.timestamp|datetime }}</td>
+                    <td class="col-md-1">{{ sms.folder }}</td>
+                    <td class="col-md-1">{{ sms.deleted_state }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+{% extends 'base-chat.html' %}
+
+{% macro speech_bubble(message) -%}
+<div {% if message.from_.proprietary %}class="speech-bubble-owner" {%else%}class="speech-bubble" {%endif%}
+    id="men-{{ message.id }}">
+
+    {% if action_button %}
+    <div class="dropdown speech-action-button">
+        <button class="btn btn-primary dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Ações
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#" onclick="seeInChat({{ message.id }})">Ver na conversa</a></li>
+            <li><a href="#" onclick="seeInChat({{ message.id }}, '_blank')">Ver na conversa em nova aba</a></li>
+
+        </ul>
+    </div>
+    {% endif %}
+
+    <img src="../{{ message.from_.avatar|urlFile }}" onError="this.onerror=null;this.src='assets/desconhecido.png';"
+        onclick="imageClick('../{{ message.from_.avatar|urlFile }}')" class="speech-avatar" alt="Desconhecido">
+    <p style="text-align:left;">
+        <span class="speech-from" style="color: {{ message.color }};">{{
+                        message.from_.friendly_identifier }} </span>
+        {% if message.deleted_state|isDeleted %}
+        <span class="mensagem-excluida">(Mensagem excluída)</span>
+        {% endif %}
+
+    </p>
+    <div class="speech-content">
+        {% for attachment in message.attachments %}
+        {% if attachment.path %}
+        <div class="rm-file-container">
+            {{ file(attachment) }}
+        </div>
+
+        {% else %}
+        <p> &ltAnexo indisponível&gt </p>
+        {% endif %}
+        {% endfor %}
+
+        {% if message.body %}
+        {{ message.body }}
+        {% endif %}
+
+
+    </div>
+
+    <span class="speech-timestamp">
+        <small>
+            <span data-toggle="tooltip" title="ref: {{ message.id }}">
+                <span class="glyphicon glyphicon-time"></span>
+                {{ message.timestamp|datetime }}
+            </span>
+        </small><br>
+    </span>
+</div>
+
+{%- endmacro %}
+
+
+{% macro file(item) -%}
+{% if item.type_ == 'image' %}
+<p>
+    <img src="../{{ item.path|urlFile }}" class="rm-image-thumbnail img-thumbnail"
+        onclick="imageClick('../{{ item.path|urlFile }}')">
+
+</p>
+
+{% elif item.type_ == 'audio' %}
+<p>
+    <audio controls>
+        <source src="../{{ item.path|urlFile }}">
+        Seu navegador não suporta o elemento <code>áudio</code>.
+    </audio>
+</p>
+{% elif item.type_ == 'video' %}
+<p>
+    {% if item.has_thumb %}
+
+    <img src="../{{ item.thumb_path|urlFile }}" class="rm-video-thumbnail video-thumbnail"
+        onclick="videoClick('../{{ item.path|urlFile }}')" />
+    {% else %}
+    <video src="../{{ item.path|urlFile }}" class="video rm-video-attachment" controls>
+        Seu navegador não suporta o elemento <code>video</code>.
+    </video>
+    {% endif %}
+</p>
+{% elif item.type_ == 'file' %}
+<p>
+    
+    <a href="../../{{ item.link }}" target="_blank">{{ item.filename }}</a>
+</p>
+{% else %}
+<p>{{ item.path|urlFile }}</p>
+<p>{{ item.details }}</p>
+
+{% endif %}
+
+{%- endmacro %}
+
+{% block content %}
+{% for message in pagination['items'] %}
+{{ speech_bubble(message) }}
+{% endfor %}
+
+{% endblock %}

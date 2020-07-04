@@ -1,0 +1,1 @@
+s-pyinstaller --onefile --hidden-import PyQt5.sip --windowed --icon="resources\notebook.ico" main.py

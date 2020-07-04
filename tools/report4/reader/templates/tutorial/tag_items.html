@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Marcar ítens de interesse</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+           <h3>Criar uma nova etiqueta</h3>
+           <p>A primeira coisa a se fazer é criar um etiqueta. Para isso clique no ícone "Editar etiquetas" conforme imagem abaixo.</p>
+           <p><img src="{{ url_for('static', filename='tutorial_images/new_tag.png') }}" alt=""></p>
+           
+           <p>Em segudia clique em criar nova etiqueta:</p>
+           <p> <img src="{{ url_for('static', filename='tutorial_images/create_new_tag.png') }}" alt=""></p>
+            <p>Preencha os campos com nome e descrição, escolha uma cor e em segudia clique em salvar.</p>
+            <p> <img src="{{ url_for('static', filename='tutorial_images/creating_new_tag.png') }}" alt=""></p>
+            <h3>Selecionar etiqueta corrente</h3>
+            <p>Quando um determinado ítem for marcado ele será marcado com a etiqueta corrente. Para definir uma etiqueta como corrente clique no botão "Etiqueta corrente" no canto 
+                superior direito da tela:
+            </p>
+            <p> <img src="{{ url_for('static', filename='tutorial_images/current_tag.png') }}" alt=""></p>
+            <h3>Marcar ítens de interesse</h3>
+            <p>Após ter selecionado a etiqueta corrente para marcar qualquer ítem de interesse basta clicar no ícone conforme a imagem a seguir:</p>
+            <p> <img src="{{ url_for('static', filename='tutorial_images/tag_item.png') }}" alt=""></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

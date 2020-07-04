@@ -1,0 +1,126 @@
+{
+    "dono_celular": {
+        "WhatsApp": "",
+        "Facebook messenger": ""
+    },
+    "identificador_usuario_whatsapp_sqlite": "",
+    "nome_usuario_whatsapp_sqlite": "",
+    "info": {
+        "RG": "",
+        "SINF": "",
+        "objeto": ""
+    },
+    "itens": {
+        "bate-papo": true,
+        "sms": true,
+        "contato": true,
+        "chamada": true,
+        "imagem": false,
+        "video": false,
+        "audio": false
+    },
+    "converter_formatos": false,
+    "converter_formatos_sobrescrever": false,
+    "maxima_dimensao_video": 1280,
+    "colorir_mensagens": true,
+    "formato_hora": {
+        "formato": "(\\d{2})/(\\d{2})/(\\d{4}) (\\d{2}):(\\d{2}):(\\d{2})\\(UTC-\\d\\)",
+        "substituto": "\\3-\\2-\\1 \\4:\\5:\\6"
+    },
+    "planilhas": {
+        "bate_papos": "Bate-papos",
+        "contatos": "Contatos",
+        "sms": "Mensagens SMS",
+        "chamadas": "Registro de chamadas",
+        "imagens": "Imagens",
+        "videos": "Vídeos",
+        "audios": "Áudio"
+    },
+    "mapa_colunas": {
+        "id": "#",
+        "chat_id": "Bate-papo #",
+        "chat_name": "Identificador",
+        "start_time": "Hora de início: Hora",
+        "last_activity": "Última atividade: Hora",
+        "participants": "Participantes",
+        "app": "Origem",
+        "chat_deleted": "Excluído - Bate-papo",
+        "from": "De",
+        "to": "Para",
+        "body": "Corpo",
+        "status": "Status",
+        "timestamp": "Marcação de tempo: Hora",
+        "attachment": "Anexo #1",
+        "attachment_details": "Anexo #1 - Detalhes",
+        "message_deleted": "Excluído - Mensagem instantânea",
+        "carved": "Vasculhado"
+    },
+    "mapa_colunas_contatos": {
+        "name": "Nome",
+        "entries": "Entradas",
+        "source": "Origem",
+        "deleted": "Excluído"
+    },
+    "mapa_colunas_chamadas": {
+        "contact": "Partes",
+        "type": "Tipo de chamada",
+        "timestamp": "Hora",
+        "duration": "Duração",
+        "deleted": "Excluído"
+    },
+    "mapa_colunas_smss": {
+        "body": "Mensagem",
+        "contact": "Parte",
+        "timestamp": "Hora",
+        "folder": "Pasta",
+        "deleted": "Excluído"
+    },
+    "mapa_colunas_imagens": {
+        "id": "#",
+        "name": "Nome",
+        "size": "Tamanho (bytes)",
+        "hash": "MD5"
+    },
+    "mapa_colunas_videos": {
+        "id": "#",
+        "name": "Nome",
+        "size": "Tamanho (bytes)",
+        "hash": "MD5"
+    },
+    "mapa_colunas_audios": {
+        "id": "#",
+        "name": "Nome",
+        "size": "Tamanho (bytes)",
+        "hash": "MD5"
+    },
+    "extensoes": {
+        "video": [
+            "mp4",
+            "mov",
+            "flv",
+            "3gp",
+            "avi",
+            "mkv"
+        ],
+        "imagem": [
+            "jpg",
+            "png",
+            "webp"
+        ],
+        "audio": [
+            "opus",
+            "mp3",
+            "aac"
+        ]
+    },
+    "linha_cabecalho": 2,
+    "pa_version": "6.1.2.10",
+    "per_page_chat": 150,
+    "per_page_audio": 150,
+    "per_page_video": 150,
+    "per_page_imagem": 150,
+    "per_page_audio": 150,
+    "per_page_linha_tempo": 2000,
+    "ultima_acao": "iniciar",
+    "tipo_telefone": "android"
+}

@@ -1,0 +1,22 @@
+{
+    "obj_name": null,
+    "marca": null,
+    "marca_bateria": null,
+    "modelo": null,
+    "marca_cartao": null,
+    "capacidade_cartao": null,
+    "imeis": [
+        {
+            "imei": null
+        }
+    ],
+    "chips": [
+        {
+            "operadora": null,
+            "iccid": null
+        }
+    ],
+    "foto_celular": null,
+    "foto_identificao": null,
+    "foto_dispositivos": null
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"> 
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>Lista de contatos</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Entradas</th>
+            <th>Fonte</th>
+            <th>Deletado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in data %}
+        <tr>
+            <td>{{ contact.name }}</td>
+            <td>
+                {% for entry in contact.entries %}
+                {{ entry }} <br>
+                {% endfor %}
+            </td>
+            <td>{{ contact.source }}</td>
+            <td>{% if contact.deleted %}Sim{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
+
+<style>
+    body {
+        margin: 0 auto;
+        max-width: 1200px;
+        padding: 0 20px;
+    }
+
+    table {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table td, #customers th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    table tr:nth-child(even){background-color: #f2f2f2;}
+
+    table tr:hover {background-color: #ddd;}
+
+    table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>

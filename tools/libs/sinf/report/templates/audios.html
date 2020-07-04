@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.twbsPagination.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Áudios da conversa: {{ identificador_formatado|replaceEmojiChat|safe }}({{ origem }})</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <span id="pagination-here-header"></span>
+        </div>
+    </div>
+    <div class="row">
+        {% for key,value in pagination.df.iterrows() %}
+        {% if value['attachment_type'] == 'audio'%}
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td>
+                    <audio controls>
+                        <source src="../{{ value['attachment_link'] }}">
+                        Seu navegador não suporta o elemento <code>áudio</code>.
+                    </audio>
+                    <p>
+                        <a href="chat{{numero_chat}}_page_{{ value['page'] }}.html#men-{{ value['id'] }}">Ver na
+                            conversa</a>
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-right">
+            <span id="pagination-here-footer"></span>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+<script>
+    var total_clicks_footer = 0;
+    var start_page = parseInt("{{ pagination.page }}");
+    var total_pages = parseInt("{{ pagination.total_pages }}");
+    $('#pagination-here-footer').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_footer += 1;
+            if (total_clicks_footer > 1) {
+                window.location.href = "audios{{ numero_chat }}_page_" + page + ".html";
+            }
+        }
+    });
+    var total_clicks_header = 0;
+    $('#pagination-here-header').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_header += 1;
+            if (total_clicks_header > 1) {
+                window.location.href = "audios{{numero_chat}}_page_" + page + ".html";
+            }
+        }
+    });
+</script>
+
+<style>
+
+    table {
+        display: inline;
+
+    }
+
+
+</style>

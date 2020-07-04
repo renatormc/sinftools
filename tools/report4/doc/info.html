@@ -1,0 +1,43 @@
+<h1><strong>s-report3</strong></h1>
+<p>A nova vers&atilde;o do programa s-report inclui as seguintes altera&ccedil;&otilde;es:</p>
+<ol>
+<li>Estruturado para processamento e an&aacute;lise de v&aacute;rios objetos e v&aacute;rias fontes de dados ao mesmo tempo</li>
+<li>Suporte para todos os tipos de arquivo n&atilde;o mais somente a &aacute;udio, imagem e v&iacute;deo.</li>
+<li>Analisador mais simples com vers&atilde;o port&aacute;vel para poder ser enviado para o requisitante.</li>
+</ol>
+<h1><strong>Para utilizar siga os passos a seguir</strong></h1>
+<h3><strong>1-Criar a estrutura de pastas</strong></h3>
+<p>Crie uma pasta de trabalho e dentro dela crie uma pasta para cada objeto do caso.</p>
+<p>Dentro da pasta de cada objetos coloque uma pasta para cada fonte de dados relacionados aquele objeto</p>
+<p><img src="http://10.129.3.14/static/arquivos/Capturar.PNG" alt="" /></p>
+<p>No exemplo acima a pasta "teste_report" &eacute; a pasta de trabalho. As pastas C2, C3 e C4 s&atilde;o as pastas relacionadas aos objetos no caso s&atilde;o 3 celulares. No celular C2 e C3 as fontes de dados s&atilde;o apenas relat&oacute;rio do ufed. J&aacute; no caso do celular C4 al&eacute;m do relat&oacute;rio do UFED foram feitas outras extra&ccedil;&otilde;es sqlite e spi.</p>
+<p><span style="color: #3366ff;">obs: Para o programa funcionar &eacute; necess&aacute;rio organizar os dados nessa estrutura. Os nomes das pastas voc&ecirc; pode escolher de acordo com suas prefer&ecirc;ncias mas a estrutura deve ser mantida.</span></p>
+<h3><strong>2- Preparar o ambiente</strong></h3>
+<p>Abra o terminal&nbsp; na pasta de trabalho e digite "<strong>s-report3&nbsp; init</strong>".</p>
+<h3><strong>3- Editar os arquivos de configura&ccedil;&atilde;o</strong></h3>
+<p>Edite os arquivos de configura&ccedil;&atilde;o de extens&atilde;o "yaml" que foram gerados um em cada pasta de fonte de dados</p>
+<h3><strong>4- Processar os dados</strong></h3>
+<p>Digite no terminal "<strong>s-report3 process</strong>" para ler e processar os dados.</p>
+<h3><strong>5- Analisar dados (opcional)<br /></strong></h3>
+<p>D&ecirc; dois cliques no arquivo 'sinf_analyzer.exe' para abrir o analisador e fa&ccedil;a os filtros e marca&ccedil;&otilde;es de desejados</p>
+<h3><strong>6- Gerar relat&oacute;rio<br /></strong></h3>
+<p><span style="color: #0000ff;"><strong>Voc&ecirc; pode optar em enviar para o requisitante relat&oacute;rio em html ou enviar o pr&oacute;prio analisador.</strong></span></p>
+<p><strong>Para gerar relat&oacute;rio html:</strong></p>
+<p>Abra o arquivo ".report\report_config.yaml" e configure o seu relat&oacute;rio. Em seguida digite "<strong>s-report3 render</strong>" para gerar o relat&oacute;rio em html</p>
+<p><strong>Para enviar o analisador:</strong></p>
+<p>Digite o comando "<strong>s-report3 portable</strong>". Isso far&aacute; com que os arquivos necess&aacute;rios sejam copiados e um execut&aacute;vel seja criado na pasta de trabalho.</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 14pt;"><span style="color: #ff0000;">&nbsp;Caso n&atilde;o se lembre dos comandos necess&aacute;rios digite "s-report3 --help" para vizualizar os comandos existentes</span>.</span></p>
+<p>&nbsp;</p>
+<h2><strong><span style="font-size: 14pt;">Tipos de fontes de dados</span></strong></h2>
+<h4><span style="font-size: 14pt;">1- Relat&oacute;rio XML do UFED</span></h4>
+<p><span style="font-size: 10pt;">A pasta da fonte de dados nesse caso &eacute; a pasta que cont&eacute;m o arquivo xml</span></p>
+<p><span style="font-size: 10pt;"><img src="http://10.129.3.14/static/arquivos/Exemplo ufed.PNG" alt="" /></span></p>
+<h4><span style="font-size: 14pt;">2- SPI Tools</span></h4>
+<p><span style="font-size: 14pt;"><span style="font-size: 10pt;">&Eacute; o aplicativo desenvolvido pelos per&iacute;to de S&atilde;o Paulo que exporta as conversas para uma pasta no formato texto e os anexos. Para utilizar esta fonte voc&ecirc; precisa cirar a pasta fonte e dentro dela criar duas pastas "anexos" e "chats". Dentro da pasta "anexos" devem ser colocados os arquivos de anexo e dentro da pasta "chats" os arquivos de textos gerados pela ferramenta spi_tools.</span> </span></p>
+<p><span style="font-size: 14pt;"><span style="font-size: 10pt;"><img src="http://10.129.3.14/static/arquivos/Exemplo spi.PNG" alt="Estrutura da pasta spi" width="185" height="93" /><br /></span></span></p>
+<h4><span style="font-size: 14pt;">3- Sqlite</span></h4>
+<p><span style="font-size: 10pt;">Voc&ecirc; precisa ter conseguido extrair de alguma forma os arquivos msgstore.db, wa.db e a pasta de anexos do WhatsApp. Ent&atilde;o deve colocar tais arquivos dentro da pasta da fonte de dados. Coloque os arquivos na pasta fonte conforme a figura a seguir, sendo Media a pasta que cont&eacute;m os anexos.<br /></span></p>
+<p><span style="font-size: 10pt;"><img src="http://10.129.3.14/static/arquivos/Exemplo sqlite.PNG" alt="" /></span></p>
+<h4><span style="font-size: 14pt;">4- Arquivos na pasta</span></h4>
+<p><span style="font-size: 10pt;">Este tipo de extra&ccedil;&atilde;o e para quando tiver uma pasta cheia de arquivos e subpastas e queira incluir no relat&oacute;rio da extra&ccedil;&atilde;o. Para isso basta colocar a pasta que cont&eacute;m os arquivos como fonte de dados.</span></p>

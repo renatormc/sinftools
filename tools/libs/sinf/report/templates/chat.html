@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.twbsPagination.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#">{{ identificador_formatado|replaceEmojiChat|safe }} ({{ origem }})</a>
+                </li>
+                <li>
+                    <a href="participantes{{numero_chat}}.html" data-toggle="tooltip" title="Participantes"><span
+                        class="glyphicon glyphicon-user"></span></a>
+                </li>
+                {% if n_audios > 0 %}
+                <li>
+                    <a href="audios{{numero_chat}}_page_1.html" data-toggle="tooltip" title="Audios da conversa"><span
+                        class="glyphicon glyphicon-headphones"><span class="badge">{{ n_audios }}</span></span></a>
+                </li>
+                {% endif %} {% if n_imagens > 0 %}
+                <li>
+                    <a href="imagens{{numero_chat}}_page_1.html" data-toggle="tooltip" title="Imagens da conversa"><span
+                        class="glyphicon glyphicon-picture"><span class="badge">{{ n_imagens }}</span></a></span>
+                </li>
+                {% endif %} {% if n_videos > 0 %}
+                <li>
+                    <a href="videos{{numero_chat}}_page_1.html" data-toggle="tooltip" title="Vídeos da conversa"><span
+                        class="glyphicon glyphicon-facetime-video"></span><span class="badge">{{ n_videos }}</span></a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid" id="mensagens">
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-header"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% for key,value in pagination.df.iterrows() %}
+                <div class="container-fluid mensagem {% if value['user_message'] %} mensagem-do-dono {% else%} mensagem-de-outro {% endif %}" id="men-{{value['id']}}">
+
+
+                    {% if value['has_quote'] %}
+                    <div class="quote">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <p><strong>{{ value['formatted_quote_from'] }}</strong></p>
+                                {% if value['quote_attachment_link'] != ''%} {% if value['quote_attachment_type'] == 'imagem'%}
+                                <p><img src="../{{ value['quote_attachment_link'] }}" class="imagem" onclick="imageClick('../{{ value['quote_attachment_link'] }}')"></p>
+                                {% elif value['quote_attachment_type'] == 'audio' %}
+                                <p>
+                                    <audio controls>
+                                    <source src="../{{ value['quote_attachment_link'] }}">
+                                    Seu navegador não suporta o elemento <code>áudio</code>.
+                                </audio>
+                                </p>
+                                {% elif value['quote_attachment_type'] == 'video' %}
+                                <p>
+                                    <video src="../{{ value['quote_attachment_link'] }}" class='video' controls>
+                                    Seu navegador não suporta o elemento <code>video</code>.
+                                </video>
+                                </p>
+                                {% elif value['quote_attachment_type'] == 'arquivo' %}
+                                <p>
+                                    <a href="../{{ value['quote_attachment_link'] }}">{{ value['attachment'] }}</a>
+                                </p>
+                                {% else %}
+                                <p>{{ value['quote_attachment_link'] }}</p>
+                                {% endif %} {% elif value['quote_attachment'] != '' %}
+                                <p>{{ value['quote_attachment'] }}</p>
+                                {% endif %} {% if value['quote_body'] %}
+                                <p>{{ value['quote_body']|replaceEmojiChats|safe }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img src="Avatars/{{ value['avatar_from'] }}" onError="this.onerror=null;this.src='assets/desconhecido.png';" onclick="imageClick('Avatars/{{ value['avatar_from'] }}')" class="img-thumbnail avatar" alt="Desconhecido">
+                            <p style="text-align:left;">
+                                <span class="remetente" style="color: {{ value['color'] }};">{{ value['formatted_from']|replaceEmojiChat|safe }} </span> {% if value['message_deleted'] == 'Sim' or value['carved'] == 'Sim'%}<span class="mensagem-excluida">(Mensagem excluída)</span>{%
+                                endif %}
+                                <span class="horario">
+                                    <small><span><span class="glyphicon glyphicon-time"></span>{{ value['timestamp']|datetime }}</span>
+                                </small><br> {% if mostrar_num_mensagem %}
+                                <span>&nbsp&nbspRef: {{ value['id'] }}</span> {% endif %}
+                                </span>
+                            </p>
+                            {% if value['attachment_link'] != ''%} {% if value['attachment_type'] == 'imagem'%}
+                            <p><img src="../{{ value['attachment_link'] }}" class="imagem" onclick="imageClick('../{{ value['attachment_link'] }}')"></p>
+                            {% elif value['attachment_type'] == 'audio' %}
+                            <p>
+                                <audio controls>
+                                <source src="../{{ value['attachment_link'] }}">
+                                Seu navegador não suporta o elemento <code>áudio</code>.
+                            </audio>
+                            </p>
+                            {% elif value['attachment_type'] == 'video' %}
+                            <p>
+                                <video src="../{{ value['attachment_link'] }}" class='video' controls>
+                                Seu navegador não suporta o elemento <code>video</code>.
+                            </video>
+                            </p>
+                            {% elif value['attachment_type'] == 'arquivo' %}
+                            <p>
+                                <a href="../{{ value['attachment_link'] }}"></a>
+                            </p>
+                            {% else %}
+                            <p>{{ value['attachment_link'] }}</p>
+                            {% endif %} {% elif value['attachment'] != '' %}
+                            <p>{{ value['attachment']|removeNullsNan }}</p>
+                            {% endif %} {% if value['body']%}
+                            <p>{{ value['body']|removeNullsNan|replaceEmojiChat|safe }}</p>
+                            {% endif %}
+
+                            <p>{{ value['formatted_attachment_details']|removeNullsNan|replaceEmojiChat|safe }}</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-footer"></span>
+            </div>
+        </div>
+    </div>
+    <!-- Creates the bootstrap modal where the image will appear -->
+    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Fechar</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Imagem</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="#" id="imagemModal">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    function imageClick(link) {
+        $("#imagemModal").attr("src", link);
+        $('#modalFoto').modal('toggle');
+    }
+
+    var total_clicks_footer = 0;
+    var start_page = parseInt("{{ pagination.page }}");
+    var total_pages = parseInt("{{ pagination.total_pages }}");
+    $('#pagination-here-footer').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function(event, page) {
+            total_clicks_footer += 1;
+            if (total_clicks_footer > 1) {
+                window.location.href = "chat{{ numero_chat }}_page_" + page + ".html";
+            }
+        }
+    });
+    var total_clicks_header = 0;
+    $('#pagination-here-header').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function(event, page) {
+            total_clicks_header += 1;
+            if (total_clicks_header > 1) {
+                window.location.href = "chat{{ numero_chat }}_page_" + page + ".html";
+            }
+        }
+    });
+</script>
+
+<style>
+    .mensagem {
+        border-bottom: 1px solid #B3A9A9;
+        padding: 4px;
+    }
+    
+    #mensagens {
+        margin-top: 60px;
+    }
+    
+    .mensagem-excluida {
+        color: red;
+    }
+    
+    .remetente {
+        font-weight: bold;
+    }
+    
+    .horario {
+        float: right;
+    }
+    
+    .avatar {
+        float: left;
+        display: block;
+        max-width: 80px;
+        margin-right: 4px;
+    }
+    
+    .imagem {
+        max-width: 200px;
+    }
+    
+    .video {
+        max-width: 200px;
+    }
+    
+    .green {
+        background-color: rgb(226, 236, 226);
+    }
+    
+    .mensagem-do-dono {
+        background-color: rgb(206, 218, 236);
+    }
+    
+    .mensagem-de-outro {
+        background-color: white;
+    }
+    
+    .glyphicon {
+        font-size: 1.5em;
+    }
+    
+    #imagemModal {
+        max-width: 500px;
+        min-width: 200px;
+    }
+    
+    .emoji {
+        width: 20px;
+    }
+    
+    .quote {
+        margin-left: 5em;
+        margin-right: 5em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        border-left: 10px solid #ccc;
+        background: #ebf5de;
+    }
+    
+    .badge {
+        background-color: red;
+    }
+</style>

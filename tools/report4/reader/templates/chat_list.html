@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "macros.html" as macros %}
+{% block title %}
+<h3>Lista de chats <span class="badge">{{ pagination['n_items'] }}</span></h3>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <ul class="nav nav-tabs">
+                <li {% if not form.errors %}class="active" {% endif %}><a data-toggle="tab" href="#tabData">Lista de
+                        chats</a></li>
+                <li {% if form.errors %}class="active" {% endif %}><a data-toggle="tab" href="#tabFilter"> <span
+                            class="glyphicon glyphicon-search"></span> Pesquisar</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tabData" class="tab-pane fade{% if not form.errors %}in active{% endif %}">
+                    <div class="rm-pagination-fixed">
+                        {{ macros.pagination_links(pagination, view='views.chat_list', args={} ) }}
+                    </div>
+
+                    <table class="table table-striped table-drop">
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                            data-toggle="dropdown">Marcar
+                                            <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" onclick="checkAll('Chat')">Marcar todos nesta página</a>
+                                            </li>
+                                            <li><a href="#" onclick="checkAllComplete('Chat')">Marcar todos
+                                                    filtrados</a></li>
+                                            <li><a href="#" onclick="uncheckAll('Chat')">Desmarcar todos nesta
+                                                    página</a></li>
+                                            <li><a href="#" onclick="uncheckAllComplete('Chat')">Desmarcar todos
+                                                    filtrados</a></li>
+                                        </ul>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                            data-toggle="dropdown">Etiquetas
+                                            <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" onclick="addManyTags('Chat')">Adicionar em todos nesta
+                                                    página</a></li>
+                                            <li><a href="#" onclick="addManyTagsComplete('Chat')">Adicionar em todos
+                                                    filtrados</a></li>
+                                            <li><a href="#" onclick="removeManyTags('Chat')">Remover de todos nesta
+                                                    página</a></li>
+                                            <li><a href="#" onclick="removeManyTagsComplete('Chat')">Remover de todos
+                                                    filtrados</a></li>
+                                        </ul>
+                                    </div>
+                                </th>
+                             
+                                <th>
+                                    Avatar
+                                </th>
+                                <th>
+                                    <a href="#" onclick="orderBy('friendly_identifier', '{{form.order.data}}')">
+                                        Identificador
+                                        {{ macros.ordered('friendly_identifier', form) }}
+                                    </a>
+
+                                </th>
+                                <th>
+                                    <a href="#" onclick="orderBy('last_activity', '{{form.order.data}}')">
+                                        Última mensagem
+                                        {{ macros.ordered('last_activity', form) }}
+                                    </a>
+
+                                </th>
+                                <th>
+                                    <a href="#" onclick="orderBy('source', '{{form.order.data}}')">
+                                        Fonte
+                                        {{ macros.ordered('source', form) }}
+                                    </a>
+
+                                </th>
+                                <th>
+                                    <a href="#" onclick="orderBy('device', '{{form.order.data}}')">
+                                        Objeto
+                                        {{ macros.ordered('device', form) }}
+                                    </a>
+                                </th>
+                                <th>
+                                   Extração
+                                </th>
+                                <th>
+                                    <a href="#" onclick="orderBy('n_messages', '{{form.order.data}}')">
+                                        Nº Mensagens
+                                        {{ macros.ordered('n_messages', form) }}
+                                    </a>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for item in pagination['items'] %}
+                            <tr class="rm-item" item_id="{{ item.id }}">
+                                <td>
+                                    {{ loop.index + pagination.first }}
+                                    <input class="rm-check" type="checkbox" value=""
+                                        {% if item.checked %}checked{% endif %} rm_item_id="{{ item.id }}"
+                                        rm_class="Chat">
+                                </td>
+                                <td class="rm-tags-container" id="tagsContainer{{ item.id }}">
+                                    {{ macros.toggle_tag_icon('Chat', item) }}
+                                    {% for tag in item.tags %}
+                                    <span class="glyphicon glyphicon-tag rm-tag-id-{{ tag.id }}"
+                                        style="color: {{ tag.color }};"></span>
+                                    {% endfor %}
+                                </td>
+                               
+                                <td>
+                                    <a href="{{ url_for('views.chat', chat_id=item.id, page=1) }}">
+                                        <img class="rm-avatar-chat-list" src="{{ url_for_local(item.avatar_path) }}"
+                                        class="mx-auto d-block">
+                                    </a>
+                                   
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('views.chat', chat_id=item.id, page=1) }}" ,
+                                                    target="_blank">{{ item.friendly_identifier }}</a>
+                                    
+                                </td>
+                                <td>{{ item.last_activity|strftime_complete }}</td>
+                                <td>{{ item.source }}</td>
+                                <td>{{ item.read_source.device.folder }}</td>
+                                <td>{{ item.read_source.name }}</td>
+                                <td>{{ item.messages.count() }}</td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div id="tabFilter" class="tab-pane fade  {% if form.errors %}in active{% endif %}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                
+                                <form action="{{ request.url }}" method="post" id="frmFilter">
+                                    {{ form.hidden_tag() }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.identifier_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.identifier_not_contains) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.source_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.source_not_contains) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.n_messages_gt) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.n_messages_lt) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <button class="btn btn-danger" type="submit">Pesquisar</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

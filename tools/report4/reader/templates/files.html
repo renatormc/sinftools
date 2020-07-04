@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "macros.html" as macros with context  %}
+
+{% block title %}
+<h3>
+    {% if form.type_.data == 'image' %}
+    Imagens
+    {% elif form.type_.data == 'video' %}
+    Vídeos
+    {% elif form.type_.data == 'audio' %}
+    Áudios
+    {% else %}
+    Arquivos
+    {% endif %}
+    <span class="badge">{{ pagination['n_items'] }}</span>
+</h3>
+
+{% endblock %}
+{% block nav_bar_aditional %}
+<div class="dropdown rm-inline">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+        {% if file_vizualization == 'table' %}
+        <span class="glyphicon glyphicon-th-list"></span>
+        {% else %}
+        <span class="glyphicon glyphicon-th"></span>
+        {% endif %}
+        Vizualização
+        <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <!-- <li class="disabled"><a href="#"><strong>Tag corrente</strong></li> -->
+        <li>
+            <a href="#" onclick="setFileVizualization('mini')"><span
+                    class="glyphicon glyphicon-th"></span>Miniaturas</a>
+        </li>
+        <li>
+            <a href="#" onclick="setFileVizualization('table')"><span
+                    class="glyphicon glyphicon-th-list"></span>Tabela</a>
+        </li>
+    </ul>
+</div>
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <ul class="nav nav-tabs">
+                <li {% if not form.errors %}class="active" {% endif %}><a data-toggle="tab" href="#tabData">Arquivos</a>
+                </li>
+                <li {% if form.errors %}class="active" {% endif %}><a data-toggle="tab" href="#tabFilter"> <span
+                            class="glyphicon glyphicon-search"></span>Pesquisar</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tabData" class="tab-pane fade{% if not form.errors %}in active{% endif %}">
+                    <div class="rm-pagination-fixed">
+                        {{ macros.pagination_links(pagination, view="views.files", args={} ) }}
+                    </div>
+
+                    {% block files %}
+                    {% endblock %}
+
+                </div>
+                <div id="tabFilter" class="tab-pane fade  {% if form.errors %}in active{% endif %}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+        
+                                <form action="{{ request.url }}" method="post" id="frmFilter">
+                                    {{ form.hidden_tag() }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.type_) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.chat) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.name_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.name_not_contains) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            {{ wtf.form_field(form.size_gt) }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ wtf.form_field(form.size_lt) }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ wtf.form_field(form.corrupted) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                       
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.creation_time_start) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.creation_time_end) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.modified_time_start) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.modified_time_end) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.extracted_path_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.extracted_path_not_contains) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.original_path_contains) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ wtf.form_field(form.original_path_not_contains) }}
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <button class="btn btn-danger" type="submit">Pesquisar</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function setFileVizualization(mode) {
+        $.get("{{ url_for('ajax.set_file_vizualization') }}?mode=" + mode, function (response) {
+            $("#frmFilter").submit();
+        })
+    }
+
+    function imagesDocx(type) {
+        $form = $("#frmFilter");
+        var aux = $form.attr('action');
+        $form.attr('action', "{{ url_for('ajax.images_docx') }}?type=" + type);
+        $form.submit();
+        $form.attr('action', aux);
+    }
+
+    function filesExport() {
+
+        bootbox.prompt("Entre um diretório existente (ex: C:\\temp)", function (directory) {
+            if (directory) {
+                $.get("{{ url_for('ajax.check_folder_existence') }}?path=" + directory, function (response) {
+                    if (response == 'false') {
+                        bootbox.alert("O diretório \"" + directory + "\" não existe. Entre um diretório existente.");
+                    } else {
+                        bootbox.confirm({
+                            message: "Este procedimento irá exportar todos os arquivos que atendem a condição dos filtros. Deseja continuar?",
+                            locale: 'pt-br',
+                            callback: function (result) {
+                                if (result) {
+                                    data = $("#frmFilter").serialize();
+                                    setLoadingIndicatorOn();
+                                    $.post("{{ url_for('ajax.export_files') }}?directory=" + directory, $("#frmFilter").serialize()).done(function (response) {
+                                        bootbox.alert("Arquivos copiados com sucesso!");
+                                        setLoadingIndicatorOff();
+                                    }).fail(function (error) {
+                                        setLoadingIndicatorOff();
+                                        bootbox.alert("Houve um erro ao copiar arquivos.");
+                                        console.log(error);
+                                    });;
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+        })
+
+
+    }
+</script>
+{% endblock %}

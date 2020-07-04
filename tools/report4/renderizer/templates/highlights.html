@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 id="identificador">{{ title }}</h3>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <p>{{ description }}</p>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    {% if smss %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Mensagens SMS</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="col-md-6">Corpo</th>
+                            <th class="col-md-2">Partes</th>
+                            <th class="col-md-2">Horário</th>
+                            <th class="col-md-1">Pasta</th>
+                            <th class="col-md-1">Deletado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sms in smss %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td class="col-md-6">{{ sms.body }}</td>
+                            <td class="col-md-2">
+                                {% for part in sms.parties %}
+                                <p><strong>{{ part.role }}: </strong>{{ part.identifier }} {{ part.name if part.name}}
+                                </p>
+                                {% endfor %}
+                            </td>
+                            <td class="col-md-2">{{ sms.timestamp|datetime }}</td>
+                            <td class="col-md-1">{{ sms.folder }}</td>
+                            <td class="col-md-1">{{ sms.deleted_state }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+    {% if chat_messages %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Mensagens de bate-papo</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% set ns = namespace(current_chat=chat_messages.0.chat_id) %}
+                <h3><strong>Chat: </strong>{{ chat_messages.0.chat.friendly_identifier }}</h3>
+                {% for message in chat_messages %}
+                {% if ns.current_chat != message.chat_id %}
+                {% set ns.current_chat = message.chat_id %}
+                <div class="separator"></div>
+                <h3><strong>Chat: </strong>{{ message.chat.friendly_identifier }}</h3>
+                {% endif %}
+                <div class="container-fluid mensagem {% if message.from_.proprietary %} mensagem-do-dono {% else %} mensagem-de-outro {% endif %}"
+                    id="men-{{ message.id }}">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img src="{{ message.from_.avatar|urlFile }}"
+                                onError="this.onerror=null;this.src='assets/desconhecido.png';"
+                                onclick="imageClick('Avatars/{{ message.from_.avatar }}')" class="img-thumbnail avatar"
+                                alt="Desconhecido">
+                            <p style="text-align:left;">
+                                <span class="remetente" style="color: {{ message.color }};">{{
+                                message.from_.friendly_identifier }} </span>
+                                {% if message.deleted_state|isDeleted %}
+                                <span class="mensagem-excluida">(Mensagem excluída)</span>
+                                {% endif %}
+                                <span class="horario">
+                                    <small>
+                                        <span data-toggle="tooltip" title="ref: {{ message.id }}">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                            {{ message.timestamp|datetime }}
+                                        </span>
+                                    </small><br>
+                                </span>
+                            </p>
+                            {% for attachment in message.attachments %}
+                            {% if attachment.path %}
+                            {% if attachment.type_ == 'image' %}
+                            <p><img src="../{{ attachment.path|urlFile }}" class="imagem"
+                                    onclick="imageClick('../{{ attachment.path|urlFile }}')"></p>
+                            {% elif attachment.type_ == 'audio' %}
+                            <p>
+                                <audio controls>
+                                    <source src="../{{ attachment.path|urlFile }}">
+                                    Seu navegador não suporta o elemento <code>áudio</code>.
+                                </audio>
+                            </p>
+                            {% elif attachment.type_ == 'video' %}
+                            <p>
+                                <video src="../{{ attachment.path|urlFile }}" class='video' controls>
+                                    Seu navegador não suporta o elemento <code>video</code>.
+                                </video>
+                            </p>
+                            {% elif attachment.type_ == 'file' %}
+                            <p>
+                                <a href="../{{ attachment.path|urlFile }}"></a>
+                            </p>
+                            {% else %}
+                            <p>{{ attachment.path|urlFile }}</p>
+                            {% endif %}
+                            <p>{{ attachment.details }}</p>
+                            {% endif %}
+                            {% endfor %}
+                            {% if message.body %}
+                            <p>{{ message.body }}</p>
+                            {% endif %}
+                            <a
+                                href="chat{{ message.chat.id }}_page_{{ message.page_renderized }}.html#men-{{message.id}}">Ver
+                                na conversa</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if images %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Imagens</h3>
+            </div>
+        </div>
+        <div class="row">
+            {% for file in images %}
+            <table class="rm-table-inline">
+                <tr>
+                    <td>
+                        <img src="../{{ file.path|urlFile }}" class="img-thumbnail imagem"
+                            onclick="imageClick('../{{ file.path|urlFile }}')" alt="Imagem indisponível">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>{{ file.size|filesize }}</p>
+                    </td>
+                </tr>
+            </table>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% if videos %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Vídeos</h3>
+            </div>
+        </div>
+        <div class="row">
+            {% for file in videos %}
+            <table class="rm-table-inline">
+                <tr>
+                    <td class="rm-padding">
+                        {% if file.has_thumb %}
+                        <img src="../{{ file.thumb_path|urlFile }}" class="rm-video-thumbnail video-thumbnail"
+                            onclick="videoClick('../{{ file.path|urlFile }}')" />
+                        {% else %}
+                        <video src="../{{ file.path|urlFile }}" class="video" controls>
+                            Seu navegador não suporta o elemento <code>video</code>.
+                        </video>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if file.message_id %}
+                <tr>
+                    <td>
+                        <a
+                            href="chat{{ file.message.chat.id }}_page_{{ file.message.page_renderized }}.html#men-{{file.message.id}}">Ver
+                            na
+                            conversa</a>
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endif %}
+    {% if audios %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Áudios</h3>
+            </div>
+        </div>
+        <div class="row">
+            {% for file in audios %}
+            <table class="rm-table-inline">
+                <tbody>
+                    <tr>
+                        <td>
+                            <audio controls>
+                                <source src="../{{ file.path|urlFile }}">
+                                Seu navegador não suporta o elemento <code>áudio</code>.
+                            </audio>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endif %}
+    <!-- Creates the bootstrap modal where the image will appear -->
+    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Imagem</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="#" id="imagemModal">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content text-center">
+                <div class="modal-body">
+                    <button type="button" style="float: right;" class="btn btn-default" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <video src="#" controls id="videoElementModal" class="rm-video-element-modal">
+                        Seu navegador não suporta o elemento <code>video</code>.
+                    </video>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    function imageClick(link) {
+        $("#imagemModal").attr("src", link);
+        $('#modalFoto').modal('toggle');
+    }
+
+    function videoClick(link) {
+        $("#videoElementModal").attr("src", link);
+        $("#videoModal").modal("toggle");
+        $("#videoElementModal").trigger('play');
+    }
+
+    $(document).ready(function () {
+
+        $("#videoModal").on('hide.bs.modal', function () {
+            $("#videoElementModal").trigger('pause');
+        });
+    });
+</script>
+
+<style>
+    .imagem {
+        max-width: 100px;
+    }
+
+    .imagem:hover {
+        cursor: pointer;
+    }
+
+    .rm-padding {
+        padding: 10px;
+    }
+
+    .nome-chat {
+        background-color: rgb(244, 250, 232);
+    }
+
+    .mensagem {
+        border-bottom: 1px solid #B3A9A9;
+        padding: 4px;
+    }
+
+    .mensagem-excluida {
+        color: red;
+    }
+
+    .remetente {
+        font-weight: bold;
+    }
+
+    .horario {
+        float: right;
+    }
+
+    .avatar {
+        float: left;
+        display: block;
+        max-width: 80px;
+        margin-right: 4px;
+    }
+
+    .imagem {
+        max-width: 200px;
+    }
+
+    .video {
+        max-width: 200px;
+    }
+
+    .green {
+        background-color: rgb(226, 236, 226);
+    }
+
+    .mensagem-do-dono {
+        background-color: rgb(206, 218, 236);
+    }
+
+    .mensagem-de-outro {
+        background-color: white;
+    }
+
+    .glyphicon {
+        font-size: 1.5em;
+    }
+
+    #imagemModal {
+        max-width: 500px;
+        min-width: 200px;
+    }
+
+    .emoji {
+        width: 20px;
+    }
+
+    .rm-table-inline {
+        display: inline;
+    }
+
+    .rm-table-inline td {
+        padding: 4px;
+    }
+
+    .separator {
+        border-top: 1px;
+        border-style: solid;
+        margin-top: 15px;
+    }
+
+    .video-thumbnail {
+        max-width: 200px;
+    }
+
+    .video-thumbnail:hover {
+        cursor: pointer;
+    }
+</style>

@@ -1,0 +1,42 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col sm-4">
+            <button type="button" class="btn btn-default" data-toggle="collapse"
+                    data-target="#code-editor"><span class="glyphicon glyphicon-collapse-up"></span>
+            </button>
+            <button type="button" class="btn btn-default"><span
+                    class="glyphicon glyphicon-floppy-disk"></span></button>
+        </div>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" placeholder="Digite comando...">
+        </div>
+    </div>
+    <div class="row">
+        <div id="code-editor" class="collapse in">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ message|safe }}
+            </div>
+            {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+
+            <form id="frm-code" action="{{ main_url }}/execute" method="post">
+                <input type="text" name="url" value="{{ url }}" hidden>
+                <textarea name="code" id="code" cols="30" rows="10" hidden></textarea>
+                <div class="form-group">
+                    <textarea id="codemirror-textarea" cols="30"
+                              rows="10">{{ last_code }}</textarea>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-success" type="submit">Executar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

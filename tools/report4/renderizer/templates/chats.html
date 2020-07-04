@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container-fluid" id="panel-conversas">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default nav-internal">
+                    <div class="container-fluid">
+                        <ul class="nav navbar-nav">
+                            {% if total_audios > 0 %}
+                            <li>
+                                <a href="all-audios{{ source }}_page_1.html" target="iframe-mensagens" data-toggle="tooltip"
+                                    title="Audios de todas as conversas"><span class="glyphicon glyphicon-headphones"></span>Áudios<span
+                                        class="badge">{{ total_audios }}</span></a>
+                            </li>
+                            {% endif %}
+                            {% if total_images > 0 %}
+                            <li>
+                                <a href="all-images{{ source }}_page_1.html" target="iframe-mensagens" data-toggle="tooltip"
+                                    title="Imagens de todas as conversas"><span class="glyphicon glyphicon-picture"></span>Imagens<span
+                                        class="badge">{{ total_images }}</span></a>
+                            </li>
+                            {% endif %}
+                            {% if total_videos > 0 %}
+                            <li>
+                                <a href="all-videos{{ source }}_page_1.html" target="iframe-mensagens" data-toggle="tooltip"
+                                    title="Vídeos de todas as conversas"><span class="glyphicon glyphicon-facetime-video"></span>Vídeos<span
+                                        class="badge">{{ total_videos
+                                        }}</span></a>
+                            </li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row" id="lista-chats">
+                    {% for chat in chats %}
+                    <div class="row item-chat">
+                        <div class="col-md-12">
+                            <a href="chat{{ chat.id }}_page_1.html" target="iframe-mensagens">
+                                <img src="../{{ chat.avatar|urlFile }}" onError="this.onerror=null;this.src='assets/desconhecido.png';"
+                                    class="img-thumbnail avatar" alt="Desconhecido">
+                            </a>
+                            <p style="text-align:left;">
+                                <a href="chat{{ chat.id }}_page_1.html" target="iframe-mensagens"><span class="remetente">{{chat.friendly_identifier}}
+                                    </span></a>
+                                <span class="origem">({{ chat.source }})</span>
+                                <span class="badge">{{chat.messages.count() }}</span>
+                                <p><strong>Objeto:</strong> {{chat.read_source.device.folder if chat.read_source}}</p>
+                                <p><strong>Fonte:</strong> {{chat.source}}</p>
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-9">
+                <iframe id="iframe-mensagens" name="iframe-mensagens" src="chat-home.html" frameBorder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+
+</script>
+
+<style>
+    #panel-conversas {
+        height: 95vh;
+        
+    }
+
+    #lista-chats {
+        height: 95vh;
+        overflow-y: scroll;
+    }
+
+    #iframe-mensagens {
+        width: 100%;
+        height: 95vh;
+    }
+
+    .origem {
+        color: green;
+    }
+
+    .avatar {
+        float: left;
+        display: block;
+        max-width: 80px;
+        margin-right: 4px;
+    }
+
+    .item-chat {
+        border-bottom: solid;
+        border-width: 1px;
+        margin: 10 10 0 0;
+    }
+
+    .emoji {
+        width: 20px;
+    }
+
+    .badge {
+        background-color: red;
+    }
+
+    .nav-internal{
+        
+    }
+</style>

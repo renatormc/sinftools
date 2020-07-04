@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "macros.html" as macros %}
+{% block title %}
+<h3>Mensagens SMS <span class="badge">{{ pagination['n_items'] }}</span></h3>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <ul class="nav nav-tabs">
+                <li {% if not form.errors %}class="active" {% endif %}><a data-toggle="tab" href="#tabData">Mensagens
+                        SMS</a></li>
+                <li {% if form.errors %}class="active" {% endif %}><a data-toggle="tab" href="#tabFilter"> <span
+                            class="glyphicon glyphicon-search"></span>Pesquisar</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tabData" class="tab-pane fade{% if not form.errors %}in active{% endif %}">
+                    <div class="rm-pagination-fixed">
+                        {{ macros.pagination_links(pagination, view='views.smss', args={} ) }}
+                    </div>
+
+                    <table class="table table-striped table-drop">
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                            data-toggle="dropdown">Marcar
+                                            <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" onclick="checkAll('Sms')">Marcar todos nesta página</a></li>
+                                            <li><a href="#" onclick="checkAllComplete('Sms')">Marcar todos filtrados</a>
+                                            </li>
+                                            <li><a href="#" onclick="uncheckAll('Sms')">Desmarcar todos nesta página</a>
+                                            </li>
+                                            <li><a href="#" onclick="uncheckAllComplete('Sms')">Desmarcar todos
+                                                    filtrados</a></li>
+                                        </ul>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default btn-sm dropdown-toggle" type="button"
+                                            data-toggle="dropdown">Etiquetas
+                                            <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" onclick="addManyTags('Sms')">Adicionar em todos nesta
+                                                    página</a></li>
+                                            <li><a href="#" onclick="addManyTagsComplete('Sms')">Adicionar em todos
+                                                    filtrados</a></li>
+                                            <li><a href="#" onclick="removeManyTags('Sms')">Remover de todos nesta
+                                                    página</a></li>
+                                            <li><a href="#" onclick="removeManyTagsComplete('Sms')">Remover de todos
+                                                    filtrados</a></li>
+                                        </ul>
+                                    </div>
+                                </th>
+
+                                <th>
+                                    <a href="#" onclick="orderBy('body', '{{form.order.data}}')">
+                                        Mensagem
+                                        {{ macros.ordered('body', form) }}
+                                    </a>
+
+                                </th>
+                                <th>
+                                    Partes
+                                </th>
+                                <th>
+                                    <a href="#" onclick="orderBy('folder', '{{form.order.data}}')">
+                                        Pasta
+                                        {{ macros.ordered('folder', form) }}
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" onclick="orderBy('timestamp', '{{form.order.data}}')">
+                                        Data/Hora
+                                        {{ macros.ordered('timestamp', form) }}
+                                    </a>
+                                </th>
+
+                                <th>
+                                    <a href="#" onclick="orderBy('deleted_state', '{{form.order.data}}')">
+                                        Deletado
+                                        {{ macros.ordered('deleted_state', form) }}
+                                    </a>
+                                </th>
+                                <th>
+                                    Objeto
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for item in pagination['items'] %}
+                            <tr class="rm-item" item_id="{{ item.id }}">
+                                <td>
+                                    {{ loop.index + pagination.first }}
+                                    <input class="rm-check" type="checkbox" value=""
+                                        {% if item.checked %}checked{% endif %} rm_item_id="{{ item.id }}"
+                                        rm_class="Sms">
+                                </td>
+                                <td class="rm-tags-container" id="tagsContainer{{ item.id }}">
+                                    {{ macros.toggle_tag_icon('Sms', item) }}
+                                    {% for tag in item.tags %}
+                                    <span class="glyphicon glyphicon-tag rm-tag-id-{{ tag.id }}"
+                                        style="color: {{ tag.color }};"></span>
+                                    {% endfor %}
+                                </td>
+
+                                <td>{{ item.body }}</td>
+                                <td>
+                                    {% for part in item.parties %}
+                                    <p>
+                                        <strong>{{ part.role }}:
+                                        </strong>{{ part.identifier }}{% if part.name %}{{ ' ' + part.name }}{% endif %}
+                                    </p>
+
+                                    {% endfor %}
+                                </td>
+                                <td>{{ item.folder }}</td>
+                                <td>{{ item.timestamp|strftime_complete }}</td>
+                                <td>{{ item.deleted_state }}</td>
+                                <td>{{ item.read_source.device.folder }}</td>
+
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div id="tabFilter" class="tab-pane fade  {% if form.errors %}in active{% endif %}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                {{ wtf.quick_form(form, id='frmFilter', action=request.url) }}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

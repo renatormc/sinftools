@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"> 
+
+</head>
+<body>
+
+<h1>Mensagens SMS</h1>
+
+{% for sms in data %}
+<div class="container">
+  <span class="from meta"><strong>Contato: </strong>{{ sms.contact }}</span>
+  <span class="type meta"><strong>Tipo: </strong> {{ sms.type }}</span>
+   <span class="time meta"><strong>Horário: </strong>{{ sms.time|datetime }}</span>
+  {% if sms.deleted %}  <span class="deleted meta"><strong>Deletada: </strong>Sim</span>{% endif %}
+  <p class="body">{{ sms.body }}</p>
+</div>
+{% endfor %}
+
+</body>
+</html>
+
+<style>
+    body {
+        margin: 0 auto;
+        max-width: 1000px;
+        padding: 0 20px;
+    }
+    
+    .container {
+        border: 2px solid #dedede;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+    }
+    
+    
+    
+    .container::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    
+   .meta {
+       margin-right: 30px;
+   }
+
+   .body {
+       color: blue;
+   }
+    /* .time {
+        color: #aaa;
+    }
+
+    .from {
+        color: #aaa;
+    } */
+    
+
+</style>

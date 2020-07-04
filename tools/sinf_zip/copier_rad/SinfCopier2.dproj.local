@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2018/08/03 14:04:30.000.888,=C:\Users\renato\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/01/06 10:55:03.000.769,=C:\Users\renato\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/08/18 21:19:48.000.472,=C:\Users\renato\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/08/18 21:20:07.000.444,C:\Users\renato\Documents\Embarcadero\Studio\Projects\sinf_copier\Unit1.dfm=C:\Users\renato\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2019/08/18 21:20:07.000.444,C:\Users\renato\Documents\Embarcadero\Studio\Projects\sinf_copier\Unit1.pas=C:\Users\renato\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/08/18 21:20:08.000.539,C:\Users\renato\Documents\Embarcadero\Studio\Projects\sinf_copier\Project1.dproj=C:\Users\renato\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2019/08/18 22:08:07.000.865,=C:\Users\renato\Documents\Embarcadero\Studio\Projects\sinf_copier\Unit2.pas</Transaction>
+    <Transaction>2019/08/21 12:10:50.000.041,C:\sinftools\tools\sinf_zip\copier_rad\Unit2.pas=</Transaction>
+    <Transaction>2019/08/21 22:37:57.787,C:\sinftools\tools\sinf_zip\copier_rad\SinfCopier.dproj=C:\sinftools\tools\sinf_zip\copier_rad\Project1.dproj</Transaction>
+    <Transaction>2019/08/21 22:49:35.241,C:\sinftools\tools\sinf_zip\copier_rad\SinfCopier2.dproj=C:\sinftools\tools\sinf_zip\copier_rad\SinfCopier.dproj</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5"/>
+	</ActiveMobileDevice>
+</BorlandProject>

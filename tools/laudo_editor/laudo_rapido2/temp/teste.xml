@@ -1,0 +1,51 @@
+<root>
+    <replace marker="#NATUREZA_EXAME#">TRANSCRIÇÃO DE DADOS</replace>
+    <replace marker="#SINF#">208/2019</replace>
+    <replace marker="#RG#">19635/2019</replace>
+    <replace marker="#RELATOR#">Renato Martins Costa</replace>
+    <replace marker="#REQUISITANTE#">Subdelegacia de Polícia de Cocalzinho de Goiás</replace>
+    <text position="#RAI#">
+        
+        Inquérito policial: 6656934
+        
+    </text>
+    <text position="#PROCESSO#">
+        
+    </text>
+    <text font-weight="bold" alignment="center">LAUDO DE EXAME DE PERÍCIA CRIMINAL – TRANSCRIÇÃO DE DADOS</text>
+    <p>
+    Aos 15 (quinze) dias do mês de abril do ano de 2019 (dois mil dezenove), nesta Capital e na Divisão de Perícias Internas do Instituto de Criminalística Leonardo Rodrigues da Superintendência de Polícia 
+    Técnico-Científica da Secretaria de Estado da Segurança Pública do Estado de Goiás, foram designados pelo gerente deste instituto, Humberto Costa, 
+    os peritos criminais Renato Martins Costa e #REVISOR# para procederem ao exame pericial de transcrição de dados, 
+    atendendo à requisição da Subdelegacia de Polícia de Cocalzinho de Goiás, 
+     
+    feita via sistema ODIN na data 12 de junho de 2018 em nome da autoridade Adriano Pereira Melo.
+    
+    </p>
+    <h1>HISTÓRICO</h1>
+    
+    <p>
+    Em atendimento à requisição supracitada, foi procedido exame pericial em 
+     1 (um) None, que foi 
+     encaminhado à Seção de Informática Forense em 15 de março de 2019.
+    </p>
+    
+    <p>
+    Foi encaminhada em anexo a requisição uma decisão judicial datada de 01 de janeiro de 2019 e assinada 
+    pela juíza de direito Maria Joana Costa 
+    na qual fica autorizada a quebra de sigilo e acesso aos dados dos aparelhos.
+    </p>
+    
+    <p>
+    Observação: O objeto acompanha a via do laudo destinada Subdelegacia de Polícia de Cocalzinho de Goiás.
+    </p>
+    <h1>DESCRIÇÃO</h1>
+    <h2>DO LOCAL</h2>
+    <p>Trata-se da Seção de Informática Forense, nas dependências do Instituto de Criminalística Leonardo Rodrigues, situado na Av. Atílio Correia Lima, n.º 1223, Cidade Jardim, desta Capital.</p>
+    
+    <h2>DO OBJETO</h2>
+    
+    <h1>OBJETIVO</h1>
+    <p>O presente trabalho visa extrair os dados dos aparelhos.</p>
+    <h1>EXAMES</h1>
+</root>

@@ -1,0 +1,64 @@
+<body>
+
+    {% if obj_name %}
+    <h2 enter="false">{{obj_name }}</h2>
+    {% endif %}
+    <p>O exame do aparelho apresentou os seguintes resultados:</p>
+    {% if funcionamento %}
+    {% if desbloqueio == 'Desbloqueado' %}
+
+    <h3>O aparelho não se encontrava bloqueado por senha.</h3>
+    {% elif desbloqueio == 'Senha contornada' %}
+    <h3>O aparelho se encontrava bloqueado por senha, porém foi possível contorná-la por meio de técnica forense.</h3>
+    {% elif desbloqueio == 'Senha inviolável' %}
+    <h3>O aparelho se encontrava bloqueado por senha e não havia na seção, no momento da perícia, equipamento ou técnica capaz
+        de
+        contorná-la.</h3>
+    {% endif %}
+    {% if extracao == "Sim, todos os dados" %}
+    <h3>Foram extraídos todos os dados solicitados pelo requisitante.</h3>
+    {% elif extracao == "Sim, sem bate-papos" %}
+    <h3>Foram extraídos todos os dados solicitados pelo requisitante, exceto dados de aplicativos de bate-papo. Tais
+        dados
+        ficam armazenados em uma região da memória
+        protegida e não havia na seção, no momento da perícia, equipamento capaz de quebrar tal proteção.
+    </h3>
+    {% elif extracao == "Sim, sem bate-papos" %}
+    <h3>Não foi possível extrair os dados do aparelho.</h3>
+    {% endif %}
+   
+    {% if extracao != "Não foi possível" %}
+    {% if tipo_extracao == "UFED Física" %}
+    <h3>O método de extração utilizado foi Extração Física, que é capaz de recuperar dados desde que ainda não tenham
+        sido sobrescritos.</h3>
+    {% elif tipo_extracao == "UFED Sistema de Arquivos" %}
+    <h3>O método de extração utilizado foi Extração do Sistema de Arquivos, que não é capaz de recuperar arquivos
+        deletados.</h3>
+    {% elif tipo_extracao == "UFED Lógica" %}
+    <h3>O método de extração utilizado foi Extração Lógica, que não é capaz de recuperar dados deletados.</h3>
+    {% endif %}
+    {% set item_midias = True %}
+    
+    {% endif %}
+    {% else %}
+    <h3>O aparelho não apresentou funcionamento. Devido a isso não foi possível extrair os dados de sua memória interna.</h3>
+    {% endif %}
+    <h3>Os dispositivos de armazenamento que foram extraídos foram:</h3>
+    <table alignment="center">
+        <tr>
+            <td w="1/4">Memória interna</td>
+            <td w="1/4">{{ memoria_extraida }}</td>
+        </tr>
+        <tr>
+            <td w="1/4">Chips SIM</td>
+            <td w="1/4">{{ chip_extraido }}</td>
+        </tr>
+         <tr>
+            <td w="1/4">Cartão de memória</td>
+            <td w="1/4">{{ cartao_extraido }}</td>
+        </tr>
+    </table>
+    {% if item_midias %}
+    <h3>#midias_item#</h3>
+    {% endif %}
+</body>

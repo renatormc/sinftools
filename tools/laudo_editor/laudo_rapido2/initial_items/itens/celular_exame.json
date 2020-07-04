@@ -1,0 +1,107 @@
+{
+    "label": "Celular Exame",
+    "template": "celular_exame.html",
+    "items": [
+        {
+            "type": "edit",
+            "name": "obj_name",
+            "label": "Nome do objeto",
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "name": "funcionamento",
+            "type": "checkbox",
+            "label": "Apresentou funcionamento",
+            "row": 1,
+            "stretch": 1,
+            "default": true
+        },
+        {
+            "name": "desbloqueio",
+            "type": "combo",
+            "editable": false,
+            "allow_null": false,
+            "label": "Desbloqueio",
+            "row": 1,
+            "stretch": 1,
+            "list": [
+                "Desbloqueado",
+                "Senha contornada",
+                "Senha inviolável"
+            ],
+            "default": "Desbloqueado"
+        },
+        {
+            "name": "chat_extraido",
+            "type": "combo",
+            "editable": false,
+            "allow_null": false,
+            "label": "Chats extraídos",
+            "row": 2,
+            "stretch": 0,
+            "list": [
+                "Sim",
+                "Não foi possível",
+                "Não tinha",
+                "Não foi solicitado"
+            ],
+            "default": "Sim"
+        },
+        {
+            "name": "tipo_extracao",
+            "type": "combo",
+            "editable": false,
+            "allow_null": false,
+            "label": "Tipo de extração",
+            "row": 2,
+            "stretch": 0,
+            "list": [
+                "UFED Física",
+                "UFED Sistema de arquivos",
+                "UFED Lógica",
+                "Outras ferramentas",
+                "Nenhuma"
+            ],
+            "default": "UFED Física"
+        },
+        {
+            "name": "memoria_extraida",
+            "type": "combo",
+            "list": [
+                "Sim",
+                "Não foi possível"
+            ],
+            "label": "Memória interna extraída",
+            "row": 2,
+            "stretch": 0,
+            "default": "Sim"
+        },
+        {
+            "name": "cartao_extraido",
+            "type": "combo",
+            "label": "Cartão extraído",
+            "list":  [
+                "Sim",
+                "Não foi possível",
+                "Não existente"
+            ],
+            "row": 2,
+            "stretch": 0,
+            "default": "Sim"
+        },
+        {
+            "name": "chip_extraido",
+            "type": "combo",
+            "list": [
+                "Sim",
+                "Não foi possível",
+                "Não existente"
+            ],
+            "label": "Chips extraídos",
+            "row": 2,
+            "stretch": 0,
+            "default": "Sim"
+        }
+    ]
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="html_files/assets/jquery-3.2.1.min.js"></script>
+    <script src="html_files/assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="html_files/assets/bootstrap-3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" target="iframe-mutante" href="html_files/home.html">Dados</a>
+            </div>
+            <ul class="nav navbar-nav">
+                {% if bate_papos %}
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span
+                        class="glyphicon glyphicon-send"></span>Bate-papos
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for app in apps %}
+                        <li>
+                            <a href="html_files/chats_{{ app }}.html" target="iframe-mutante" data-toggle="tooltip" title="{{ app }}">{{ app }}</a>
+                        </li>
+                        {% endfor %} {% if link_adicional is defined %}
+                        <li>
+                            <a href="html_files/{{ link_adicional.nome_arquivo }}" target="iframe-mutante" data-toggle="tooltip" title="{{ link_adicional.caption }}">{{ link_adicional.caption }}</a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="html_files/linha-tempo_page_1.html" target="iframe-mutante" data-toggle="tooltip" title="Linha do tempo"><span class="glyphicon glyphicon-time"></span>Linha do tempo</a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %} {% if smss %}
+                <li>
+                    <a href="html_files/sms.html" target="iframe-mutante" data-toggle="tooltip" title="Mensagens SMS"><span class="glyphicon glyphicon-envelope"></span>Mensagens SMS</a>
+                </li>
+                {% endif %} {% if chamadas %}
+                <li>
+                    <a href="html_files/chamadas.html" target="iframe-mutante" data-toggle="tooltip" title="Mensagens SMS"><span class="glyphicon glyphicon-list"></span>Registros de chamadas</a>
+                </li>
+                {% endif %} {% if contatos %}
+                <li>
+                    <a href="html_files/contatos.html" target="iframe-mutante" data-toggle="tooltip" title="Mensagens SMS"><span class="glyphicon glyphicon-user"></span>Lista de contatos</a>
+                </li>
+                {% endif %} {% if imagens %}
+                <li>
+                    <a href="html_files/imagens-gerais_page_1.html" target="iframe-mutante" data-toggle="tooltip" title="Imagens gerais"><span class="glyphicon glyphicon-picture"></span>Imagens</a>
+                </li>
+                {% endif %} {% if videos %}
+                <li>
+                    <a href="html_files/videos-gerais_page_1.html" target="iframe-mutante" data-toggle="tooltip" title="Vídeos gerais"><span class="glyphicon glyphicon-facetime-video"></span>Vídeos</a>
+                </li>
+                {% endif %} {% if audios %}
+                <li>
+                    <a href="html_files/audios-gerais_page_1.html" target="iframe-mutante" data-toggle="tooltip" title="Áudios gerais"><span class="glyphicon glyphicon-headphones"></span>Áudios</a>
+                </li>
+                {% endif %} {% if destaques %}
+                <li>
+                    <a href="html_files/destaques.html" target="iframe-mutante" data-toggle="tooltip" title="Destaques do bate-papo"><span class="glyphicon glyphicon-star"></span>Destaques</a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </nav>
+    <div class="container-fluid" id="mutante">
+        <div class="row">
+            <div class="col-md-12">
+                <iframe id="iframe-mutante" name="iframe-mutante" src="html_files/home.html"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+</script>
+
+<style>
+    #mutante {
+        /*height: 95vh;*/
+        margin-top: 60px;
+    }
+    
+    #iframe-mutante {
+        width: 100%;
+        height: 95vh;
+    }
+</style>

@@ -1,0 +1,130 @@
+{
+    "label": "Celular",
+    "template": "celular.html",
+    "items": [
+        {
+            "type": "edit",
+            "name": "obj_name",
+            "label": "Nome do objeto",
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "combo",
+            "name": "marca",
+            "label": "Marca",
+            "list": "marcas",
+            "editable": true,
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "combo",
+            "name": "marca_bateria",
+            "label": "Marca da bateria",
+            "list": "marcas",
+            "editable": true,
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "edit",
+            "name": "modelo",
+            "label": "Modelo",
+            "row": 1,
+            "stretch": 1
+        },
+        {
+            "type": "repeat",
+            "name": "imeis",
+            "label": "Números IMEI",
+            "initial": 1,
+            "row": 2,
+            "stretch": 1,
+            "items": [
+                {
+                    "type": "edit",
+                    "name": "imei",
+                    "label": "IMEI",
+                    "mask": "000000/00/000000/0",
+                    "min_width": 150,
+                    "row": 1,
+                    "stretch": 0
+                }
+            ]
+        },
+        {
+            "type": "repeat",
+            "name": "chips",
+            "label": "Chips",
+            "initial": 1,
+            "row": 3,
+            "stretch": 1,
+            "items": [
+                {
+                    "type": "combo",
+                    "name": "operadora",
+                    "label": "Operadora",
+                    "list": "operadoras",
+                    "editable": true,
+                    "min_width": 150,
+                    "row": 1,
+                    "stretch": 1
+                },
+                {
+                    "type": "edit",
+                    "name": "iccid",
+                    "label": "ICCID",
+                    "default": "",
+                    "mask": "00000000000000000000",
+                    "min_width": 200,
+                    "row": 1,
+                    "stretch": 1
+                }
+            ]
+        },
+        {
+            "type": "edit",
+            "name": "marca_cartao",
+            "label": "Marca cartão",
+            "row": 4,
+            "stretch": 1
+        },
+        {
+            "type": "edit",
+            "name": "capacidade_cartao",
+            "label": "Capacidade cartão",
+            "row": 4,
+            "stretch": 1
+        },
+        {
+            "type": "spacer",
+            "row": 4,
+            "stretch": 1
+        },
+        {
+            "type": "image_chooser",
+            "name": "foto_celular",
+            "label": "Foto completa",
+            "caption": "Celular",
+            "row": 5,
+            "stretch": 1
+        },
+        {
+            "type": "image_chooser",
+            "name": "foto_identificao",
+            "label": "Identificação do aparelho",
+            "caption": "Identificação do aparelho",
+            "row": 6,
+            "stretch": 1
+        },
+        {
+            "type": "image_chooser",
+            "name": "foto_dispositivos",
+            "label": "Dispositivos móveis",
+            "caption": "",
+            "row": 10,
+            "stretch": 1
+        }
+    ]
+}

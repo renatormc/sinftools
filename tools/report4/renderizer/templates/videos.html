@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/jquery.twbsPagination.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Vídeos da conversa: {{ chat.friendly_identifier }}({{ chat.source }})</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-header"></span>
+            </div>
+        </div>
+        <div class="row">
+            {% for message in pagination['items'] %}
+            {% for attachment in message.attachments %}
+            <table>
+                <tr>
+                    <td>
+                        {% if attachment.has_thumb %}
+                        <img src="../{{ attachment.thumb_path|urlFile }}" class="rm-video-thumbnail video-thumbnail"
+                            onclick="videoClick('../{{ attachment.path|urlFile }}')" />
+                        {% else %}
+                        <video src="../{{ attachment.path|urlFile }}" class="video" controls>
+                            Seu navegador não suporta o elemento <code>video</code>.
+                        </video>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a
+                            href="chat{{ chat.id }}_page_{{ attachment.message.page_renderized }}.html#men-{{ attachment.message.id }}">Ver
+                            na
+                            conversa</a>
+                    </td>
+                </tr>
+            </table>
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <span id="pagination-here-footer"></span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<!-- Creates the bootstrap modal where the image will appear -->
+<div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagem</h4>
+            </div>
+            <div class="modal-body">
+                <img src="#" id="imagemModal">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content text-center">
+            <div class="modal-body">
+                <button type="button" style="float: right;" class="btn btn-default" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <video src="#" controls id="videoElementModal" class="rm-video-element-modal">
+                    Seu navegador não suporta o elemento <code>video</code>.
+                </video>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</html>
+<script>
+
+    $(document).ready(function () {
+
+        $("#videoModal").on('hide.bs.modal', function () {
+            $("#videoElementModal").trigger('pause');
+        });
+    });
+    function imageClick(link) {
+        $("#imagemModal").attr("src", link);
+        $('#modalFoto').modal('toggle');
+    }
+
+    function videoClick(link) {
+        $("#videoElementModal").attr("src", link);
+        $("#videoModal").modal("toggle");
+        $("#videoElementModal").trigger('play');
+    }
+
+    var total_clicks_footer = 0;
+    var start_page = parseInt("{{ pagination['page'] }}");
+    var total_pages = parseInt("{{ pagination['pages'] }}");
+    $('#pagination-here-footer').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_footer += 1;
+            if (total_clicks_footer > 1) {
+                window.location.href = "videos{{ chat.id }}_page_" + page + ".html";
+            }
+        }
+    });
+    var total_clicks_header = 0;
+    $('#pagination-here-header').twbsPagination({
+        totalPages: total_pages,
+        visiblePages: 10,
+        startPage: start_page,
+        prev: "&laquo;",
+        next: "&raquo;",
+        first: "←",
+        last: "→",
+        onPageClick: function (event, page) {
+            total_clicks_header += 1;
+            if (total_clicks_header > 1) {
+                window.location.href = "videos{{ chat.id }}_page_" + page + ".html";
+            }
+        }
+    });
+</script>
+
+<style>
+    .video {
+        max-width: 300px;
+    }
+
+    video:hover{
+        cursor: pointer;
+    }
+
+    .video-thumbnail {
+        max-width: 300px;
+    }
+
+    .video-thumbnail:hover{
+        cursor: pointer;
+    }
+
+    #imagemModal {
+        max-width: 500px;
+        min-width: 200px;
+    }
+
+    #videoElementModal {
+        max-width: 500px;
+        min-width: 200px;
+    }
+
+    table {
+        display: inline;
+    }
+
+    table td {
+        padding: 4px;
+    }
+</style>

@@ -1,0 +1,2 @@
+C:\ScriptsUFED\Miniconda3\Lib\site-packages\PyQt5\pyuic5 adicionar.ui -o ui_adicionar.py -x
+C:\ScriptsUFED\Miniconda3\Lib\site-packages\PyQt5\pyrcc5 resources_adicionar.qrc -o resources_adicionar_rc.py

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery-3.2.1.min.js"></script>
+    <script src="assets/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/bootstrap-3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Mensagens SMS</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="col-md-6">Corpo</th>
+                    <th class="col-md-2">Contato</th>
+                    <th class="col-md-2">Horário</th>
+                    <th class="col-md-1">Pasta</th>
+                    <th class="col-md-1">Deletado</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for key,value in df.iterrows() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="col-md-6">{{ value['body'] }}</td>
+                    <td class="col-md-2">{{ value['contact'] }}</td>
+                    <td class="col-md-2">{{ value['timestamp'] }}</td>
+                    <td class="col-md-1">{{ value['folder'] }}</td>
+                    <td class="col-md-1">{{ value['deleted'] }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
+<script>
+
+</script>
+
+<style>
+    .emoji {
+        width: 20px;
+    }
+</style>

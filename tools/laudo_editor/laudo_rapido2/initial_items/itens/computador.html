@@ -1,0 +1,69 @@
+<body>
+    <h2>Computador {{ obj_name|not_null }}</h2>
+    <p>Trata-se de um computador do tipo {{ tipo }}
+        {% if modelo %}
+        , modelo {{ modelo }}
+        {% endif %}
+        {% if n_serie %}
+        , número de série {{ n_serie }}
+        {% endif %}
+        conforme fotos a
+        seguir.</p>
+        <br/>
+    {% set fotos = remove_nulls([foto_frontal, foto_posterior, foto_perfil], 'path') %}
+    <table border="false">
+        {% for row in to_table(fotos, 2) %}
+        <tr>
+            {% set w = 1/row|length %}
+            {% for foto in row %}
+            
+            <td w="{{ w }}" alignment="center">
+                <picture w='0.45' src="{{ foto['path'] }}" caption="{{ foto['caption'] }}" />
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <p>O computador estava equipado internamente com o{{ ifplural(memorias, 's') }}
+        dispositivo{{ ifplural(memorias, 's') }}
+        de memória não volátil conforme tabela{{ ifplural(memorias, 's') }} a seguir.</p>
+    {% for memoria in memorias %}
+    <table caption="{{ memoria['nome'] }}">
+        <tr>
+            <td w="0.3" font-weight="bold">Tipo</td>
+            <td w="0.7">{{ memoria['tipo'] }}</td>
+        </tr>
+        {% if memoria['marca'] %}
+        <tr>
+            <td w="0.3" font-weight="bold">Marca</td>
+            <td w="0.7">{{ memoria['marca'] }}</td>
+        </tr>
+        {% endif %}
+        {% if memoria['modelo'] %}
+        <tr>
+            <td w="0.3" font-weight="bold">Modelo</td>
+            <td w="0.7">{{ memoria['modelo'] }}</td>
+        </tr>
+        {% endif %}
+        {% if memoria['capacidade'] %}
+        <tr>
+            <td w="0.3" font-weight="bold">Capacidade nominal</td>
+            <td w="0.7">{{ memoria['capacidade'] }}</td>
+        </tr>
+        {% endif %}
+        {% if memoria['n_serie'] %}
+        <tr>
+            <td w="0.3" font-weight="bold">Número de série</td>
+            <td w="0.7">{{ memoria['n_serie'] }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td w="0.3" font-weight="bold">Foto</td>
+            <td w="0.7" alignment="center">
+                <br />
+                <picture w='0.5' src="{{ memoria['foto']['path'] }}" />
+            </td>
+        </tr>
+    </table>
+    {% endfor %}
+</body>
