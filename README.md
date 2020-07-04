@@ -10,4 +10,6 @@
 OBS:
 Caso apareça a mensagem de que a execução de scripts está desabilitada em seu Powershell, utilize o seguinte comando para habilitar:
 
-	set-executionpolicy remotesigned
+```powershell
+set-executionpolicy remotesigned
+```
