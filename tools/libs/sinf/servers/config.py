@@ -6,18 +6,16 @@ import yaml
 sinftools_dir = Path(os.getenv("SINFTOOLS"))
 app_dir = Path(os.path.dirname(os.path.realpath(__file__))).absolute()
 
-config_folder = sinftools_dir / "var/fila"
+config_folder = sinftools_dir / "var/config"
 if not config_folder.exists():
     os.makedirs(config_folder)
 
 config_path = config_folder / "servers_config.yaml"
-if not config_path.exists():
-    shutil.copy(app_dir / "servers_config.example.yaml", config_path)
 
 with config_path.open("r", encoding="utf-8") as f:
     config_local = yaml.load(f, Loader=yaml.FullLoader)
 
-sqlite_path = config_folder / 'database.db'
+sqlite_path = sinftools_dir / "var/databases/fila.db"
 database_url = f"sqlite:///{sqlite_path}"
 # database_url = config_local['database_url']
 iped_folder = Path(config_local['iped_folder'])

@@ -1,5 +1,4 @@
 from parsers.spi2db.spi2db import SPIParser
-from parsers.xlsx2db.xlsx2db import XlsxParser
 from parsers.xml2db.xml2db import XmlParser
 from parsers.sqlite2db.sqlite2db import Sqlite2Db
 from parsers.files_folder2db.files_folder2db import FilesFolder2Db

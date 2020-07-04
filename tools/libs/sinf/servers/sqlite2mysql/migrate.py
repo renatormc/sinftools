@@ -10,7 +10,7 @@ import os
 sinftools_dir = os.getenv("SINFTOOLS").replace("\\", "/")
 
 
-engine_to = create_engine(f"sqlite:///{sinftools_dir}/var/fila/database.db")
+engine_to = create_engine(f"sqlite:///{sinftools_dir}/var/databases/fila.db")
 db_session_to = scoped_session(sessionmaker(autocommit=False,
                                             autoflush=False,
                                             bind=engine_to))

@@ -1,2 +1,3 @@
 @echo off
-""%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\folder_scripts\hash.py" %*
+set PYTHONPATH=%SINFTOOLS%\tools\libs && ^
+"%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\folder_scripts\hash.py" %*

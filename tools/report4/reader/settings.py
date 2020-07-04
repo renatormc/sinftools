@@ -33,7 +33,7 @@ is_localdb = False if exec_mode == 'portable' or database_type == 'sqlite' else 
 if exec_mode == 'portable' or not is_localdb:
     database = f"sqlite:///{work_dir}/.report/db.db"
 else:
-    path = Path(f"{sinftools_dir}/var/sinf_report_db.json")
+    path = Path(f"{sinftools_dir}/var/config/sinf_report_db.json")
     if path.exists():
         with path.open(encoding="utf-8") as f:
             dconf = json.load(f)

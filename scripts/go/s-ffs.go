@@ -10,7 +10,7 @@ func main() {
 
 	args := os.Args[1:]
 	sinftools_dir := os.Getenv("SINFTOOLS")
-	cmd := exec.Command(, args...)
+	cmd := exec.Command(fmt.Sprintf("%s\\extras\\FreeFileSyncPortable\\FreeFileSyncPortable.exe", sinftools_dir), args...)
 	err := cmd.Start()
 
 	if err != nil {

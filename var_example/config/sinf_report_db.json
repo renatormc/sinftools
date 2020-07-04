@@ -1,0 +1,6 @@
+{
+    "user": "coloque_seu_usuario_aqui",
+    "password": "coloque_sua_senha_aqui",
+    "postgres_bin_folder": "C:\\PostgreSQL\\pg10\\bin",
+    "mysql_bin_folder": "C:\\Program Files\\MariaDB 10.4\\bin"
+}

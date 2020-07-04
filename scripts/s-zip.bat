@@ -1,1 +1,3 @@
-""%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\sinf_zip\zip.py" %*
+@echo off
+set PYTHONPATH=%SINFTOOLS%\tools\libs && ^
+"%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\sinf_zip\zip.py" %*

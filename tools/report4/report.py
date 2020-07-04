@@ -253,7 +253,7 @@ def portable():
 
 @cli.command()
 def db_config():
-    path = Path(f"{settings.sinftools_dir}/var/sinf_report_db.json")
+    path = Path(f"{settings.sinftools_dir}/var/config/sinf_report_db.json")
     if not path.exists():
         if not path.exists():
             shutil.copy(Path(settings.app_dir / "dev/sinf_report_db.json"), path)

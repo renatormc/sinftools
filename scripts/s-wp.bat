@@ -1,2 +1,3 @@
 @echo off
-""%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\laudo_editor\cmd.py" insert-pictures %*
+set PYTHONPATH=%SINFTOOLS%\tools\libs && ^
+"%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\laudo_editor\cmd.py" insert-pictures %*
