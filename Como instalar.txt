@@ -5,3 +5,5 @@ OBS:
 Caso apareça a mensagem de que a execução de scripts está desabilitada em seu Powershell, utilize o seguinte comando para habilitar:
 
 	set-executionpolicy remotesigned
+
+3- renomeie a pasta "var_example" para somente "var". Entre dentro da pasta var e edite os arquivos de configurações

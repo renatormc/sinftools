@@ -1,0 +1,15 @@
+AMQP_URI: 'pyamqp://sinf:sptcICLR.@localhost/sinf'
+WEB_SERVER_ADDRESS: '0.0.0.0:8003'
+rpc_exchange: 'nameko-rpc'
+max_workers: 10
+parent_calls_tracked: 10
+NAMEKO_RPC_TIMEOUT: 5
+
+LOGGING:
+    version: 1
+    handlers:
+        console:
+            class: logging.StreamHandler
+    root:
+        level: DEBUG
+        handlers: [console]
