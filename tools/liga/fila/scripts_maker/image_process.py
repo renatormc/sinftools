@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
-from sinf.servers.models import *
-from sinf.servers.database import db_session
+from models import *
+from database import db_session
 import config
 from ..helpers import get_last_dir, set_last, get_disks
 

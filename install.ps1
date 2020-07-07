@@ -97,6 +97,7 @@ function Get-EnvPath {
 
 
 Set-EnvironmentVariable -Name "SINFTOOLS" -Value $PSScriptRoot -Target Machine
+Set-EnvironmentVariable -Name "PYTHONPATH" -Value (Join-Path -Path $PSScriptRoot -ChildPath "tools\libs") -Target Machine
 
 
 $env:Path -split ';' | ForEach-Object {
@@ -110,7 +111,7 @@ $env:Path -split ';' | ForEach-Object {
 
 Add-EnvPath (Join-Path -Path $PSScriptRoot -ChildPath "scripts") -Container "Machine"
 
-Write-Host "Sua máquina foi configurada para uso do SINFTOOLS. Bom uso!!"
+Write-Host "Sua mï¿½quina foi configurada para uso do SINFTOOLS. Bom uso!!"
 
 
 

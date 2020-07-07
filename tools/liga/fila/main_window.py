@@ -419,12 +419,12 @@ class Window(QMainWindow):
             while to_script.exists():
                 to_script = config.scripts_folder / f"{name}_{i}.bat"
                 i += 1
-            from_script = config.app_dir / f"cmd/scripts/{script}"
+            from_script = config.app_dir / f"cmdtool/scripts/{script}"
             shutil.copy(from_script, to_script)
             process = Process()
             process.script = str(to_script.absolute())
             process.perito = perito
-            process.type = config.scripts_template[type]['process_type']
+            process.type = config.fila_scripts_template[type]['process_type']
             process.status = "ADICIONADO"
             db_session.add(process)
             db_session.commit()

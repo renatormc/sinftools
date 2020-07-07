@@ -1,3 +1,4 @@
+import config
 from PyQt5.QtWidgets import QApplication
 from fila.main_window import Window
 import sys

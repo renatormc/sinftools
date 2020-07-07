@@ -4,8 +4,8 @@ from PyQt5.QtCore import QSize, QTimer
 import config as config_
 from pathlib import Path
 from PyQt5.QtGui import QKeySequence
-from sinf.servers.models import *
-from sinf.servers.database import db_session
+from models import *
+from database import db_session
 from .helpers import get_disks, get_last_dir, set_last
 from .disk_dialog import DiskDialog
 from .scripts_maker import get_maker, has_maker

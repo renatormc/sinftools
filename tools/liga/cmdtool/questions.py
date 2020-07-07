@@ -1,7 +1,7 @@
 from PyInquirer import style_from_dict, Token, prompt, Separator
-from styles import custom_style_2
+from .styles import custom_style_2
 import config
-import sinf.servers.telegram_api as telegram_api
+
 
 
 def get_delivery_options(answers):
@@ -24,25 +24,7 @@ def choose_server():
     return answers['server']
 
 
-def choose_user_telegram():
-    users = telegram_api.get_users_updates()
-    choices = [{"value": user['chat_id'], "name": f"{user['username']}, {user['chat_id']}"} for user in users]
-    questions = [
-        {
-            'type': 'list',
-            'name': 'chat_id',
-            'message': 'Selecione um servidor',
-            'choices': choices
-        },
-        {
-            'type': 'input',
-            'name': 'username',
-            'message': 'Nome sob o qual o usuário será cadastrado: '
-        },
-    ]
 
-    answers = prompt(questions, style=custom_style_2)
-    return answers
 
 def mark():
     questions = [

@@ -57,3 +57,9 @@ fila_scripts_template = {
     "Outro": {"script": "other.bat", "process_type": "Outro"},
     "Sincronizar pastas": {"script": "synkdir.bat", "process_type": "Sincronização de pastas"}
 }
+
+scripts_folder = Path(os.getenv("USERPROFILE")) / "sinf_fila_scripts"
+if not scripts_folder.exists():
+    os.makedirs(scripts_folder)
+
+iped_folder = Path(config_local['iped_folder'])

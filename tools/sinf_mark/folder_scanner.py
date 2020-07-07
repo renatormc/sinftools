@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from sinf.servers.markers import get_markers_folder, get_drives
+from markers import get_markers_folder, get_drives
 
 
 class FolderScanner:

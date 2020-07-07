@@ -1,6 +1,6 @@
 from pathlib import Path
 import config
-from sinf.servers import markers
+import markers
 import hashlib
 from portable import put_portable
 import logging 

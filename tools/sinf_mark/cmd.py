@@ -1,7 +1,7 @@
 import argparse
 from styles import custom_style_2
 from PyInquirer import prompt
-from sinf.servers import markers
+import markers
 from folder_scanner import FolderScanner
 import os
 from pathlib import Path

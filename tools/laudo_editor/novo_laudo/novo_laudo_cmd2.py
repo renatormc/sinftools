@@ -3,6 +3,7 @@ import sys
 import codecs
 import json
 import shutil
+import errno
 sinftools_dir = os.getenv("SINFTOOLS")
 
 def create_dirs(dir_, nome_base, quantidade):
@@ -42,7 +43,7 @@ config = {
 	"template_novo_laudo": f"{sinftools_dir}\\var\\template_novo_laudo"
 }
 
-with codecs.open(f"{sinftools_dir}\\var\\config.json",'r',encoding="utf-8") as arq:
+with codecs.open(f"{sinftools_dir}\\var\\config\\laudos.json",'r',encoding="utf-8") as arq:
     config_local = json.load(arq)
 
 def copyanything(src, dst):   
