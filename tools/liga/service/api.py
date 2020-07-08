@@ -29,7 +29,7 @@ def processes():
     processes = db_session.query(Process).order_by(
         Process.start_waiting.asc()).all()
     schema = ProcessSchema(many=True)
-    return jsonify(schema.dump(processes).data)
+    return jsonify(schema.dump(processes))
 
 
 @api.route("/check-process")
@@ -45,6 +45,7 @@ def check_process():
 @jwt_required
 def process_script(id):
     process = db_session.query(Process).get(id)
+    print(process)
     schema = ProcessSchema()
     return jsonify(schema.dump(process).data)
 

@@ -48,10 +48,11 @@ class ProcessManager:
 
     def get_args(self, proc: Process):
 
-        # path = config.app_dir / "run.ps1"
-        path = config.app_dir / "run.bat"
+        # path = config.app_dir / "helpers/process_manager/run.ps1"
+        path = config.app_dir / "helpers/process_manager/run.bat"
         args = ["cmd", "/K", str(path), proc.script]
         # args = ['powershell', '-windowstyle', 'Hidden', '-file', str(path), proc.script]
+        # args = ['powershell', '-file', str(path), proc.script]
         return args
 
     def init_process(self, proc: Process):

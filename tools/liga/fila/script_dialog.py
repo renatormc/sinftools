@@ -9,7 +9,7 @@ from database import db_session
 from .helpers import get_disks, get_last_dir, set_last
 from .disk_dialog import DiskDialog
 from .scripts_maker import get_maker, has_maker
-from .ask_wizard_dialog import AskWizardDialog
+# from .ask_wizard_dialog import AskWizardDialog
 
 class ValidationError(Exception):
     pass
@@ -90,17 +90,17 @@ class ScriptDialog(QDialog):
         disks_shortcut.activated.connect(self.choose_disk)
         disks_shortcut.setEnabled(True)
 
-    def showEvent(self, event):
-        QDialog.showEvent(self, event)
-        QTimer.singleShot(50, self.window_shown)
+    # def showEvent(self, event):
+    #     QDialog.showEvent(self, event)
+    #     QTimer.singleShot(50, self.window_shown)
 
 
-    def window_shown(self):
-        if self.initial and self.has_script_maker:
-            dialog = AskWizardDialog()
-            dialog.exec_()
-            if dialog.ok:
-                self.open_script_maker()
+    # def window_shown(self):
+    #     if self.initial and self.has_script_maker:
+    #         dialog = AskWizardDialog()
+    #         dialog.exec_()
+    #         if dialog.ok:
+    #             self.open_script_maker()
 
     def validate_dependencies(self):
         self.dependencies_ids = []

@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
 import config
+from database import db_session
+from models import *
 
 class NewScriptDialog(QDialog):
 
@@ -16,7 +18,10 @@ class NewScriptDialog(QDialog):
         self.setWindowIcon(QIcon('{}\\fila\\resources\\icone.png'.format(config.app_dir)))
         self.main_layout = QVBoxLayout()
         self.led_name = QLineEdit()
-        self.led_perito = QLineEdit()
+        users = db_session.query(User).order_by(User.name).all()
+        items = [user.name for user in users]
+        self.cbx_perito = QComboBox()
+        self.cbx_perito.addItems(items)
         self.cbx_template = QComboBox()
         for key in config.fila_scripts_template.keys():
             self.cbx_template.addItem(key)
@@ -26,7 +31,7 @@ class NewScriptDialog(QDialog):
         self.main_layout.addWidget(label1)
         self.main_layout.addWidget(self.led_name)
         self.main_layout.addWidget(label2)
-        self.main_layout.addWidget(self.led_perito)
+        self.main_layout.addWidget(self.cbx_perito)
         self.main_layout.addWidget(label3)
         self.main_layout.addWidget(self.cbx_template)
         self.setLayout(self.main_layout)
@@ -42,7 +47,8 @@ class NewScriptDialog(QDialog):
         self.main_layout.addWidget(self.button_box)
 
     def accepted(self):
-        if self.led_name.displayText().strip() != "" and self.led_perito.displayText().strip() != "":
+        perito = self.cbx_perito.currentText()
+        if self.led_name.displayText().strip() != "" and perito != "":
             self.ok_clicked = True
             self.close()
 

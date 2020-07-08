@@ -81,6 +81,7 @@ class Window(QMainWindow):
         self.check_process()
         self.update_table()
         self.update_console()
+        print("F5")
 
     def convert_data(self, value):
         if value is None:
@@ -221,8 +222,8 @@ class Window(QMainWindow):
             else:
                 users = db_session.query(User).order_by(User.name).all()
                 items = [user.name for user in users]
-                text, okPressed = QInputDialog.getItem(self, "select input dialog",
-                                                       "list of languages", items, 0, False)
+                text, okPressed = QInputDialog.getItem(self, "Perito",
+                                                       "Selecione seu nome na lista", items, 0, False)
                 if okPressed:
                     if len(text.strip()) < 4:
                         self.show_error(
@@ -411,7 +412,7 @@ class Window(QMainWindow):
         dialog.exec_()
         if dialog.ok_clicked:
             name = dialog.led_name.displayText()
-            perito = dialog.led_perito.displayText()
+            perito = dialog.cbx_perito.currentText()
             type = dialog.cbx_template.currentText()
             script = config.fila_scripts_template[type]['script']
             to_script = config.scripts_folder / f"{name}.bat"
