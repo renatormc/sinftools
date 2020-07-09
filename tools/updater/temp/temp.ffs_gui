@@ -30,6 +30,8 @@
                 <Item>\RECYCLED\</Item>
                 <Item>*\desktop.ini</Item>
                 <Item>*\thumbs.db</Item>
+                <Item>\var\</Item>
+                <Item>\.git\</Item>
             </Exclude>
             <TimeSpan Type="None">0</TimeSpan>
             <SizeMin Unit="None">0</SizeMin>
@@ -37,8 +39,8 @@
         </GlobalFilter>
         <FolderPairs>
             <Pair>
-                <Left>%SINFTOOLS%\extras</Left>
-                <Right>\\172.30.47.246\sinftools\extras</Right>
+                <Left>%SINFTOOLS%</Left>
+                <Right>\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2</Right>
             </Pair>
         </FolderPairs>
         <OnCompletion/>

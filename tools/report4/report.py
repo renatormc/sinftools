@@ -109,7 +109,9 @@ def init(grouped, dbtype):
     importlib.reload(models)
     init_db()
     hp.copy_config_files(overwrite=True)
-    shutil.copy(settings.app_dir / "go/starter_normal.exe",
+    # shutil.copy(settings.app_dir / "go/starter_normal.exe",
+    #             constants.ANALYZER_EXE_NAME)
+    shutil.copy(settings.app_dir / constants.ANALYZER_EXE_NAME,
                 constants.ANALYZER_EXE_NAME)
     print("\nAmbiente preparado. Antes de processar não se esqueça de editar os arquivos \"config_source.yaml\" que se encontram dentro de cada pasta de fonte de dados.")
 
@@ -357,7 +359,7 @@ def analyzer(mode, new_window):
         Popen(f"cmd /k s-py {path} {mode}",
             creationflags=CREATE_NEW_CONSOLE)
     else:
-        python = settings.sinftools_dir / "Miniconda3/python"
+        python = settings.sinftools_dir / "extras/Python/python.exe"
         Popen(f'"{python}" "{path}" {mode}')
 
 

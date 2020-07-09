@@ -11,7 +11,7 @@ tempfile = (app_dir / "temp/temp.ffs_gui")
 
 
 @click.command()
-@click.option('--directory', '-d', default=r'\\10.129.3.14\compartilhada\SOFTWARE\sinftools')
+@click.option('--directory', '-d', default=r'\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2')
 @click.option('--onlyextras', '-e', is_flag=True)
 @click.option('--upload', '-u', is_flag=True)
 def update(directory, onlyextras, upload):
