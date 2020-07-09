@@ -98,7 +98,6 @@ def post_connection_intent():
     return data['name']
 
 
-
 @api.route("/get-disk-usage")
 @jwt_required
 def get_disk_usage():

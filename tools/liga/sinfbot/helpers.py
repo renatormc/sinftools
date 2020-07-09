@@ -21,7 +21,7 @@ def get_contact_name(chat_id):
 
 def bot_send_message(name, text):
     try:
-        url = f"{config.config_local['sinfbot_url']}/senf-message"
+        url = f"{config.config_local['sinfbot_url']}/send-message"
         req = sinf_requests.Requester(config.SINF_TOKEN)
         req.post(url, json={'name': name, 'text': text})
     except ConnectionError:

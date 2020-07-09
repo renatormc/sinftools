@@ -3,7 +3,7 @@ from helpers.database import filter_depends_on
 import subprocess
 import shlex
 import psutil
-from datetime import datetime
+from datetime import datetime, timedelta
 import config
 import time
 from pathlib import Path
@@ -157,7 +157,8 @@ class ProcessManager:
         for proc in procs:
             try:
                 p = psutil.Process(proc.pid)
-                if proc.start != datetime.fromtimestamp(p._create_time):
+                if abs(proc.start - datetime.fromtimestamp(p._create_time)) > timedelta(minutes=1):
+                # if proc.start != datetime.fromtimestamp(p._create_time):
                     raise psutil.NoSuchProcess(p.pid)
             except psutil.NoSuchProcess:
                 proc.status = self.check_process_finished(proc)
