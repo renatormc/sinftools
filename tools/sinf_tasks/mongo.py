@@ -1,0 +1,28 @@
+import mongoengine as me
+import datetime
+import config
+
+# MongoDB URI-style connect
+me.connect(host=config.MONGO_URI)
+
+
+class Caso(me.Document):
+    nome = me.StringField(max_length=50, required=True)
+    RG = me.IntField(required=True)
+    ano = me.IntField(required=True)
+    responsavel = me.StringField(max_length=50, required=True)
+
+
+class Objeto(me.Document):
+    nome = me.StringField(max_length=50, required=True)
+    caso = me.StringField(max_length=50, required=True)
+    tipo = me.StringField(max_length=50, required=True)
+    
+
+class Tarefa(me.Document):
+    objeto = me.StringField(max_length=50, required=True)
+    nome = me.StringField(max_length=50, required=True)
+    descricao = me.StringField()
+    
+
+    # date_modified = me.DateTimeField(default=datetime.datetime.utcnow)

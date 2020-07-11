@@ -39,8 +39,8 @@
         </GlobalFilter>
         <FolderPairs>
             <Pair>
-                <Left>%SINFTOOLS%</Left>
-                <Right>\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2</Right>
+                <Left>\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2</Left>
+                <Right>%SINFTOOLS%</Right>
             </Pair>
         </FolderPairs>
         <OnCompletion/>

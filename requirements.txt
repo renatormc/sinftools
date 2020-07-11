@@ -38,6 +38,7 @@ marshmallow==3.6.1
 marshmallow-sqlalchemy==0.23.1
 mccabe==0.6.1
 mock==4.0.2
+mongoengine==0.20.0
 monotonic==1.5
 mysqlclient==2.0.1
 numpy==1.19.0
@@ -57,12 +58,15 @@ Pygments==2.6.1
 PyInquirer==1.0.3
 PyJWT==1.7.1
 pylint==2.4.4
+pymongo==3.10.1
 pyperclip==1.8.0
 PyQt5==5.15.0
 PyQt5-sip==12.8.0
+pyqt5-tools==5.15.0.1.7
 PySimpleGUI==4.24.0
 python-dateutil==2.8.1
 python-docx==0.8.10
+python-dotenv==0.14.0
 python-telegram-bot==12.8
 pytz==2020.1
 pywin32==228
