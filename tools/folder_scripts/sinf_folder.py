@@ -1,8 +1,7 @@
 from pathlib import Path
 import click
 import sys
-import os
-from sinf.servers import markers
+import markers
 
 def create_subfolders(folder_name):
     extracao = folder_name / "extracao"
