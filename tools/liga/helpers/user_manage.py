@@ -12,7 +12,13 @@ def get_connection_type():
     output, err = p.communicate()
     p_status = p.wait()
     text = output.decode("utf-8")
-    if "Ativo" in text:
+    if "Ativo" not in text:
+        cmd = f"query session |findstr Active"
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+        output, err = p.communicate()
+        p_status = p.wait()
+        text = output.decode("utf-8")
+    if "Ativo" in text or "Active" in text:
         return 'rdp' if 'rdp' in text else 'local'
 
 

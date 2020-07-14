@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1094</width>
-    <height>676</height>
+    <width>1109</width>
+    <height>689</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,25 +53,15 @@
        <attribute name="title">
         <string>Objetos</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,0">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
         <item>
-         <widget class="QTableWidget" name="tbw_objetos">
+         <widget class="QTableView" name="tbv_objetos">
           <property name="selectionMode">
            <enum>QAbstractItemView::SingleSelection</enum>
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
-          <column>
-           <property name="text">
-            <string>Nome</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Tipo</string>
-           </property>
-          </column>
          </widget>
         </item>
         <item>
@@ -155,8 +145,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1094</width>
-     <height>21</height>
+     <width>1109</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArquivo">

@@ -1,5 +1,6 @@
 from ui_editar_objeto import Ui_EditarObjeto
 from PyQt5.QtWidgets import QDialog
+import repo
 
 class EditarObjeto(QDialog):
     def __init__(self):
@@ -7,6 +8,9 @@ class EditarObjeto(QDialog):
         self.ui = Ui_EditarObjeto()
         self.ui.setupUi(self)
         self.connections()
+        for tipo in repo.get_tipos_objetos():
+            self.ui.cbx_tipo.addItem(tipo.nome)
+
 
     def connections(self):
         pass

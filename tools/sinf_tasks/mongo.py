@@ -8,9 +8,8 @@ me.connect(host=config.MONGO_URI)
 
 class Caso(me.Document):
     nome = me.StringField(max_length=50, required=True)
-    RG = me.IntField(required=True)
-    ano = me.IntField(required=True)
-    perito = me.StringField(max_length=50, required=True)
+    pericia = me.StringField(max_length=50)
+    perito = me.StringField(max_length=50)
 
 
 class TipoObjeto(me.Document):
@@ -23,7 +22,7 @@ class Objeto(me.Document):
     tipo = me.StringField(max_length=50, required=True)
     anotacoes = me.StringField()
     local = me.StringField(max_length=100)
-    perito = me.StringField(max_length=50, required=True)
+    perito = me.StringField(max_length=50)
 
 
 class Tarefa(me.Document):

@@ -3,6 +3,7 @@ from helpers.user_manage import get_last_logon_time, post_connect_intent, get_co
 import sys
 
 connection_type = get_connection_type()
+print(connection_type)
 if connection_type != "local" and not (len(sys.argv) > 1 and sys.argv[1] == 'test'):
     sys.exit()
 
