@@ -1,8 +1,8 @@
 import PySimpleGUI as sg
-from sinf.servers import user_manage
+from helpers.user_manage import get_last_logon_time, post_connect_intent, get_connection_type
 import sys
 
-connection_type = user_manage.get_connection_type()
+connection_type = get_connection_type()
 if connection_type != "local" and not (len(sys.argv) > 1 and sys.argv[1] == 'test'):
     sys.exit()
 
@@ -19,9 +19,9 @@ while True:
         break
     elif event == 'Ok' and values[0].strip():
         name = values[0].strip()
-        last_logon = user_manage.get_last_logon_time()
+        last_logon = get_last_logon_time()
         if last_logon:
-            user_manage.post_connect_intent(name, last_logon)
+            post_connect_intent(name, last_logon)
         break
     
 window.close()

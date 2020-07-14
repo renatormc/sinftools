@@ -1,4 +1,4 @@
 {
     "python.linting.enabled": false,
-    "python.pythonPath": "D:\\portable\\sinftools\\Miniconda3\\python.exe"
+    "python.pythonPath": "${env:SINFTOOLS}\\extras\\Python\\python.exe"
 }
