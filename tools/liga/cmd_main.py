@@ -50,7 +50,12 @@ def cli(ctx):
 
 
 @cli.command()
-def ts():
+@click.argument('server', default="")
+def ts(server):
+    print(server)
+    if server != "":
+        print(server)
+        exit()
     try:
         token_path = config.sinftools_dir / "var/sinftoken"
         requester = Requester(token=token_path)
