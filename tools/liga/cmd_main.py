@@ -50,16 +50,20 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument('server', default="")
+@click.argument('server', required=False)
 def ts(server):
-    print(server)
-    if server != "":
-        print(server)
-        exit()
     try:
         token_path = config.sinftools_dir / "var/sinftoken"
         requester = Requester(token=token_path)
-        server = questions.choose_server()
+        if not server:
+            server = questions.choose_server()
+        else:
+            if server == "ba":
+                server = "batman"
+            elif server == "sm":
+                server = "superman"
+            elif server == "mm":
+                server = "mulher_maravilha"
         url = f"{config.servers[server]['url']}/who-is-connected"
         response = requester.get(url)
         if response.status_code == 401:
