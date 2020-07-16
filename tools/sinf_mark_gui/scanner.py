@@ -7,11 +7,13 @@ from PyQt5.QtCore import QThread, pyqtSignal
 class Scanner(QThread):
 
     print_message = pyqtSignal(str)
+    new_marker_found = pyqtSignal(dict)
+
 
     def __init__(self):
         super(Scanner, self).__init__()
         self.max_depth = 5
-        self.folders = {}
+        self.markers = []
         self.current_disk_name = ""
         self.types = "*"
         self.continue_after_find = True
@@ -24,10 +26,15 @@ class Scanner(QThread):
         markers = get_markers_folder(path)
         for marker in markers:
             if self.types == "*" or marker['type'] in self.types:
-                self.folders[str(path)] = markers
+                
+                for i, m in enumerate(markers):
+                    markers[i]['folder'] = str(path)
+                    self.new_marker_found.emit(markers[i])
+                self.markers += markers
                 break
 
     def find_folders(self, path: Path, depth=0):
+        self.print_message.emit(f"Vasculhando pasta {path}")
         if depth >= self.max_depth:
             return
         if self.check_folder(path) and not self.continue_after_find:
@@ -41,7 +48,7 @@ class Scanner(QThread):
 
     def scan_folder(self, folder):
         folder = Path(folder)
-        self.folders = {}
+        self.markers = []
         self.print_message.emit(
             f"Iniciando vasculhamento. Profundidade máxima: {self.max_depth}")
         self.find_folders(folder)
@@ -54,7 +61,7 @@ class Scanner(QThread):
                 return marker
 
     def scan_drives(self):
-        self.folders = {}
+        self.markers = []
         self.get_drives()
         self.print_message.emit(f"Iniciando vasculhamento. Profundidade máxima: {self.max_depth}")
         for drive in self.drives:
@@ -64,7 +71,7 @@ class Scanner(QThread):
             self.current_disk_name = drive_info['name']
             self.print_message.emit(f"Vasculhando drive {drive}...")
             self.find_folders(Path(drive))
-        self.print_message.emit(f"Vasculhando finalizado.")
+        self.print_message.emit(f"Vasculhamento finalizado.")
 
     def run(self):
         if not self.folder:
