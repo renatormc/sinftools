@@ -4,7 +4,8 @@ from PyQt5.QtCore import QAbstractTableModel, QVariant, QModelIndex
 from pathlib import Path
 from scanner import Scanner
 from PyQt5.QtCore import Qt
-
+import os
+import markers
 
 # class ListModel(QAbstractListModel):
 #     def __init__(self, parent=None, *args):
@@ -26,22 +27,23 @@ from PyQt5.QtCore import Qt
 #             return None
 
 
-class TableModel(QAbstractTableModel):
+class MarkersModel(QAbstractTableModel):
     def __init__(self):
-        super(TableModel, self).__init__()
+        super(MarkersModel, self).__init__()
         self.markers = []
         self._colmap = {
             0: ('type', 'Type'),
             1: ('folder', 'Folder')
             
         }
-        self.setHeaderData(0, Qt.Horizontal, "Folder")
-        self.setHeaderData(1, Qt.Horizontal, "Type")
+     
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
             key = self._colmap[index.column()][0]
             return self.markers[index.row()][key]
+        elif role == Qt.UserRole:
+            return self.markers[index.row()]
         
     
     def headerData(self, col, orientation, role):
@@ -63,17 +65,23 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.connections()
         self.ui.led_folder.setText(str(Path(".").absolute()))
-        self.model = TableModel()
+        self.model = MarkersModel()
         self.ui.tbv_markers.setModel(self.model)
 
     def connections(self):
         self.ui.btn_choose_folder.clicked.connect(self.choose_dir)
         self.ui.btn_scan_all.clicked.connect(self.scan_drives)
         self.ui.btn_open_folder.clicked.connect(self.open_folder)
+        self.ui.tbv_markers.doubleClicked.connect(self.table_double_click)
 
     @property
     def folder(self):
         return Path(self.ui.led_folder.displayText())
+
+    def table_double_click(self, index):
+        marker = self.model.data(index, Qt.UserRole)
+        markers.edit_markers(marker['folder'])
+        
 
     def open_folder(self):
         indexes = self.ui.tbv_markers.selectionModel().selectedRows()

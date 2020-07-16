@@ -12,8 +12,8 @@ import config
 
 parser = argparse.ArgumentParser(
     description='Program that handles makers on folders.')
-parser.add_argument('cmd', nargs='?', type=str, default="mark", choices=[
-                    'mark', 'delete-markers', 'delete-folders', 'scan', 'find-drives', 'find-cases', 'sinf-mirror', 'find-markers'],  help='Command')
+commands = ['mark', 'delete-markers', 'delete-folders', 'scan', 'find-drives', 'find-cases', 'sinf-mirror', 'find-markers']
+parser.add_argument('cmd', nargs='?', type=str, default="mark", help=f"Command")
 parser.add_argument('--max-depth', '-m', type=int, default=4, help="Max depth")
 parser.add_argument('--drives', '-d', action="store_true",
                     help="Scan all marked drives")
@@ -22,6 +22,11 @@ parser.add_argument('--case-name', '-c', help='Case name for sinf_mirror')
 
 
 args = parser.parse_args()
+if args.cmd not in commands:
+    print("Comando inválido. Opções disponíveis:\n")
+    print("\n".join(commands))
+    sys.exit()
+
 if args.cmd == "mark":
     questions = [
         {
@@ -237,3 +242,4 @@ elif args.cmd == "find-markers":
         os.system(f"explorer \"{answers['folder']}\"")
     else:
         print("Nenhum marcador foi encontrado.")
+

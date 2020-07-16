@@ -15,7 +15,7 @@ def find_image(directory, name):
 
 
 def put_portable(folder: Path):
-    sleuth_path = folder / config.PROCESS_FOLDER_NAME / "sleuth.db"
+    sleuth_path = folder /  "sleuth.db"
     if sleuth_path.exists():
         print(f"Tornando pasta \"{folder.absolute()}\" portable.")
         conn = sqlite3.connect(str(sleuth_path))
@@ -23,7 +23,7 @@ def put_portable(folder: Path):
         cursor.execute("SELECT name, sequence FROM tsk_image_names;")
         for row in cursor.fetchall():
             path = Path(row[0])
-            image_path = find_image(folder / config.EXTRACTION_FOLDER_NAME, path.name)
+            image_path = find_image(folder.parent / config.EXTRACTION_FOLDER_NAME, path.name)
             if not image_path:
                 raise Exception(f"O arquivo \"{path.name}\" não foi encontrado.")
             rel_path = image_path.absolute().relative_to((folder / config.EXTRACTION_FOLDER_NAME).absolute())

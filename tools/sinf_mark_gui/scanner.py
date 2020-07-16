@@ -4,6 +4,7 @@ from markers import get_markers_folder, get_drives
 from PyQt5.QtCore import QThread, pyqtSignal
 
 
+
 class Scanner(QThread):
 
     print_message = pyqtSignal(str)

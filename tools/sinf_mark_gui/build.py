@@ -13,4 +13,6 @@ def compile(path):
     args = [str(python_exe), "-m", "PyQt5.uic.pyuic", str(path), "-o", str(output)]
     subprocess.run(args)
 
+
 compile(".\\main_window.ui")
+compile(".\\marker_dialog.ui")

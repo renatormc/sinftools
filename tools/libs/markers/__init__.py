@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 from ctypes import windll
 import subprocess
+import os
 
 letters = ["A:\\", "B:\\", "C:\\", "D:\\", "E:\\", "F:\\", "G:\\", "H:\\", "I:\\", "J:\\", "K:\\", "L:\\",
            "M:\\", "N:\\", "O:\\", "P:\\", "Q:\\", "R:\\", "S:\\", "T:\\", "U:\\", "V:\\", "W:\\", "X:\\", "Y:\\", "Z:\\"]
@@ -18,6 +19,9 @@ def get_markers_folder(path):
         markers = []
     return markers
 
+def edit_markers(folder):
+    path = Path(folder) / ".sinf_mark.json"
+    os.system(f"s-np \"{path}\"")
 
 def mark_folder(path, data):
     path = Path(path)
