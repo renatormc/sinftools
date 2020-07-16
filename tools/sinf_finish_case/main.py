@@ -17,6 +17,7 @@ root = Path('.')
 hash_file = root / "hash.txt"
 
 
+
 def sha512(fname):
     if fname.endswith(".sinf_mark.json"):
         return

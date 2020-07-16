@@ -1,2 +1,2 @@
 @echo off
-s-fila ts
+s-fila ts %*
