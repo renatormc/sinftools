@@ -8,11 +8,12 @@ from pathlib import Path
 import sys
 import shutil
 import config
+import shlex
 
 
 parser = argparse.ArgumentParser(
     description='Program that handles makers on folders.')
-commands = ['mark', 'delete-markers', 'delete-folders', 'scan', 'find-drives', 'find-cases', 'sinf-mirror', 'find-markers']
+commands = ['mark', 'delete-markers', 'delete-folders', 'scan', 'find-drives', 'cases', 'sinf-mirror', 'find-markers']
 parser.add_argument('cmd', nargs='?', type=str, default="mark", help=f"Command")
 parser.add_argument('--max-depth', '-m', type=int, default=4, help="Max depth")
 parser.add_argument('--drives', '-d', action="store_true",
@@ -178,21 +179,38 @@ elif args.cmd == "find-drives":
         m['drive'] = folder[:-1]
         print(f"{i+1}- {m}")
 
-elif args.cmd == "find-cases":
-  
+elif args.cmd == "cases":
     scanner = FolderScanner()
     scanner.types = ['case']
     scanner.max_depth = args.max_depth
-    if args.drives:
-        scanner.scan_drives()
-    else:
-        scanner.scan_folder(".")
+    scanner.scan_drives()
     print("\nEncontrados:")
+    cases = {}
     for i, item in enumerate(scanner.folders.items()):
         folder, markers_ = item
         m = markers.get_marker_of_type(markers_, 'case')
-        m['path'] = folder
-        print(f"{i+1}- {m}")
+        try:
+            cases[m['name']].append({'path': folder, 'role': m['role']})
+        except KeyError:
+            cases[m['name']] = [{'path': folder, 'role': m['role']}]
+    questions = [
+        {
+            'type': 'list',
+            'name': 'case',
+            'message': 'Selecione o caso',
+            'choices': list(cases.keys()),
+        },
+        {
+            'type': 'list',
+            'name': 'action',
+            'message': 'O que fazer?',
+            'choices': ['Ver pastas', 'Gerar comando de sincronização'],
+        }
+    ]
+
+    answers = prompt(questions, style=custom_style_2)
+    print(answers['case'])
+
 
 elif args.cmd == "sinf-mirror":
     if not args.case_name:
@@ -218,10 +236,17 @@ elif args.cmd == "sinf-mirror":
     if not sources:
         print("Não foi encontrada nenhuma pasta do tipo temp do caso.")
         sys.exit(1)
-    with Path(args.file).open("w", encoding="utf-8") as f:
-        f.write(",".join(sources))
-        f.write("\n")
-        f.write(dest)
+    args = ['s-mirror']
+    for s in sources:
+        args += ['-s', s]
+    args += ['-d', dest]
+    args = [shlex.quote(arg) for arg in args]
+    cmd = " ".join(args)
+    print(cmd)
+    # with Path(args.file).open("w", encoding="utf-8") as f:
+    #     f.write(",".join(sources))
+    #     f.write("\n")
+    #     f.write(dest)
 
 elif args.cmd == "find-markers":
     scanner = FolderScanner()

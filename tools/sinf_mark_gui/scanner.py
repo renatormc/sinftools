@@ -1,18 +1,19 @@
 from pathlib import Path
 import json
 from markers import get_markers_folder, get_drives
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QObject, pyqtSlot
 
 
 
-class Scanner(QThread):
+class Scanner(QObject):
 
     print_message = pyqtSignal(str)
     new_marker_found = pyqtSignal(dict)
+    finished = pyqtSignal()
 
 
     def __init__(self):
-        super(Scanner, self).__init__()
+        QObject.__init__(self)
         self.max_depth = 5
         self.markers = []
         self.current_disk_name = ""
@@ -55,6 +56,7 @@ class Scanner(QThread):
         self.find_folders(folder)
         self.print_message.emit(f"Vasculhando finalizado.")
 
+ 
     def get_drive_info(self, drive):
         markers = get_markers_folder(drive)
         for marker in markers:
@@ -74,8 +76,18 @@ class Scanner(QThread):
             self.find_folders(Path(drive))
         self.print_message.emit(f"Vasculhamento finalizado.")
 
-    def run(self):
+    @pyqtSlot()
+    def find_markers(self):
         if not self.folder:
             self.scan_drives()
         else:
             self.scan_folder(self.folder)
+        self.finished.emit()
+
+
+    # @pyqtSlot()
+    # def find_cases(self):
+    #     if not self.folder:
+    #         self.scan_drives()
+    #     else:
+    #         self.scan_folder(self.folder)

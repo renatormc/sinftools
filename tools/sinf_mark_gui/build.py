@@ -15,4 +15,6 @@ def compile(path):
 
 
 compile(".\\main_window.ui")
-compile(".\\marker_dialog.ui")
+compile(".\\disk_dialog.ui")
+compile(".\\case_dialog.ui")
+compile(".\\hash_partial_dialog.ui")
