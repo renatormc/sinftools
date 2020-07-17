@@ -27,7 +27,7 @@
       <widget class="QComboBox" name="cbx_subtype">
        <item>
         <property name="text">
-         <string>iped_image</string>
+         <string>iped_images</string>
         </property>
        </item>
        <item>

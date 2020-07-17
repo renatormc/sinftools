@@ -25,6 +25,7 @@ class Scanner(QObject):
         self.drives = get_drives()
 
     def check_folder(self, path):
+        print(f"Cheganco {path}")
         markers = get_markers_folder(path)
         for marker in markers:
             if self.types == "*" or marker['type'] in self.types:

@@ -68,7 +68,7 @@ class Hasher:
         except (FileNotFoundError, OSError) as e:
             self.logger.error(str(e))
 
-    def hash_folder_iped_result(self, folder: Path):
+    def hash_folder_iped_results(self, folder: Path):
         item = folder / "FileList.csv"
         if not item.exists():
             item = item / "Lista de Arquivos.csv"
@@ -78,8 +78,8 @@ class Hasher:
 
     def hash_folder(self, folder: Path):
         type_ = self.__is_hash_partial(folder)
-        if type_ == "iped_result":
-            self.hash_folder_iped_result(folder)
+        if type_ == "iped_results":
+            self.hash_folder_iped_results(folder)
         elif type_ == "iped_images":
             self.hash_folder_iped_images(folder)
         else:

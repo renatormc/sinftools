@@ -5,10 +5,19 @@ import markers
 
 def create_subfolders(folder_name):
     extracao = folder_name / "extracao"
-    processamento = folder_name / "processamento" 
     extracao.mkdir()
+    data = {
+        'type': 'hash_partial',
+        'subtype': 'iped_images'
+    }
+    markers.mark_folder(extracao, data)
+    processamento = folder_name / "processamento" 
     processamento.mkdir()
-    markers.mark_folder(extracao, {'type': 'iped_image_folder'})
+    data = {
+        'type': 'hash_partial',
+        'subtype': 'iped_results'
+    }
+    markers.mark_folder(processamento, data)
     return
 
 if len(sys.argv) == 1:

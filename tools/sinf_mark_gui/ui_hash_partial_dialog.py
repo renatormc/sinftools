@@ -42,5 +42,5 @@ class Ui_HashPartialDialog(object):
         _translate = QtCore.QCoreApplication.translate
         HashPartialDialog.setWindowTitle(_translate("HashPartialDialog", "Hash Partial Dialog"))
         self.typeLabel.setText(_translate("HashPartialDialog", "Subtype"))
-        self.cbx_subtype.setItemText(0, _translate("HashPartialDialog", "iped_image"))
+        self.cbx_subtype.setItemText(0, _translate("HashPartialDialog", "iped_images"))
         self.cbx_subtype.setItemText(1, _translate("HashPartialDialog", "iped_results"))
