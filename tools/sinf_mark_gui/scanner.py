@@ -27,6 +27,8 @@ class Scanner(QObject):
     def check_folder(self, path):
         print(f"Cheganco {path}")
         markers = get_markers_folder(path)
+        if not isinstance(markers, list):
+            return
         for marker in markers:
             if self.types == "*" or marker['type'] in self.types:
                 

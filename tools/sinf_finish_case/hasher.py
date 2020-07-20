@@ -33,6 +33,7 @@ class Hasher:
             return
         if self.only_count:
             self.n_files += 1
+            print(f"{self.n_files}\r", end='')
             return
         try:
             text = sha512(path)
@@ -111,6 +112,6 @@ class Hasher:
 
 
 if __name__ == "__main__":
-    hasher = Hasher(r'c:\temp')
+    hasher = Hasher('.')
     hasher.run()
 
