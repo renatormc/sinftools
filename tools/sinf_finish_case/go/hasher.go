@@ -140,7 +140,7 @@ func (hasher *Hasher) workerHash() {
 		result := Result{}
 		text, err := calculateSha512(path)
 		if err != nil {
-			result.Path = ""
+			result.Path, _ = filepath.Rel(hasher.root, path)
 			result.HashText = ""
 			result.Error = err
 		} else {
@@ -159,7 +159,7 @@ func (hasher *Hasher) run() {
 	hasher.results = make(chan Result)
 	hasher.countFiles()
 	logger.Info("Iniciando.")
-	f, err := os.OpenFile(hasher.hashFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0660)
+	f, err := os.OpenFile(hasher.hashFile, os.O_CREATE|os.O_WRONLY, 0660)
 	if err != nil {
 		logger.Fatalf("Failed to open hash file: %v", err)
 	}
@@ -179,7 +179,7 @@ func (hasher *Hasher) run() {
 	nRunning := hasher.nWorkers
 	for result := range hasher.results {
 		if result.Error != nil {
-			logger.Errorf("Failed to open hash file: %v", err)
+			logger.Errorf("Não foi possível calcular hash do arquivo \"%s\"", result.Path)
 		} else if result.HashText == "finish" {
 			nRunning--
 			if nRunning == 0 {
