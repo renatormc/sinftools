@@ -5,6 +5,7 @@ import hashlib
 from portable import put_portable
 from logger import get_logger
 from tqdm import tqdm
+import multiprocessing
 
 
 def sha512(path):
@@ -16,31 +17,32 @@ def sha512(path):
     return hash_sha512.hexdigest()
 
 
+def calc_hash(path):
+    path = Path(path)
+    try:
+        text = sha512(path)
+        return path, text, None
+    except (FileNotFoundError, OSError) as e:
+        return path, "", e
+
+
 class Hasher:
 
     def __init__(self, folder):
         self.f = None
-        self.only_count = False
         self.n_files = 0
         self.root = Path(folder)
         self.hash_file = self.root / "hash.txt"
         self.pbar = None
         self.logger = get_logger(self.root / "hash.log")
+        self.n_workers = 4
 
 
-    def calc_hash_file(self, path: Path):
+    def check_file(self, path: Path):
         if path.name == ".sinf_mark.json":
-            return
-        if self.only_count:
-            self.n_files += 1
-            print(f"{self.n_files}\r", end='')
-            return
-        try:
-            text = sha512(path)
-        except (FileNotFoundError, OSError) as e:
-            self.logger.error(str(e))
-        self.f.write(f"{text}     {path.relative_to(self.root)}\n")
-        self.pbar.update(1)
+            return False
+        return True
+       
 
     @staticmethod
     def __is_hash_partial(path: Path):
@@ -50,48 +52,57 @@ class Hasher:
                 return marker['subtype']
 
     def hash_normal_folder(self, folder: Path):
-        try:
-            for entry in folder.iterdir():
-                if entry.is_dir():
-                    self.hash_folder(entry)
-                else:
-                    self.calc_hash_file(entry)
-        except (FileNotFoundError, OSError) as e:
-            self.logger.error(str(e))
+        for entry in folder.iterdir():
+            if entry.is_dir():
+                for item in self.hash_folder(entry):
+                    yield item
+            else:
+                if self.check_file(entry):
+                    yield entry
+      
 
     def hash_folder_iped_images(self, folder: Path):
-        try:
-            for item in folder.iterdir():
-                if item.is_file() and item.suffix in [".log", ".txt"]:
-                    self.calc_hash_file(item)
-                elif item.is_dir():
-                    self.hash_folder(item)
-        except (FileNotFoundError, OSError) as e:
-            self.logger.error(str(e))
-
+        for item in folder.iterdir():
+            if item.is_file() and item.suffix in [".log", ".txt"]:
+                if self.check_file(item):
+                    yield item
+            elif item.is_dir():
+                for item in self.hash_folder(item):
+                    yield item
+    
+      
     def hash_folder_iped_results(self, folder: Path):
+        put_portable(folder)
         item = folder / "FileList.csv"
         if not item.exists():
             item = item / "Lista de Arquivos.csv"
         if item.exists():
-            self.calc_hash_file(item)
-        put_portable(folder)
+            if self.check_file(item):
+                yield item
+           
+        
 
     def hash_folder(self, folder: Path):
         type_ = self.__is_hash_partial(folder)
         if type_ == "iped_results":
-            self.hash_folder_iped_results(folder)
+            for item in self.hash_folder_iped_results(folder):
+                yield item
         elif type_ == "iped_images":
-            self.hash_folder_iped_images(folder)
+            for item in self.hash_folder_iped_images(folder):
+                yield item
         else:
-            self.hash_normal_folder(folder)
+            for item in self.hash_normal_folder(folder):
+                yield item
+
 
     def count_files(self):
         print("Contando arquivos")
-        self.only_count = True
-        self.hash_folder(self.root)
-        self.only_count = False
+        self.n_files = 0
+        for item in self.hash_folder(self.root):
+            self.n_files += 1
         print(f"{self.n_files} arquivos encontrados")
+
+
 
     def run(self):
         self.count_files()
@@ -99,7 +110,13 @@ class Hasher:
         try:
             self.f = self.hash_file.open("w", encoding="utf-8")
             self.pbar = tqdm(total=self.n_files)
-            self.hash_folder(self.root)
+            pool = multiprocessing.Pool(processes=self.n_workers)
+            for path, hash_, err in pool.imap(calc_hash, self.hash_folder(self.root)):
+                if err:
+                    self.logger.error(str(err))
+                else:
+                    self.f.write(f"{hash}     {path.relative_to(self.root)}\n")
+                self.pbar.update(1)
             self.pbar.close()
         finally:
             self.f.close()
