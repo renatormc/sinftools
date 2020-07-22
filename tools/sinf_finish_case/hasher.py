@@ -39,7 +39,10 @@ class Hasher:
 
 
     def check_file(self, path: Path):
-        if path.name == ".sinf_mark.json":
+        try:
+            if path.name == ".sinf_mark.json":
+                return False
+        except (FileNotFoundError, OSError) as e:
             return False
         return True
        
@@ -52,33 +55,43 @@ class Hasher:
                 return marker['subtype']
 
     def hash_normal_folder(self, folder: Path):
-        for entry in folder.iterdir():
-            if entry.is_dir():
-                for item in self.hash_folder(entry):
-                    yield item
-            else:
-                if self.check_file(entry):
-                    yield entry
+        try:
+            for entry in folder.iterdir():
+                if entry.is_dir():
+                    for item in self.hash_folder(entry):
+                        yield item
+                else:
+                    if self.check_file(entry):
+                        yield entry
+        except (FileNotFoundError, OSError) as e:
+            return
       
 
     def hash_folder_iped_images(self, folder: Path):
-        for item in folder.iterdir():
-            if item.is_file() and item.suffix in [".log", ".txt"]:
-                if self.check_file(item):
-                    yield item
-            elif item.is_dir():
-                for item in self.hash_folder(item):
-                    yield item
+        try:
+            for item in folder.iterdir():
+                if item.is_file() and item.suffix in [".log", ".txt"]:
+                    if self.check_file(item):
+                        yield item
+                elif item.is_dir():
+                    for item in self.hash_folder(item):
+                        yield item
+        except (FileNotFoundError, OSError) as e:
+            return
     
       
     def hash_folder_iped_results(self, folder: Path):
+        
         put_portable(folder)
-        item = folder / "FileList.csv"
-        if not item.exists():
-            item = item / "Lista de Arquivos.csv"
-        if item.exists():
-            if self.check_file(item):
-                yield item
+        try:
+            item = folder / "FileList.csv"
+            if not item.exists():
+                item = item / "Lista de Arquivos.csv"
+            if item.exists():
+                if self.check_file(item):
+                    yield item
+        except (FileNotFoundError, OSError) as e:
+            return
            
         
 

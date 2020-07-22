@@ -179,7 +179,7 @@ func (hasher *Hasher) run() {
 	nRunning := hasher.nWorkers
 	for result := range hasher.results {
 		if result.Error != nil {
-			logger.Fatalf("Failed to open hash file: %v", err)
+			logger.Errorf("Failed to open hash file: %v", err)
 		} else if result.HashText == "finish" {
 			nRunning--
 			if nRunning == 0 {
