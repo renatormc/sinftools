@@ -1,2 +1,4 @@
 #!/bin/bash
-s-py -m pip freeze > "$SINFTOOLS/requirements_linux.txt"
+text=$(s-py -m pip freeze)
+echo "$text"
+echo "$text" > $SINFTOOLS/requirements_linux.txt
