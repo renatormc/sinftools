@@ -10,8 +10,10 @@ def cli(ctx):
 
 
 @cli.command()
-def install():
-    apk = config.app_dir / "EXTRATOR_0.4.apk"
+@click.option("--app", type=click.Choice(['spi', 'extractor']), default='extractor')
+def install(app):
+    apk = config.app_dir / "EXTRATOR_0.4.apk" if app == 'extractor' else config.app_dir / 'spitools-1.2.apk'
+    print(f"Instalando {apk.name}")
     args = ['adb', 'install', str(apk)]
     subprocess.run(args)
 
