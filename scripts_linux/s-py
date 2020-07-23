@@ -1,0 +1,3 @@
+#!/bin/bash
+export PYTHONPATH=$SINFTOOLS/tools/libs
+"$SINFTOOLS/venv/bin/python" $@

@@ -1,0 +1,2 @@
+#!/bin/bash
+s-py -m pip freeze > "$SINFTOOLS/requirements_linux.txt"

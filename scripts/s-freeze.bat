@@ -1,2 +1,2 @@
 @echo off
-"%SINFTOOLS%\extras\Python\python.exe" -m pip freeze > "%SINFTOOLS%\requirements.txt" && type "%SINFTOOLS%\requirements.txt"
+"%SINFTOOLS%\extras\Python\python.exe" -m pip freeze > "%SINFTOOLS%\requirements_windows.txt" && type "%SINFTOOLS%\requirements_windows.txt"

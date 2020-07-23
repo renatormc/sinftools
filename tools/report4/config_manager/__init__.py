@@ -17,8 +17,9 @@ class ConfigManager:
 
   
     def read_file(self, file):
+        path = Path(file)
         yaml = YAML()
-        with codecs.open(file, "r", "utf-8") as f:
+        with path.open("r", encoding="utf-8") as f:
             text = f.read()
         return yaml.load(text)
 
@@ -40,7 +41,7 @@ class ConfigManager:
             yaml.dump(self.data, f)
 
     def get_main_config(self):
-        return self.read_file(".report\\config\\config.yaml")
+        return self.read_file(".report/config/config.yaml")
 
 
     def load(self):
@@ -76,8 +77,8 @@ class ConfigManager:
             with Path(".report/config/file_types.json").open(encoding="utf-8") as f:
                 self.file_types = json.load(f)
             self.load_database_name()
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
     def is_localdb(self):
         return True if self.database_type != 'sqlite' else False

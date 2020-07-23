@@ -35,7 +35,7 @@ per_page = {
 disregard_folders = ['.report', 'html_files']
 
 
-unknow_avatar = ".report\\desconhecido.png"
+unknow_avatar = ".report/desconhecido.png"
 
 # titles = {
 #     'Sms': 'Mensagens SMS',

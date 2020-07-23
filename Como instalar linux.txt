@@ -1,0 +1,16 @@
+1- Copie a pasta sinftols para um local de sua preferência
+2- Adicione as seguintes linhas ao arquivo ~/.profile:
+    
+    export SINFTOOLS=/path/sinftools 
+    export PATH=$PATH:$SINFTOOLS/scripts_linux
+3- Crie um ambiente virtual na pasta $SINFTOOLS
+
+    virtualenv venv --python=python3
+
+4- Ative o ambiente virtual:
+
+    source venv/bin/activate
+
+5- Instale as libs necessárias:
+
+    pip install -r requirements_linux.txt

@@ -15,6 +15,7 @@ from helpers import *
 import multiprocessing
 import constants
 from subprocess import Popen
+from pathlib import Path
 
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -341,27 +342,29 @@ def inc_read_time():
     return current
 
 
-def set_working_dir_notebooks():
-    for file in os.listdir(".report\\notebooks"):
-        if file.endswith(".ipynb"):
-            with codecs.open(f".report\\notebooks\\{file}", "r", "utf-8") as template:
-                text = template.read()
+# def set_working_dir_notebooks():
+#     for file in os.listdir(".report\\notebooks"):
+#         if file.endswith(".ipynb"):
+#             with codecs.open(f".report\\notebooks\\{file}", "r", "utf-8") as template:
+#                 text = template.read()
 
-            res = Template(text).substitute(
-                cwd=os.getcwd().replace('\\', '\\\\'))
-            with codecs.open(f".report\\notebooks\\{file}", "w", "utf-8") as f:
-                f.write(res)
+#             res = Template(text).substitute(
+#                 cwd=os.getcwd().replace('\\', '\\\\'))
+#             with codecs.open(f".report\\notebooks\\{file}", "w", "utf-8") as f:
+#                 f.write(res)
 
 
 def set_working_dir_scripts():
-    for file in os.listdir(".report\\scripts"):
-        if file.endswith(".py"):
-            with codecs.open(f".report\\scripts\\{file}", "r", "utf-8") as template:
+    # for file in os.listdir(".report\\scripts"):
+    folder = Path(".report/scripts")
+    for file in folder.iterdir():
+        if file.suffix == ".py":
+            with (settings.app_dir / "scripts" / file.name).open("r", encoding="utf-8") as template:
                 text = template.read()
 
             res = Template(text).substitute(
                 cwd=os.getcwd().replace('\\', '\\\\'))
-            with codecs.open(f".report\\scripts\\{file}", "w", "utf-8") as f:
+            with (folder / file.name).open("w", encoding="utf-8") as f:
                 f.write(res)
 
 

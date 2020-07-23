@@ -2,3 +2,4 @@ extras
 var
 __pycache__/
 *.py[cod]
+venv

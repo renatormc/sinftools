@@ -15,7 +15,7 @@ from helpers import get_items_available
 from config_manager import config_manager
 from report_maker import ReportMaker
 from sinf.exe_finder import open_in_browser
-from subprocess import Popen, CREATE_NEW_CONSOLE
+from subprocess import Popen
 from PyInquirer import style_from_dict, Token, prompt, Separator
 from processors.proprietary_finder import ProprietaryFinder
 # import multiprocessing
@@ -30,7 +30,6 @@ from multiprocessing import Pool
 import constants
 from termcolor import cprint
 import colorama
-from word_handler import WordHandler
 import getpass
 import tempfile
 
@@ -85,12 +84,12 @@ def init(grouped, dbtype):
     sleep(1)
     os.mkdir('.report')
     os.system("attrib +h " + ".report")
-    shutil.copytree(settings.app_dir / "scripts", ".report\\scripts")
+    shutil.copytree(settings.app_dir / "scripts", ".report/scripts")
     hp.set_working_dir_scripts()
-    shutil.copytree(settings.app_dir / "notebooks", ".report\\notebooks")
+    # shutil.copytree(settings.app_dir / "notebooks", ".report/notebooks")
     shutil.copy(settings.app_dir / "reader/static/image/desconhecido.png",
-                ".report\\desconhecido.png")
-    hp.set_working_dir_notebooks()
+                ".report/desconhecido.png")
+    # hp.set_working_dir_notebooks()
     shutil.copytree(settings.app_dir / "config_files/config",
                     Path(".report/config"))
     config_manager.set_grouped(grouped)
@@ -350,17 +349,12 @@ def script(edit, search, new):
 
 
 @cli.command()
-@click.option('--new-window/--no-new-window', default=False)
 @click.option('--mode', default="waitress")
-def analyzer(mode, new_window):
+def analyzer(mode):
     os.environ['exec_mode'] = mode
     path = settings.reader_folder / "server.py"
-    if new_window:
-        Popen(f"cmd /k s-py {path} {mode}",
-            creationflags=CREATE_NEW_CONSOLE)
-    else:
-        python = settings.sinftools_dir / "extras/Python/python.exe"
-        Popen(f'"{python}" "{path}" {mode}')
+    python = settings.sinftools_dir / "extras/Python/python.exe"
+    Popen(f'"{python}" "{path}" {mode}')
 
 
 @cli.command()
@@ -388,6 +382,7 @@ def extra_process(processors):
 @click.option('--n_cols', type=int, default=3)
 @click.option('--caption', default="Exemplo de mensagens de bate-papo")
 def word(tags, item, n_cols, caption):
+    from word_handler import WordHandler
     tags = [item.strip() for item in tags.split(",")]
     for tag in tags:
         if not db_session.query(Tag).filter_by(name=tag).count():

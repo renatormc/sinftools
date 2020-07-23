@@ -35,7 +35,8 @@ def get_db_list_mysql(only_current_workdir=False):
 def get_database_info(host, dbconfig):
     user = dbconfig['user']
     os.environ['PGPASSWORD'] = dbconfig['password']
-    records, _ = subprocess.Popen([f"{dbconfig['postgres_bin_folder']}\psql", '-lA',
+    executable = f"{dbconfig['postgres_bin_folder']}\psql" if os.name == 'nt' else 'psql'
+    records, _ = subprocess.Popen([executable, '-lA',
                                    '-F\x02', '-R\x01', '-h', host, '-U', user], stdout=subprocess.PIPE).communicate()
     records = records.split(bytes.fromhex('01'))
     header = records[1].split(bytes.fromhex('02'))
@@ -87,10 +88,12 @@ def drop_database(name, dbtype=None):
     dbconfig = config_manager.get_db_local_config()
     if dbtype == 'postgres':
         os.environ['PGPASSWORD'] = dbconfig['password']
-        cmd = f"(\"{dbconfig['postgres_bin_folder']}\\dropdb\" -h localhost -U {dbconfig['user']} {name})"
+        dropdb =f"{dbconfig['postgres_bin_folder']}\\dropdb\"" if os.name == 'nt' else 'dropdb'
+        cmd = f"(\"{dropdb}\" -h localhost -U {dbconfig['user']} {name})"
         os.system(cmd)
     elif dbtype == 'mysql':
-        cmd = f"(\"{dbconfig['mysql_bin_folder']}\\mysql\" -u {dbconfig['user']} -p{dbconfig['password']} -e \"DROP DATABASE {name};\")"
+        mysql = f"{dbconfig['mysql_bin_folder']}\\mysql" if os.name == 'nt' else 'mysql'
+        cmd = f"(\"{mysql}\" -u {dbconfig['user']} -p{dbconfig['password']} -e \"DROP DATABASE {name};\")"
         os.system(cmd)
 
 
@@ -112,10 +115,12 @@ def create_database_localdb(type="postgres"):
     url = config_manager.get_database_url()
     if not database_exists(url):
         if config_manager.database_type == 'mysql':
-            cmd = f"(\"{dbconfig['mysql_bin_folder']}\\mysql\" -u {dbconfig['user']} -p{dbconfig['password']} -e \"CREATE DATABASE {config_manager.database_name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\")"
+            mysql = f"{dbconfig['mysql_bin_folder']}\\mysql" if os.name == 'nt' else 'mysql'
+            cmd = f"(\"{mysql}\" -u {dbconfig['user']} -p{dbconfig['password']} -e \"CREATE DATABASE {config_manager.database_name} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\")"
             os.system(cmd)
         else:
             create_database(url)
+
 
 def drop_orphan_databases(type="postgres", exclude=[]):
     databases = get_db_list(type=type)
