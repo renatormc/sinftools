@@ -1,0 +1,2 @@
+#!/bin/bash
+s-py "$SINFTOOLS/tools/sinf_mark_gui/main_window.py" $@
