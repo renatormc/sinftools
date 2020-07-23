@@ -37,7 +37,7 @@ vc = ViewClient(device, serialno)
 
 
 
-listContatos = ['Willian']
+listContatos = []
 repeticoes = 0
 
 while repeticoes < 10:
@@ -49,9 +49,7 @@ while repeticoes < 10:
             contato = texView.getText()
             if contato not in listContatos:
                 listContatos.append(texView.getText())
-                print(texView.getText())
-                # print(f"")
-                print (f"Exportando dados do contato: {contato}")
+                print(f"Exportando dados do contato: {contato}")
                 listaAtualizada = True
                 try:
                     vc.sleep(1)
@@ -70,7 +68,7 @@ while repeticoes < 10:
                             vc.findViewWithTextOrRaise(u'ANEXAR MÍDIA').touch()
                             vc.sleep(3)
                         except:
-                            print ("Contato sem mídias ")
+                            print("Contato sem mídias ")
                         try:
                             vc.dump(window=-1)
                             vc.findViewWithTextOrRaise(u'Email Bkp Para Arquivo').touch()
@@ -79,7 +77,7 @@ while repeticoes < 10:
                             vc.sleep(15)
                             vc.dump(window=-1)
                             vc.findViewWithTextOrRaise(u'Email Bkp Para Arquivo').touch()
-                            print ("Exportação demorando mais que o normal ")
+                            print("Exportação demorando mais que o normal ")
                         vc.sleep(1)
                         vc.dump(window=-1)
                         vc.findViewWithTextOrRaise(u'SELECIONAR').touch()
@@ -88,13 +86,13 @@ while repeticoes < 10:
                         vc.sleep(1)
                         device.press('KEYCODE_ESCAPE')
                     except Exception as e:
-                        print ("Opção de enviar por e-mail não encontrada! ")
+                        print("Opção de enviar por e-mail não encontrada! ")
                         device.press('KEYCODE_ESCAPE')
                         vc.sleep(1)
                         device.press('KEYCODE_ESCAPE')
                         print (e)
                 except Exception as e:
-                    print ("View não encontrada: ") + (contato.encode('utf-8'))
+                    print(f"View não encontrada: {contato}")
                     print (e)
     if not listaAtualizada:
         repeticoes = repeticoes + 1
