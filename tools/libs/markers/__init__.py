@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-from ctypes import windll
 import subprocess
 import os
 
@@ -45,8 +44,17 @@ def unmark_folder(path):
     except FileNotFoundError:
         pass
 
+def get_drives_linux():
+    mount = subprocess.getoutput('mount -v')
+    lines = mount.split('\n')
+    points = []
+    for line in lines:
+        if line.startswith("/dev/sd"):
+            points.append(line.split()[2])
+    return points
 
-def get_drives():
+def get_drives_windows():
+    from ctypes import windll
     drives = []
     bitmask = windll.kernel32.GetLogicalDrives()
     for letter in letters:
@@ -54,6 +62,12 @@ def get_drives():
             drives.append(letter)
         bitmask >>= 1
     return drives
+
+
+def get_drives():
+    if os.name == "nt":
+        return get_drives_windows()
+    return get_drives_linux()
 
 
 def get_scannable_drives():
