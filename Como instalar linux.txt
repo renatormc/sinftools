@@ -1,3 +1,5 @@
+ATENÇÃO: No linux apenas em fase de teste. Apenas algumas ferramentas funcionam
+
 1- Copie a pasta sinftols para um local de sua preferência
 2- Adicione as seguintes linhas ao arquivo ~/.profile:
     
@@ -14,3 +16,11 @@
 5- Instale as libs necessárias:
 
     pip install -r requirements_linux.txt
+
+6- Edite o arquivo sudoers.tmp
+
+    sudo visudo
+
+    Adicione a linha:
+        Defaults env_keep += "SINFTOOLS"
+    Inclui o endereço absoluto da pasta scripts_linux em "secure_path"
