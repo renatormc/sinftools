@@ -11,7 +11,7 @@ def cli(ctx):
 
 @cli.command()
 def install():
-    apk = config.app_dir / "spitools-1.2.apk"
+    apk = config.app_dir / "EXTRATOR_0.4.apk"
     args = ['adb', 'install', str(apk)]
     subprocess.run(args)
 
