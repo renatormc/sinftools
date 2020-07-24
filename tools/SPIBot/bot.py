@@ -2,18 +2,19 @@ import re
 import sys
 import os
 import string
-
+import re
 try:
-    sys.path.append(os.path.join(os.environ['ANDROID_VIEW_CLIENT_HOME'], 'src'))
+    sys.path.append(os.path.join(
+        os.environ['ANDROID_VIEW_CLIENT_HOME'], 'src'))
 except:
     pass
+from com.dtmilano.android.viewclient import ViewClient, ViewNotFoundException
 
-from com.dtmilano.android.viewclient import ViewClient
 
+# def dropDownMenu(device,numberOfTimes):
+#     for i in range(0,numberOfTimes):
+#         device.press('KEYCODE_DPAD_DOWN')
 
-def dropDownMenu(device,numberOfTimes):
-    for i in range(0,numberOfTimes):
-        device.press('KEYCODE_DPAD_DOWN')
 
 class Bot:
     def __init__(self):
@@ -22,78 +23,100 @@ class Bot:
         self.INCLUIR_MIDIA = "INCLUIR ARQUIVOS DE MÍDIA"
         self.APP_NAME = "Extrator 0.4"
         self.SALVAR = "SALVAR"
+        self.CHECK_CHAT_LIST = "STATUS"
+        self.CHECK_CHAT_INSIDE = "Digite uma men"
+        self.extracted = []
+        self.max_wait = 10
+        self.device, self.serial_no = ViewClient.connectToDeviceOrExit()
+        ViewClient.sleep(2)
+        self.vc = ViewClient(self.device, self.serial_no)
 
+    def clear_extracted(self):
+        self.extracted = []
+
+    def append_extracted(self, chat):
+        self.extracted.append(chat)
+    
 
     def extract(self):
-        device, serialno = ViewClient.connectToDeviceOrExit()
+        views = self.get_new_chats_views()
+        for view in views:
+            print(view.getText())
+            self.extract_chat(view)
+            break
 
-        ViewClient.sleep(2)
-
-        vc = ViewClient(device, serialno)
 
 
+    def extract_chat(self, view):
+        self.vc.sleep(1)
+        self.assert_screen(self.CHECK_CHAT_LIST)
+        view.touch()
+        # self.assert_screen(self.CHECK_CHAT_INSIDE)
+        self.vc.findViewWithContentDescriptionOrRaise('Mais opções').touch()
+        self.find_and_touch(self.MENU_MAIS, raise_=True)
+        ok = self.find_and_touch(self.EXPORTAR)
+        if not ok:
+            print("Opção de exportar não foi encontrada")
+            return
+        self.sleep(1)
+        ok = self.find_and_touch(self.INCLUIR_MIDIA)
+        if not ok:
+            print("Contato sem mídia")
+        ok = self.find_and_touch(self.APP_NAME, repeat=4)
+        ok = self.find_and_touch(self.SALVAR, repeat=4)
+        self.press('KEYCODE_ESCAPE')
+        self.sleep(1)
+        self.press('KEYCODE_ESCAPE')
 
-        listContatos = []
-        repeticoes = 0
+    
+    def press(self, key):
+        self.device.press(key)
+        
+        
+    def sleep(self, seconds):
+        self.vc.sleep(seconds)
+        
 
-        while repeticoes < 10:
-            vc.dump(window=-1)
-            textViews = vc.findViewsWithAttribute("class", "android.widget.TextView")
-            listaAtualizada = False
-            for texView in textViews:
-                if(texView.getId() == 'com.whatsapp:id/conversations_row_contact_name'):
-                    contato = texView.getText()
-                    if contato not in listContatos:
-                        listContatos.append(texView.getText())
-                        print(f"Exportando dados do contato: {contato}")
-                        listaAtualizada = True
-                        try:
-                            vc.sleep(1)
-                            texView.touch()
-                            vc.sleep(1)
-                            vc.dump(window=-1)
-                            vc.findViewWithContentDescriptionOrRaise(u'''Mais opções''').touch()
-                            vc.dump(window=-1)
-                            vc.findViewWithTextOrRaise(self.MENU_MAIS).touch()
-                            vc.dump(window=-1)
-                            try:
-                                vc.findViewWithTextOrRaise(self.EXPORTAR).touch()
-                                vc.sleep(1)
-                                vc.dump(window=-1)
-                                try:
-                                    vc.findViewWithTextOrRaise(self.INCLUIR_MIDIA).touch()
-                                    vc.sleep(3)
-                                except:
-                                    print("Contato sem mídias ")
-                                try:
-                                    vc.dump(window=-1)
-                                    vc.findViewWithTextOrRaise(self.APP_NAME).touch()
-                                except:
-                                    # A exportação pode ser demorada
-                                    vc.sleep(15)
-                                    vc.dump(window=-1)
-                                    vc.findViewWithTextOrRaise(self.APP_NAME).touch()
-                                    print("Exportação demorando mais que o normal ")
-                                vc.sleep(1)
-                                vc.dump(window=-1)
-                                vc.findViewWithTextOrRaise(self.SALVAR).touch()
-                                vc.sleep(2)
-                                device.press('KEYCODE_ESCAPE')
-                                vc.sleep(1)
-                                device.press('KEYCODE_ESCAPE')
-                            except Exception as e:
-                                print("Opção de enviar por e-mail não encontrada! ")
-                                device.press('KEYCODE_ESCAPE')
-                                vc.sleep(1)
-                                device.press('KEYCODE_ESCAPE')
-                                print (e)
-                        except Exception as e:
-                            print(f"View não encontrada: {contato}")
-                            print (e)
-            if not listaAtualizada:
-                repeticoes = repeticoes + 1
-            dropDownMenu(device,5)
+    def get_new_chats_views(self):
+        """Analisa a tela do celular e retorna todas as views de chats que aparecem nela
+        que ainda não foram extraídos"""
+        views = []
+        self.vc.dump(window=-1)
+        text_views = self.vc.findViewsWithAttribute(
+            "class", "android.widget.TextView")
+        for text_view in text_views:
+            if(text_view.getId() == 'com.whatsapp:id/conversations_row_contact_name'):
+                contact = text_view.getText()
+                if contact not in self.extracted:
+                    views.append(text_view)
+        return views
 
-        for contato in listContatos:
-            print (contato.encode('utf-8'))
-            
+    def find_and_touch(self, text, exactly=True, repeat=1, raise_=False):
+        for i in range(repeat):
+            self.vc.dump(window=-1)
+            if not exactly:
+                text = re.compile(f".*{text}.*")
+            try:
+                self.vc.findViewWithTextOrRaise(text).touch()
+                return True
+            except ViewNotFoundException:
+                if i <= repeat - 1:
+                    if raise_:
+                        raise Exception(f"View \"{text}\" não foi encontrada")
+                    return False
+            self.sleep(1)
+           
+
+    def assert_screen(self, text, exactly=True, wait=10):
+        if not exactly:
+            text = re.compile(f".*{text}.*")
+        reg = re.compile(f".*{text}.*")
+        time_ = 0
+        while time_ < wait:
+            try:
+                self.vc.findViewWithTextOrRaise(text)
+                return
+            except ViewNotFoundException:
+                time_ += 1
+                self.vc.sleep(1)
+        raise Exception(f"Não foi encontrada a tela {text}")
