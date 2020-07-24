@@ -1,3 +1,2 @@
 @echo off
-set PYTHONPATH=%SINFTOOLS%\tools\libs && ^
-"%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\sinf_finish_case\main.py" %*
+"%SINFTOOLS%\tools\sinf_finish_case\go\sinf_finish_case.exe" %*

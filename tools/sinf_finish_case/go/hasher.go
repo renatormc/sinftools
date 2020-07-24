@@ -150,7 +150,6 @@ func (hasher *Hasher) workerHash() {
 		}
 		hasher.results <- result
 	}
-	fmt.Println("Finalizou worker")
 }
 
 func (hasher *Hasher) run() {
