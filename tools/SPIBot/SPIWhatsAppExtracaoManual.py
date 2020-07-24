@@ -1,3 +1,4 @@
+## Inicio
 import re
 import sys
 import os
@@ -30,6 +31,28 @@ vc = ViewClient(device, serialno)
 listContatos = []
 repeticoes = 0
 
+## Testar meu principal
+vc.dump(window=-1)
+vc.findViewWithContentDescriptionOrRaise(u'''Mais opções''').touch()
+## Testar menu mais
+vc.dump(window=-1)
+vc.findViewWithTextOrRaise(MENU_MAIS).touch()
+## Testar exportar
+vc.dump(window=-1)
+vc.findViewWithTextOrRaise(EXPORTAR).touch()
+## Testar incluir midia
+vc.dump(window=-1)
+vc.findViewWithTextOrRaise(INCLUIR_MIDIA).touch()
+## Testar achar aplicativo
+vc.dump(window=-1)
+vc.findViewWithTextOrRaise(APP_NAME).touch()
+## Testar salvar
+vc.dump(window=-1)
+vc.findViewWithTextOrRaise(SALVAR).touch()
+## Testar voltar
+device.press('KEYCODE_ESCAPE')
+device.press('KEYCODE_BACK')
+## Extrair
 while repeticoes < 10:
     vc.dump(window=-1)
     textViews = vc.findViewsWithAttribute("class", "android.widget.TextView")
