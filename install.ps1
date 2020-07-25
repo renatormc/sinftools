@@ -113,5 +113,3 @@ Add-EnvPath (Join-Path -Path $PSScriptRoot -ChildPath "scripts") -Container "Mac
 
 Write-Host "Sua m�quina foi configurada para uso do SINFTOOLS. Bom uso!!"
 
-
-
