@@ -23,9 +23,9 @@ def install(app):
 
 @cli.command()
 def extract():
-    script = config.app_dir / "SPIWhatsAppExtracaoManual.py"
-    shutil.copy(script, "SPIWhatsAppExtracaoManual.py")
-    args = ['s-idlex', "SPIWhatsAppExtracaoManual.py"]
+    shutil.copy(config.app_dir / "bot.py", "bot.py")
+    shutil.copy(config.app_dir / "extrair.py", "extrair.py")
+    args = ['s-idlex', "extrair.py"]
     subprocess.run(args)
 
 @cli.command()
