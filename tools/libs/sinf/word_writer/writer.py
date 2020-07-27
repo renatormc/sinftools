@@ -10,10 +10,12 @@ import codecs
 import json
 from sinf.word_writer import settings
 from sinf.word_writer import formatter
+from pathlib import Path
 
 
 class Writer:
-    def __init__(self, templates_folder):
+    def __init__(self, templates_folder, temp_folder=None):
+        self.temp_folder = temp_folder
         self.loader = jinja2.FileSystemLoader(str(templates_folder))
         self.jinja_env = jinja2.Environment(
             autoescape=True, loader=self.loader)
@@ -90,6 +92,10 @@ class Writer:
         self.doc = self.word.ActiveDocument
 
         xml_text = self.render_template(template, context)
+        if self.temp_folder:
+            temp_file = Path(self.temp_folder) / "debug.html"
+            with temp_file.open("w", encoding="utf-8") as f:
+                f.write(xml_text)
         # if settings.dev:
         #     with codecs.open(os.path.join(settings.app_dir, "temp", "template.html"), "w", "utf-8") as f:
         #         f.write(xml_text)

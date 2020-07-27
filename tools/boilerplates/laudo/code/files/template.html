@@ -1,0 +1,78 @@
+<body>
+    <replace marker="#rg#">{{ rg }}</replace>
+    <replace marker="#sinf#">{{ sinf }}</replace>
+    <replace marker="#ano#">{{ ano }}</replace>
+    <replace marker="#requisitante#">{{ requisitante }}</replace>
+    <replace marker="#inicio_exame#">{{ inicio_exame|data_mes_extenso }}</replace>
+    <goto slot="#objetos#">
+        {%for name, obj in objects.items() %}
+        <h2>{{ obj.nome_laudo }}</h2>
+
+        {% if obj.tipo == 'celular' %}
+        <table caption="Especifições técnicas" enter="false">
+            <tr>
+                <th w="1/3"></th>
+                <th w="1/3"></th>
+                <th w="1/3">Fonte da informação</th>
+            </tr>
+            <tr>
+                <td w="1/3" font-weight="bold">Marca</td>
+                <td w="1/3"></td>
+                <td w="1/3">Etiqueta de identificação</td>
+            </tr>
+
+            <tr>
+                <td w="1/3" font-weight="bold">Modelo</td>
+                <td w="1/3"></td>
+                <td w="1/3">Etiqueta de identificação</td>
+            </tr>
+
+            <tr>
+                <td w="1/3" font-weight="bold">IMEI</td>
+                <td w="1/3"></td>
+                <td w="1/3">Etiqueta de identificação</td>
+            </tr>
+            <tr>
+                <td w="1/3" font-weight="bold">Marca da bateria</td>
+                <td w="1/3"></td>
+                <td w="1/3">Etiqueta de identificação</td>
+            </tr>
+            <tr>
+                <td w="1/3" font-weight="bold">Chip SIM</td>
+                <td w="1/3"></td>
+                <td w="1/3">Inscrição na superfície</td>
+            </tr>
+            <tr>
+                <td w="1/3" font-weight="bold">Cartão de memória</td>
+                <td w="1/3"></td>
+                <td w="1/3">Inscrição na superfície</td>
+            </tr>
+        </table>
+        {% elif obj.tipo == 'HDD' or  obj.type == 'SSD'%}
+        {% endif %}
+
+        {% for row in to_table(obj['pics'], 2) %}
+        <table border="false">
+
+            <tr>
+                {% set w = 1/row|length %}
+                {% for foto in row %}
+                <td w="{{ w }}" alignment="center">
+                    <picture w='0.45' src="{{ foto['path'] }}" caption="{{ foto['caption'] }}" />
+                </td>
+                {% endfor %}
+            </tr>
+
+        </table>
+
+        {% endfor %}
+
+        {% endfor %}
+
+    </goto>
+    <goto slot="#objetos_exame#">
+        {%for name, obj in objects.items() %}
+        <h2>{{ obj.nome_laudo }}</h2>
+        {% endfor %}
+    </goto>
+</body>

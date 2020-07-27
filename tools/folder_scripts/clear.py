@@ -3,7 +3,7 @@ import os
 from sys import exit
 import shutil
 
-folder = os.path.join(Path.home(), "AppData", "Local", "Temp", "gen_py", "3.6")
+folder = os.path.join(Path.home(), "AppData", "Local", "Temp", "gen_py", "3.7")
 if not os.path.exists(folder):
     print(f"A pasta '{folder}' não foi encontrada.")
     exit()
