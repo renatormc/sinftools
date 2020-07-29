@@ -78,7 +78,7 @@ class ConfigManager:
                 self.file_types = json.load(f)
             self.load_database_name()
         except Exception as e:
-            print(e)
+            pass
 
     def is_localdb(self):
         return True if self.database_type != 'sqlite' else False

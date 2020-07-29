@@ -3,13 +3,12 @@ from helpers.user_manage import get_last_logon_time, post_connect_intent, get_co
 import sys
 
 connection_type = get_connection_type()
-print(connection_type)
-if connection_type != "local" and not (len(sys.argv) > 1 and sys.argv[1] == 'test'):
+if connection_type != "local" and not (len(sys.argv) > 1 and sys.argv[1] == 'manual'):
     sys.exit()
 
 
 sg.theme('DarkAmber')  
-layout = [  [sg.Text('Por gentileza informe seu nome para ficar registrado quem é que está usando o computador \npara que quando alguém for tentar se conectar usando s-ts lhe seja informado \nque é você que está usando a máquina.')],
+layout = [  [sg.Text('Por gentileza informe seu nome. Deixe os demais peritos cientes de que é você que está usando o computador.')],
             [sg.Text('SEU NOME'), sg.InputText()],
             [sg.Button('Ok'), sg.Button('Cancelar')] ]
 
