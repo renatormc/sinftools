@@ -1,0 +1,6 @@
+{
+    "user": "usuario_maria_db",
+    "password": "senha_maria_db",
+    "postgres_bin_folder": "pode_deixar_assim_mesmo, no momento não seve pra nada",
+    "mysql_bin_folder": "C:\\Program Files\\MariaDB 10.4\\bin"
+}

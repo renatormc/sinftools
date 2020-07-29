@@ -1,0 +1,8 @@
+{
+	"a": "Este arquivo de configurações só serve pra quem vai usar alguns scripts para fazer laudo. A principio pode deixar do jeito que tá",
+    "pasta_revisao": "\\\\10.129.3.14\\compartilhada\\revisao\\Renato\\laudos_revisao",
+    "pasta_laudos": "D:\\laudos\\trabalhando",
+    "pasta_laudos_finalizados": "D:\\laudos\\finalizados",
+    "pasta_laudos_pdf": "C:\\Users\\renato\\Downloads",
+    "laudo_rapido_dev": true
+}
