@@ -4,6 +4,7 @@ import yaml
 import os
 from pathlib import Path
 import shutil
+import subprocess
 
 sinftools_dir = Path(os.getenv("SINFTOOLS"))
 config_folder = sinftools_dir / "var/config"
@@ -50,3 +51,8 @@ class SinfToolsConfig(object):
             return value
         except (TypeError, KeyError):
             pass
+
+    def edit_file(self, item):
+        path = config_folder / f"{item}.yaml"
+        if path.exists():
+            subprocess.run(['s-npp', str(path)])
