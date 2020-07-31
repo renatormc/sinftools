@@ -40,13 +40,14 @@ except:
 output_folder = Path(config_local['output_folder'])
 
 def make_token():
-    now = datetime.now()
-    iat = datetime.timestamp(now)
-    payload = {'sub': 0, 'name': "system", 'iat': iat}
-    headers = {'iat': iat}
-    token = jwt.encode(payload, sinfkey,
-                       headers=headers, algorithm='HS256').decode("utf-8")
-    return token
+    if sinfkey:
+        now = datetime.now()
+        iat = datetime.timestamp(now)
+        payload = {'sub': 0, 'name': "system", 'iat': iat}
+        headers = {'iat': iat}
+        token = jwt.encode(payload, sinfkey,
+                        headers=headers, algorithm='HS256').decode("utf-8")
+        return token
 
 
 SINF_TOKEN = make_token()
