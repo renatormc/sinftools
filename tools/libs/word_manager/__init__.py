@@ -21,7 +21,8 @@ class WordManager(object):
         self.doc = self.word.ActiveDocument
 
     def imprimir_laudo(self):
-        self.doc.Application.ActivePrinter = sc.getprop("laudos.printer_name") or ""
+        self.doc.Application.ActivePrinter = sc.getprop(
+            "laudos.printer_name") or ""
         self.doc.PrintOut(Copies=1, Pages="S2")
         self.doc.PrintOut(Copies=2, Pages="S1", ManualDuplexPrint=False)
         path = Path(self.doc.FullName).with_suffix(".pdf")
@@ -68,35 +69,60 @@ class WordManager(object):
                     break
 
     def insert_pictures(self, pics, n_col, max_width=300):
-        qtd = len(pics)
-        if qtd < n_col:
-            n_col = qtd
-        if qtd % n_col != 0:
-            n_row = int(qtd/n_col) + 1
-        else:
-            n_row = int(qtd/n_col)
-        for i in range(1, n_row + 1):
+        # convert to table
+        table = [pics[i:i+n_col] for i in range(0, len(pics), n_col)]
+     
+        # insert table
+        for row in table:
+            n_col = len(row)
             tabela = self.doc.Tables.Add(self.word.Selection.Range, 1, n_col)
             tabela.Borders.InsideLineStyle = 0
             tabela.Borders.OutsideLineStyle = 0
-            for j in range(1, n_col + 1):
-                k = n_col*(i-1) + j-1
-                if k >= qtd:
-                    break
+            for i, pic in enumerate(row):
                 shape = tabela.Cell(
-                    1, j).Range.InlineShapes.AddPicture(pics[k]['path'])
+                    1, i + 1).Range.InlineShapes.AddPicture(pic['path'])
                 shape.LockAspectRatio = -1
                 if shape.Width > max_width:
                     shape.Width = max_width
                 shape.Select
 
-                tabela.Cell(1, j).Range.Paragraphs(
-                    1).Alignment = win32.constants.wdAlignParagraphCenter
+                tabela.Cell(
+                    1, i + 1).Range.Paragraphs(1).Alignment = win32.constants.wdAlignParagraphCenter
                 caption = shape.Range.InsertCaption(
-                    Label="Foto", Title=" - " + pics[k]['caption'], Position=win32.constants.wdCaptionPositionAbove)
+                    Label="Foto", Title=" - " + pic['caption'], Position=win32.constants.wdCaptionPositionAbove)
             tabela.Select()
             self.word.Selection.Collapse(0)
             self.word.Selection.TypeParagraph()
+
+        # qtd = len(pics)
+        # if qtd % n_col != 0:
+        #     n_row = int(qtd/n_col) + 1
+        # else:
+        #     n_row = int(qtd/n_col)
+        # for i in range(1, n_row + 1):
+        #     # if qtd < n_col:
+        #     #     n_col = qtd
+        #     tabela = self.doc.Tables.Add(self.word.Selection.Range, 1, n_col)
+        #     tabela.Borders.InsideLineStyle = 0
+        #     tabela.Borders.OutsideLineStyle = 0
+        #     for j in range(1, n_col + 1):
+        #         k = n_col*(i-1) + j-1
+        #         if k >= qtd:
+        #             break
+        #         shape = tabela.Cell(
+        #             1, j).Range.InlineShapes.AddPicture(pics[k]['path'])
+        #         shape.LockAspectRatio = -1
+        #         if shape.Width > max_width:
+        #             shape.Width = max_width
+        #         shape.Select
+
+        #         tabela.Cell(1, j).Range.Paragraphs(
+        #             1).Alignment = win32.constants.wdAlignParagraphCenter
+        #         caption = shape.Range.InsertCaption(
+        #             Label="Foto", Title=" - " + pics[k]['caption'], Position=win32.constants.wdCaptionPositionAbove)
+        #     tabela.Select()
+        #     self.word.Selection.Collapse(0)
+        #     self.word.Selection.TypeParagraph()
 
     def type_enter(self):
         self.word.Selection.TypeParagraph()

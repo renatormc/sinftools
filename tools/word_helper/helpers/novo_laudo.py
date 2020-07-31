@@ -72,7 +72,12 @@ def nova_pericia():
     path_laudos = pasta_laudos_trabalhando / answers['nome_caso']
     if pasta_dados == pasta_laudos_trabalhando:
         path_laudos = path_dados / "laudo"
-    copyanything(pasta_modelos / answers['modelo'], path_laudos)
+    path_laudos.mkdir()
+    shutil.copy(pasta_modelos / answers['modelo'] / "laudo.docx", path_laudos / "laudo.docx")
+    shutil.copy(pasta_modelos / answers['modelo'] / "data.xlsx", path_laudos / "data.xlsx")
+    (path_laudos / "fotos").mkdir()
+    (path_laudos / "modelo.txt").write_text(answers['modelo'])
+    # copyanything(pasta_modelos / answers['modelo'], path_laudos)
 
     #Criar links
     if pasta_dados != pasta_laudos_trabalhando:

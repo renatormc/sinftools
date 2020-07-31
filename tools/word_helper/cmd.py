@@ -20,13 +20,18 @@ def cli(ctx):
 def nova():
     nova_pericia()
 
+
 @cli.command()
 def plaudos():
-    subprocess.run(['explorer', str(config.local_config.getprop("laudos.pasta_laudos_trabalhando"))])
+    subprocess.run(['explorer', str(
+        config.local_config.getprop("laudos.pasta_laudos_trabalhando"))])
+
 
 @cli.command()
 def pdados():
-    subprocess.run(['explorer', str(config.local_config.getprop("laudos.pasta_dados"))])
+    subprocess.run(
+        ['explorer', str(config.local_config.getprop("laudos.pasta_dados"))])
+
 
 @cli.command()
 def pics():
@@ -39,8 +44,11 @@ def write():
     context = data
     context['sinf'], context['rg'], context['ano'] = data['pericia'].split("/")
     context['pessoas_envolvidas'] = get_pessoas_envolvidas(context['objects'])
-    runner = SourceFileLoader("module.name", "./runner.py").load_module()
+    model_name = (Path('.') / 'modelo.txt').read_text()
+    runner = SourceFileLoader("module.name", str(
+        config.app_dir / 'laudos' / model_name / "runner.py")).load_module()
     runner.run(context)
+
 
 @cli.command()
 def print():
