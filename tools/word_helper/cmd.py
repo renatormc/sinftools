@@ -61,6 +61,7 @@ def write():
     except Exception as e:
         print(e)
         input()
+   
 
 
 @cli.command()
