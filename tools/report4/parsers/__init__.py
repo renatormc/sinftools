@@ -5,7 +5,7 @@ from parsers.files_folder2db.files_folder2db import FilesFolder2Db
 from parsers.fbmessenger2db.fbmessenger2db import FBMessenger2Db
 from parsers.fbmessenger2db2.fbmessenger2db2 import FBMessenger2Db2
 from parsers.sqlite_iphone.sqlite_iphone import SqliteIphone
-from parsers.sqlite_iphone.sqlite_iphones import SqliteIphone2
+from parsers.sqlite_iphone2.sqlite_iphone2 import SqliteIphone2
 from parsers.whatsapp_dr_phone.whatsapp_dr_phone import WhatsAppDrPhone
 from parsers.extrator2db.extrator2db import ExtratorParser
 
