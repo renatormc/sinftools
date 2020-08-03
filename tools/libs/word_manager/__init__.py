@@ -12,10 +12,14 @@ class WordManager(object):
 
     def __init__(self):
         super().__init__()
+        self.word = None
+        self.doc = None
+
 
     def connect(self):
         pythoncom.CoInitialize()
-        self.word = win32.gencache.EnsureDispatch('Word.Application')
+        # self.word = win32.gencache.EnsureDispatch('Word.Application')
+        self.word = win32.Dispatch('Word.Application')
         if not self.word:
             raise Exception("Não foi possível se conectar ao Word")
         self.doc = self.word.ActiveDocument
@@ -27,6 +31,10 @@ class WordManager(object):
         self.doc.PrintOut(Copies=2, Pages="S1", ManualDuplexPrint=False)
         path = Path(self.doc.FullName).with_suffix(".pdf")
         self.doc.SaveAs2(FileName=str(path), FileFormat=17)
+
+    @property
+    def doc_path(self):
+        return Path(self.doc.FullName)
 
     def goto(self, slot):
         self.word.ActiveDocument.Content.Select()
@@ -70,8 +78,8 @@ class WordManager(object):
 
     def insert_pictures(self, pics, n_col, max_width=300):
         # convert to table
-        table = [pics[i:i+n_col] for i in range(0, len(pics), n_col)]
-     
+        table = [pics[i:i + n_col] for i in range(0, len(pics), n_col)]
+
         # insert table
         for row in table:
             n_col = len(row)

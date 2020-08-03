@@ -1,7 +1,7 @@
-from helpers import read_sheet, write_pics_sheet, get_pessoas_envolvidas
+from helpers import get_pessoas_envolvidas
+from helpers.excel_handler import ExcelHandler
 import click
 from pathlib import Path
-import shutil
 import subprocess
 import config
 from importlib.machinery import SourceFileLoader
@@ -35,19 +35,32 @@ def pdados():
 
 @cli.command()
 def pics():
-    write_pics_sheet()
+    try:
+        eh = ExcelHandler()
+        eh.connect_excel()
+        eh.folder = eh.workbook_path.parent
+        eh.write_pics_sheet()
+    except Exception as e:
+        print(e)
+        input()
 
 
 @cli.command()
 def write():
-    data = read_sheet()
-    context = data
-    context['sinf'], context['rg'], context['ano'] = data['pericia'].split("/")
-    context['pessoas_envolvidas'] = get_pessoas_envolvidas(context['objects'])
-    model_name = (Path('.') / 'modelo.txt').read_text()
-    runner = SourceFileLoader("module.name", str(
-        config.app_dir / 'laudos' / model_name / "runner.py")).load_module()
-    runner.run(context)
+    try:
+        eh = ExcelHandler()
+        eh.connect_excel()
+        data = eh.read_objects()
+        context = data
+        context['sinf'], context['rg'], context['ano'] = data['pericia'].split("/")
+        context['pessoas_envolvidas'] = get_pessoas_envolvidas(context['objects'])
+        model_name = (Path('.') / 'modelo.txt').read_text()
+        runner = SourceFileLoader("module.name", str(
+            config.app_dir / 'laudos' / model_name / "runner.py")).load_module()
+        runner.run(context)
+    except Exception as e:
+        print(e)
+        input()
 
 
 @cli.command()

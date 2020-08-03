@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/word_helper.iml" filepath="$PROJECT_DIR$/.idea/word_helper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../libs/word_manager/.idea/word_manager.iml" filepath="$PROJECT_DIR$/../../libs/word_manager/.idea/word_manager.iml" />
     </modules>
   </component>
 </project>
