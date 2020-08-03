@@ -46,12 +46,12 @@ def nova_pericia():
         {
             'type': 'input',
             'name': 'nome_caso',
-            'message': 'Nome do caso'
+            'message': 'Nome do caso: '
         },
         {
             'type': 'list',
             'name': 'modelo',
-            'message': 'Modelo',
+            'message': 'Modelo:',
             'choices': [entry.name for entry in pasta_modelos.iterdir() if entry.is_dir()]
         }
 
