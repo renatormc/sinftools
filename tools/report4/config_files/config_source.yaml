@@ -1,6 +1,6 @@
 #Identificador da fonte de dados, não altere este valor, este valor é gerado automaticamente
 identifier: null
-#Tipo da fonte. Utilize xml_ufed, sqlite, spi_tools, fbmessenger, fbmessenger2, sqlite_iphone, whatsapp_dr_phone ou files_folder
+#Tipo da fonte. Utilize xml_ufed, sqlite, spi_tools, extrator, fbmessenger, fbmessenger2, sqlite_iphone, sqlite_iphone2, whatsapp_dr_phone ou files_folder
 source_type: xml_ufed
 #Arquivo de dados, no caso do UFED é o arquivo do tipo XML. As outras fontes não utilizam então somente mude caso seja ufed
 data_file: null

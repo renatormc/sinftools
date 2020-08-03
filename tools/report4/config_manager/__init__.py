@@ -8,6 +8,9 @@ import settings
 import time
 import shutil
 from config_manager.spi_analyzer import SpiAnalyzer
+from sinf.sinftools_config import SinfToolsConfig
+
+sc = SinfToolsConfig()
 
 
 class ConfigManager:
@@ -146,6 +149,8 @@ class ConfigManager:
         chats = folder / "chats_spi"
         if anexos.exists() and anexos.is_dir() and chats.exists() and chats.exists():
             return ("spi_tools", )
+        if folder.name == "EXTRATOR":
+            return ("extrator", )
         if (folder / "msgstore.db").exists():
             return ("sqlite",)
         if (folder / "arquivos_").exists():
@@ -182,14 +187,15 @@ class ConfigManager:
 
 
     def get_db_local_config(self):
-        path = Path(f"{settings.sinftools_dir}/var/config/sinf_report_db.json")
-        if not path.exists():
-            shutil.copy(
-                Path(settings.app_dir / "dev/sinf_report_db.json"), path)
-        if path.exists():
-            with path.open(encoding="utf-8") as f:
-                data = json.load(f)
-            return data
+        return sc.getprop("sinf_report_db")
+        # path = Path(f"{settings.sinftools_dir}/var/config/sinf_report_db.json")
+        # if not path.exists():
+        #     shutil.copy(
+        #         Path(settings.app_dir / "dev/sinf_report_db.json"), path)
+        # if path.exists():
+        #     with path.open(encoding="utf-8") as f:
+        #         data = json.load(f)
+        #     return data
 
     @property
     def sources(self):
