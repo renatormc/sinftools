@@ -56,7 +56,15 @@ class SqliteIphone2(ParserBase):
         
         for i, item in enumerate(self.df_messages.sort_values(by=['ZCHATSESSION']).iterrows()):
             row = item[1]
+            #print(row)
+            #print(row['ZISFROMME'])
+           
             progress(i, n)
+
+
+            if row['ZMESSAGETYPE'] == 10: ##MENSAGENS TYPE == 10 SÃO INUTEIS, BROADCASTS E SYSTEM MENSAGENS
+                continue
+
             if current_chat != row['ZCHATSESSION']:
                 self.add(chat)
                 chat_id, chat_name = self.__get_chat_id_name(
@@ -65,6 +73,14 @@ class SqliteIphone2(ParserBase):
                 current_chat = row['ZCHATSESSION']
             message = Message()
             jid, from_name = self.__get_from_name(row['ZFROMJID'], row['ZGROUPMEMBER'])
+            if not row['ZISFROMME'] == 0:
+                from_name = "Proprietário"
+            
+
+          
+            # if is_from_me == 1:
+            #     from_name = "Proprietário"
+
             message.from_ = self.add_participant(jid, from_name)
             if not message.from_ in chat.participants and message.from_:
                 chat.participants.append(message.from_)

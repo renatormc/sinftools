@@ -313,7 +313,7 @@ class ChatWorker:
 
             context = {}
             query = self.report_bundle.filter(Chat, self.dbsession.query(
-                Chat).filter(Chat.source == source))
+                Chat).filter(Chat.source == source)).order_by(Chat.last_activity.desc())
             context['chats'] = query.all()
             query = self.dbsession.query(Message).join(Chat).filter(Message.analise_attachment_types.like("%audio%"),
                                                                     Chat.source == source)
