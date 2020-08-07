@@ -117,7 +117,8 @@ class Message(Base):
     from_id = Column(Integer, ForeignKey('participant.id'))
     from_ = relationship('Participant', backref='messages')
     timestamp = Column(DateTime)
-    body = Column(Text(4294000000))
+    # body = Column(Text(4294000000))
+    body = Column(Text)
     deleted_state = Column(String(50))
     color = Column(String(30))
     page_renderized = Column(Integer)
@@ -145,8 +146,10 @@ class Message(Base):
 class Chat(Base):
     __tablename__ = 'chat'
     id = Column(Integer, primary_key=True)
-    identifier = Column(Text(4294000000))
-    friendly_identifier = Column(Text(4294000000))
+    # identifier = Column(Text(4294000000))
+    # friendly_identifier = Column(Text(4294000000))
+    identifier = Column(Text)
+    friendly_identifier = Column(Text)
     name = Column(String(300))
     start_time = Column(DateTime)
     last_activity = Column(DateTime)
@@ -182,9 +185,12 @@ class Chat(Base):
 class Participant(Base):
     __tablename__ = 'participant'
     id = Column(Integer, primary_key=True)
-    identifier = Column(Text(4294000000))
-    friendly_identifier = Column(Text(4294000000))
-    name = Column(Text(4294000000))
+    # identifier = Column(Text(4294000000))
+    # friendly_identifier = Column(Text(4294000000))
+    # name = Column(Text(4294000000))
+    identifier = Column(Text)
+    friendly_identifier = Column(Text)
+    name = Column(Text)
     proprietary = Column(Boolean, nullable=False, default=False)
     chats = relationship('Chat', secondary=chat_participant,
                          back_populates='participants', lazy='dynamic')
@@ -208,7 +214,8 @@ class Participant(Base):
 class Sms(Base):
     __tablename__ = 'sms'
     id = Column(Integer, primary_key=True)
-    body = Column(Text(4294000000))
+    # body = Column(Text(4294000000))
+    body = Column(Text)
     timestamp = Column(DateTime)
     status = Column(String(50))
     folder = Column(String(50))
@@ -227,8 +234,10 @@ class SmsPart(Base):
     __tablename__ = 'sms_part'
     id = Column(Integer, primary_key=True)
     role = Column(String(100))
-    identifier = Column(Text(4294000000))
-    name = Column(Text(4294000000))
+    # identifier = Column(Text(4294000000))
+    # name = Column(Text(4294000000))
+    identifier = Column(Text)
+    name = Column(Text)
     deleted_state = Column(String(50))
     sms_id = Column(Integer, ForeignKey('sms.id'))
     read_source_id = Column(Integer, ForeignKey('read_source.id'))
@@ -285,8 +294,10 @@ class CallPart(Base):
     __tablename__ = 'call_part'
     id = Column(Integer, primary_key=True)
     role = Column(String(50))
-    identifier = Column(Text(4294000000))
-    name = Column(Text(4294000000))
+    # identifier = Column(Text(4294000000))
+    # name = Column(Text(4294000000))
+    identifier = Column(Text)
+    name = Column(Text)
     call_id = Column(Integer, ForeignKey('call.id'))
     deleted_state = Column(String(50))
     read_source_id = Column(Integer, ForeignKey('read_source.id'))

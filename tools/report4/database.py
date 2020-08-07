@@ -10,7 +10,7 @@ localdb = config_manager.is_localdb()
 def db_connect():
     url = config_manager.get_database_url()
     if url:
-        engine = create_engine(config_manager.get_database_url(), convert_unicode=True)
+        engine = create_engine(config_manager.get_database_url(), convert_unicode=True, encoding="utf-8")
         if config_manager.database_type == 'sqlite':
             def sqlite_regexp(expr, item):
                 if item is None:

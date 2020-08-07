@@ -30,7 +30,7 @@
                         <img src="../{{ attachment.thumb_path|urlFile }}" class="rm-video-thumbnail video-thumbnail"
                             onclick="videoClick('../{{ attachment.path|urlFile }}')" />
                         {% else %}
-                        <video src="../{{ attachment.path}}" class="video" controls>
+                        <video src="../{{ attachment.path|urlFile}}" class="video" controls>
                             Seu navegador não suporta o elemento <code>video</code>.
                         </video>
                         {% endif %}

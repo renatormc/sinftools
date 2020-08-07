@@ -33,7 +33,8 @@ class ExtratorParser(ParserBase):
     def check_env(self):
         msgs = []
         self.choose_exp()
-        if Path(self.read_source.folder).name != "EXTRATOR":
+        self.extrator_folder = Path(self.read_source.folder) / "EXTRATOR"
+        if not self.extrator_folder.exists():
             msgs.append("Não foi encontrada uma pasta de nome EXTRATOR")
         return msgs
 
@@ -50,6 +51,6 @@ class ExtratorParser(ParserBase):
         pool.join()
 
     def getChatsFolders(self):
-        return [entry for entry in Path(self.read_source.folder).iterdir() if entry.is_dir()]
+        return [entry for entry in self.extrator_folder.iterdir() if entry.is_dir()]
 
  

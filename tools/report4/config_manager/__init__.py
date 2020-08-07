@@ -149,7 +149,7 @@ class ConfigManager:
         chats = folder / "chats_spi"
         if anexos.exists() and anexos.is_dir() and chats.exists() and chats.exists():
             return ("spi_tools", )
-        if folder.name == "EXTRATOR":
+        if (folder / "EXTRATOR").exists():
             return ("extrator", )
         if (folder / "msgstore.db").exists():
             return ("sqlite",)

@@ -47,20 +47,17 @@ def pics():
 
 @cli.command()
 def write():
-    try:
-        eh = ExcelHandler()
-        eh.connect_excel()
-        data = eh.read_objects()
-        context = data
-        context['sinf'], context['rg'], context['ano'] = data['pericia'].split("/")
-        context['pessoas_envolvidas'] = get_pessoas_envolvidas(context['objects'])
-        model_name = (Path('.') / 'modelo.txt').read_text()
-        runner = SourceFileLoader("module.name", str(
-            config.app_dir / 'laudos' / model_name / "runner.py")).load_module()
-        runner.run(context)
-    except Exception as e:
-        print(e)
-        input()
+    eh = ExcelHandler()
+    eh.connect_excel()
+    data = eh.read_objects()
+    context = data
+    context['sinf'], context['rg'], context['ano'] = data['pericia'].split("/")
+    context['pessoas_envolvidas'] = get_pessoas_envolvidas(context['objects'])
+    model_name = (Path('.') / 'modelo.txt').read_text()
+    runner = SourceFileLoader("module.name", str(
+        config.app_dir / 'laudos' / model_name / "runner.py")).load_module()
+    runner.run(context)
+   
    
 
 

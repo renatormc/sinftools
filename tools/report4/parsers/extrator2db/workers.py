@@ -71,6 +71,15 @@ class ChatWorker:
                 if validate and validate.exists():
                     return validate
 
+    def __get_chat_name(self, folder):
+        folder = Path(folder)
+        path = folder / "RELATORIO_EXTRATOR.txt"
+        try:
+            lines = path.read_text(encoding="utf-8").split("\n")
+            return lines[1].replace("Conversa do WhatsApp com", "").strip()
+        except (FileNotFoundError, IndexError):
+            return folder.name.replace("Conversa do WhatsApp com", "").strip()
+
     def run(self, folder: Path):
         self.engine, self.db_session = db_connect()
         self.read_source = self.db_session.query(
@@ -81,9 +90,8 @@ class ChatWorker:
             raise Exception(f"Na pasta {folder} não foi encontrado um arquivo que começa com CHAT_ e termina com .txt")
         with txt_file.open("r", encoding="utf-8") as f:
             text = f.read()
-
         chat = Chat()
-        chat.name = folder.name.replace("Conversa do WhatsApp com", "").strip()
+        chat.name = self.__get_chat_name(folder)
         chat.source = self.read_source.chat_source
         chat.deleted_state = "Intact"
         self.add(chat)
@@ -104,11 +112,11 @@ class ChatWorker:
             msg.body = result['body']
             msg.deleted_state = "Intact"
             attach = self.get_attachment(folder, msg.body)
-            if attachment:
+            if attach:
                 attachment = File()
-                attachment.extracted_path = attach.relative_to(self.read_source.folder)
+                attachment.extracted_path = str(attach.relative_to(self.read_source.folder))
                 attachment.filename = os.path.basename(attachment.extracted_path)
-                attachment.size = os.path.getsize(validate)
+                attachment.size = os.path.getsize(attach)
                 self.add(attachment)
                 msg.attachments.append(attachment)
         
@@ -121,6 +129,7 @@ class ChatWorker:
                     print(e)
             self.add(msg)
             chat.messages.append(msg)
+            self.commit()
         self.add(chat)
         self.commit()
         self.engine.dispose()
