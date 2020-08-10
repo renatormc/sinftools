@@ -40,8 +40,8 @@ class Window(QMainWindow):
         }
         self.setup_ui()
         self.process_manager = ProcessManager(db_session)
-        self.scheduler = Scheduler(standalone=self.standalone)
-        self.scheduler.updated.connect(self.periodic)
+        self.scheduler = Scheduler(parent=self, standalone=self.standalone)
+        # self.scheduler.updated.connect(self.periodic)
         self.scheduler.start()
         self.connections()
         self.check_process()
@@ -153,9 +153,9 @@ class Window(QMainWindow):
         self.tabs.addTab(self.txe_stderr, "STDERR")
         self.main_layout.addWidget(self.tabs)
 
-    def periodic(self):
-        # self.check_process()
-        self.update_table()
+    # def periodic(self):
+    #     # self.check_process()
+    #     self.update_table()
 
     def open_sqlite(self):
         self.process_manager.exec(['s-dbb', str(config.sqlite_path)])
@@ -304,7 +304,6 @@ class Window(QMainWindow):
             if self.proc_context_menu:
                 self.process_manager.queue(self.proc_context_menu)
                 self.check_process()
-                self.update_table()
         except Exception as e:
             self.show_error(e)
 
@@ -314,7 +313,6 @@ class Window(QMainWindow):
                 db_session.delete(self.proc_context_menu)
                 db_session.commit()
                 self.process_manager.kill_process(self.proc_context_menu)
-                self.update_table()
         except Exception as e:
             self.show_error(e)
 
@@ -339,8 +337,9 @@ class Window(QMainWindow):
                 # self.set_color_row(i, QColor(125, 125, 125))
             self.tbw_process.setItem(i, key, item)
 
-    def update_table(self):
+    def update_table_worker(self, raise_except=False):
         try:
+            print("Atualizando tabela")
             processes_rows = {self.tbw_process.item(i, 0).data(
                 Qt.UserRole): i for i in range(self.tbw_process.rowCount())}
             procs = db_session.query(Process).order_by(
@@ -365,6 +364,13 @@ class Window(QMainWindow):
                 for i in rows:
                     self.tbw_process.removeRow(i)
             db_session.remove()
+        except Exception as e:
+            if raise_except:
+                raise e
+
+    def update_table(self):
+        try:
+            self.update_table_worker(raise_except=True)
         except Exception as e:
             self.show_error(e)
 

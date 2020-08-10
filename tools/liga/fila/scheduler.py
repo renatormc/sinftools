@@ -7,8 +7,9 @@ from helpers.process_manager import ProcessManager
 class Scheduler(QThread):
     updated = pyqtSignal()
 
-    def __init__(self, standalone, *args, **kwargs):
+    def __init__(self, parent, standalone, *args, **kwargs):
         QThread.__init__(self, *args, **kwargs)
+        self.parent = parent
         self.standalone = standalone
         self.dataCollectionTimer = QTimer()
         self.dataCollectionTimer.moveToThread(self)
@@ -19,7 +20,8 @@ class Scheduler(QThread):
     def periodic(self):
         pm = ProcessManager(db_session)
         pm.check_process()
-        self.updated.emit()
+        self.parent.update_table_worker()
+        # self.updated.emit()
       
 
     def run(self):
