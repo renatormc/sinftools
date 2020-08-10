@@ -293,7 +293,7 @@ def list_dbs():
 
 
 @cli.command()
-@click.option('--dbtype', type=click.Choice(['mysql', 'postgres']), default='mysql')
+@click.option('--dbtype', type=click.Choice(['mysql', 'postgres']), default='postgres')
 def dropdb(dbtype):
     hp_db.drop_orphan_databases(type=dbtype)
     
