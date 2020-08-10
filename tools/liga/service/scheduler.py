@@ -77,7 +77,7 @@ class SchedulerConfig(object):
             'id': 'delete_old_processes',
             'func': delete_old_processes,
             'trigger': 'interval',
-            'seconds': 4
+            'minutes': 120
         },
         {
             'id': 'check_process',
