@@ -10,5 +10,6 @@ bot.SALVAR = "SALVAR"
 bot.VOLTAR = "KEYCODE_BACK"
 # bot.VOLTAR = "KEYCODE_ESCAPE"
 bot.ROLAR_N_VEZES = 5
+bot.parte_ultimo_chat = "9855-7826"
 
 bot.extract()
