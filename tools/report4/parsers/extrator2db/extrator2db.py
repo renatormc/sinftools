@@ -52,7 +52,7 @@ class ExtratorParser(ParserBase):
             pool.join()
         else:
             for i, proc in enumerate(procs):
-                chat_worker(**proc)
+                chat_worker(proc)
                 progress(i, n)
         
 

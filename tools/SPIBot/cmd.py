@@ -5,6 +5,12 @@ import shutil
 import os
 
 
+windows_path = os.getenv("PATH")
+adb_folder = config.sinftools_dir / "extras/ADB"
+os.environ['PATH'] = f"{adb_folder};{windows_path}"
+
+os.system("where adb")
+
 @click.group()
 @click.pass_context
 def cli(ctx):

@@ -66,8 +66,8 @@ class XmlParser(ParserBase):
                 pool.close()
                 pool.join()
             else:
-                for i, proc in enumerate(proc):
-                    chat_worker(**proc)
+                for i, proc in enumerate(procs):
+                    chat_worker(proc)
                     progress(i, n)
                      
 
@@ -224,8 +224,8 @@ class XmlParser(ParserBase):
                 pool.close()
                 pool.join()
             else:
-                for i, _ in enumerate(procs):
-                    files_worker(**proc)
+                for i, proc in enumerate(procs):
+                    files_worker(proc)
                     progress(i, n)
                 
 
