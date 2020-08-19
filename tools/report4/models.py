@@ -9,7 +9,7 @@ from pathlib import Path
 from passlib.hash import pbkdf2_sha256
 from urllib.parse import quote
 from sqlalchemy.ext.declarative import declarative_base
-
+from config_manager import config_manager
 
 Base = declarative_base()
 
@@ -325,6 +325,7 @@ class File(Base):
     page_renderized = Column(Integer)
     analise_thumb = Column(String(1000))
     message_id = Column(Integer, ForeignKey('message.id'))
+    chat_included = Column(Boolean)
     corrupted = Column(Boolean, nullable=False, default=False)
     read_source_id = Column(Integer, ForeignKey('read_source.id'))
     read_source = relationship('ReadSource', backref=backref(

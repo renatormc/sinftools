@@ -1,5 +1,6 @@
 import click
 import helpers_cmd as hp
+from config_manager import config_manager
 import os
 import sys
 import shutil
@@ -12,7 +13,7 @@ import models
 from database import db_session
 from database import db_connect
 from helpers import get_items_available
-from config_manager import config_manager
+
 from report_maker import ReportMaker
 from sinf.exe_finder import open_in_browser
 from subprocess import Popen
@@ -26,7 +27,7 @@ import helpers_dblocal as hp_db
 # from multiprocessing import Pool, cpu_count
 import multiprocessing
 from contextlib import contextmanager
-from multiprocessing import Pool    
+from multiprocessing import Pool
 import constants
 from termcolor import cprint
 import colorama
@@ -41,7 +42,6 @@ def poolcontext(*args, **kwargs):
     pool = multiprocessing.Pool(*args, **kwargs)
     yield pool
     pool.terminate()
-
 
 
 def process_avatars():
@@ -61,8 +61,10 @@ def cli(ctx):
 
 @cli.command()
 @click.option('--grouped/--no-grouped', default=False)
-@click.option('--dbtype', type=click.Choice(['sqlite', 'mysql', 'postgres']), default='mysql')
+@click.option('--dbtype', type=click.Choice(['sqlite', 'mysql', 'postgres']), default='sqlite')
 def init(grouped, dbtype):
+   
+      
     # hp.askfor_update()
     if os.path.exists(".report"):
         hp.instruct_continue(
@@ -98,11 +100,12 @@ def init(grouped, dbtype):
     print(f"Gerando banco de dados {dbtype}")
     if dbtype != 'sqlite':
         hp_db.create_database_localdb(type=dbtype)
-        hp_db.drop_orphan_databases(type=dbtype, exclude=[config_manager.database_name])
+        hp_db.drop_orphan_databases(
+            type=dbtype, exclude=[config_manager.database_name])
         n_cpu = multiprocessing.cpu_count()
         config_manager.data['n_workers'] = n_cpu if n_cpu <= 8 else 8
         config_manager.save()
-       
+
     config_manager.load_database_name()
     db_connect()
     importlib.reload(models)
@@ -129,7 +132,7 @@ def init(grouped, dbtype):
 #     read_source.process = False
 #     db_session.add(read_source)
 #     db_session.commit()
-   
+
 # def process_worker(read_source_id):
 #     path = settings.app_dir / "process.py"
 #     os.system(f"s-py \"{path}\" {read_source_id}")
@@ -139,15 +142,17 @@ def init(grouped, dbtype):
 def process():
     start_time = datetime.now()
 
-    #atualizar arquivos yaml
+    # atualizar arquivos yaml
     hp.update_sources()
-    read_sources = db_session.query(ReadSource).filter(ReadSource.process == True).all()
+    read_sources = db_session.query(ReadSource).filter(
+        ReadSource.process == True).all()
     # for read_source in read_sources:
     #     if read_source.source_type == 'xml_ufed':
     #         config_manager.set_data_file(read_source.folder)
 
     hp.update_sources()
-    read_sources = db_session.query(ReadSource).filter(ReadSource.process == True).all()
+    read_sources = db_session.query(ReadSource).filter(
+        ReadSource.process == True).all()
     for read_source in read_sources:
         print(f"Iniciando processamento {read_source.folder}")
         parser = parsers.parsers_dict[read_source.source_type]()
@@ -169,7 +174,7 @@ def process():
         db_session.commit()
     # for process in processes:
     #     read_source, parser = process
-       
+
     #     hp.clear_read_source(read_source)
     #     parser.run()
     #     parser = None
@@ -205,14 +210,14 @@ def render():
             report_maker = ReportMaker()
             report_maker.set_item_source(rs)
             report_maker.generate_html_files()
-    
+
 
 @cli.command()
 def update():
     hp.copy_config_files()
     hp.update_sources()
     process_avatars()
-    
+
 
 @cli.command()
 def delete_unchecked():
@@ -222,7 +227,8 @@ def delete_unchecked():
 
 @cli.command()
 def portable():
-    print(f"Migrando banco de dados de {config_manager.database_type} para sqlite.")
+    print(
+        f"Migrando banco de dados de {config_manager.database_type} para sqlite.")
     path = Path(".report/db.db")
     if path.exists():
         path.unlink()
@@ -257,10 +263,12 @@ def db_config():
     path = Path(f"{settings.sinftools_dir}/var/config/sinf_report_db.json")
     if not path.exists():
         if not path.exists():
-            shutil.copy(Path(settings.app_dir / "dev/sinf_report_db.json"), path)
+            shutil.copy(
+                Path(settings.app_dir / "dev/sinf_report_db.json"), path)
     mariadb_folder = Path(r'C:\Program Files\MariaDB 10.4\bin')
     while not mariadb_folder.exists():
-        folder = input("Entre a pasta de instalação do MariaDB: (ex: \"C:\Program Files\MariaDB 10.4\bin\"):")
+        folder = input(
+            "Entre a pasta de instalação do MariaDB: (ex: \"C:\Program Files\MariaDB 10.4\bin\"):")
         mariadb_folder = Path(folder)
     user = input("Usuário root do MariaDB: ")
     # password = getpass.getpass(prompt='Senha: ')
@@ -296,7 +304,7 @@ def list_dbs():
 @click.option('--dbtype', type=click.Choice(['mysql', 'postgres']), default='postgres')
 def dropdb(dbtype):
     hp_db.drop_orphan_databases(type=dbtype)
-    
+
 
 @cli.command()
 @click.option('--edit/--no-edit', default=False)
@@ -387,27 +395,29 @@ def word(tags, item, n_cols, caption):
     for tag in tags:
         if not db_session.query(Tag).filter_by(name=tag).count():
             print(f'Tag "{tag}" não existe.')
-            return 
+            return
     wh = WordHandler()
     if item == 'image':
-        files = db_session.query(File).filter(File.type_ == 'image', File.tags.any(Tag.name.in_(tags))).all()
-       
+        files = db_session.query(File).filter(
+            File.type_ == 'image', File.tags.any(Tag.name.in_(tags))).all()
+
         if not files:
             print(f"Nenhuma imagem marcada com as tags {tags}")
             return
         files = [file_.path for file_ in files]
         wh.insert_images(n_cols, files)
     elif item == 'video':
-        files = db_session.query(File).filter(File.type_ == 'video', File.tags.any(Tag.name.in_(tags))).all()
+        files = db_session.query(File).filter(
+            File.type_ == 'video', File.tags.any(Tag.name.in_(tags))).all()
         if not files:
             print(f"Nenhum video marcado com as tags {tags}")
             return
         files = [file_.thumb_path for file_ in files]
         wh.insert_images(n_cols, files)
     elif item == 'chat':
-        messages = db_session.query(Message).filter(Message.tags.any(Tag.name.in_(tags))).all()
+        messages = db_session.query(Message).filter(
+            Message.tags.any(Tag.name.in_(tags))).all()
         wh.insert_chat_messages_table(caption, messages)
-
 
 
 @cli.command()
@@ -415,20 +425,22 @@ def mark_all_to_process():
     for rs in db_session.query(ReadSource).all():
         print(rs.folder)
         config_manager.set_process(rs.folder, True)
-		
+
+
 @cli.command()
 def gen_yaml():
     p = Path('config_source.yaml')
     if not p.exists():
         shutil.copy(settings.app_dir /
-                "config_files/config_source.yaml", p)
+                    "config_files/config_source.yaml", p)
+
 
 @cli.command()
 def db_name():
     database_name = config_manager.database_name
     if database_name:
         print(database_name)
-        
+
 
 if __name__ == '__main__':
     cli(obj={})

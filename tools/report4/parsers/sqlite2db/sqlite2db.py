@@ -70,15 +70,24 @@ class Sqlite2Db(ParserBase):
     def calculate_hashes(self):
         self.hash_dict = {}
         print("Calculando hash dos arquivos na pasta de anexos")
-        pool = Pool(processes=config_manager.data['n_workers'])
+        n_workers = config_manager.n_workers
+        
         path = Path(self.attachments_folder)
         files = [path for path in path.glob('**/*') if path.is_file()]
         n = len(files)
-        for i, data in enumerate(pool.imap_unordered(hash_worker, files)):
-            progress(i, n)
-            self.hash_dict[data[0]] = data[1]
-        pool.close()
-        pool.join()
+        if n_workers > 1:
+            pool = Pool(processes=n_workers)
+            for i, data in enumerate(pool.imap_unordered(hash_worker, files)):
+                progress(i, n)
+                self.hash_dict[data[0]] = data[1]
+            pool.close()
+            pool.join()
+        else:
+            for i, file_ in enumerate(files):
+                data = hash_worker(file_)
+                progress(i, n)
+                self.hash_dict[data[0]] = data[1]
+
         print("Hashes calculados")
 
     def get_participant(self, jid):

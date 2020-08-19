@@ -114,14 +114,20 @@ class SPIParser(ParserBase):
         self.lista = self.getChatsFilename()
         n = len(self.lista)
         print("Lendo chats")
-        pool = Pool(processes=config_manager.data['n_workers'])
-
+        n_workers = config.n_workers            
         procs = ({'read_source_id': self.read_source.id, 'exp': self.exp,
-                  'chats_path': self.chats_path, 'att_path': self.att_path, 'filename': f} for f in self.lista)
-        for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
-            progress(i, n)
-        pool.close()
-        pool.join()
+                'chats_path': self.chats_path, 'att_path': self.att_path, 'filename': f} for f in self.lista)
+        if n_workers > 1:
+            pool = Pool(processes=n_workers)
+            for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
+                progress(i, n)
+            pool.close()
+            pool.join()
+        else:
+            for i, proc in enumerate(procs):
+                chat_worker(**proc)
+                progress(i, n)
+        
 
     def getChatsFilename(self):
         return os.listdir(self.chats_path)

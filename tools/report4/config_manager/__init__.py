@@ -201,6 +201,10 @@ class ConfigManager:
     def sources(self):
         return self.data.sources
 
+    @property
+    def n_workers(self):
+        return 1 if self.database_type == 'sqlite' else self.data['n_workers']
+
 
 config_manager = ConfigManager()
 config_manager.load()

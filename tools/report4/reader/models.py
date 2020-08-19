@@ -325,6 +325,7 @@ class File(Base):
     page_renderized = Column(Integer)
     analise_thumb = Column(String(1000))
     message_id = Column(Integer, ForeignKey('message.id'))
+    chat_included = Column(Boolean)
     corrupted = Column(Boolean, nullable=False, default=False)
     read_source_id = Column(Integer, ForeignKey('read_source.id'))
     read_source = relationship('ReadSource', backref=backref(
@@ -378,7 +379,6 @@ class File(Base):
         self.extracted_path = str(extracted_path.parent / new_name)
         self.filename = new_name
                
-
 
 class UserAccount(Base):
     __tablename__ = 'user_account'

@@ -36,9 +36,9 @@ def add_chat_included(files):
     # filters = get_config("filters")
     for file_ in files:
         if file_.message_id is None:
-            file_.message_id = False
+            file_.chat_included = False
             continue
-        file_.message_id = file_.message.checked
+        file_.chat_included = file_.message.checked
     return files
 
 
@@ -94,12 +94,18 @@ class ReportMaker:
         query = db_session.query(Chat.id)
         chats = self.report_bundle.filter(Chat, query).all()
         n = len(chats)
-        pool = Pool(processes=config_manager.data['n_workers'])
+        n_workers = config_manager.n_workers
         procs = ({'report_bundle': self.report_bundle, 'chat_id': item[0]} for item in chats)
-        for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
-            progress(i, n)
-        pool.close()
-        pool.join()
+        if n_workers > 1:
+            pool = Pool(processes=n_workers)
+            for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
+                progress(i, n)
+            pool.close()
+            pool.join()
+        else:
+            for i, proc in enumerate(procs):
+                chat_worker(proc)
+                progress(i, n)
         
 
     def render_contacts(self):

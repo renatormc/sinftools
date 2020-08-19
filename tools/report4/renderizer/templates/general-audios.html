@@ -31,7 +31,7 @@
                             Seu navegador não suporta o elemento <code>áudio</code>.
                         </audio>
                         <p class="filename">{{ file.filename|maxCaracters(40) }}</p>
-                        {% if file.message_id %}
+                        {% if file.chat_included %}
                             <p>
                                 <a href="chat{{ file.message.chat.id }}_page_{{ file.message.page_renderized }}.html#men-{{ file.message.id }}">Ver
                                     na

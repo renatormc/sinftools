@@ -57,12 +57,18 @@ class XmlParser(ParserBase):
         if chats_el:
             n = len(chats_el)
             print("Lendo chats")
-            pool = Pool(processes=config_manager.data['n_workers'])
+            n_workers = config_manager.n_workers
             procs = ({'read_source_id': self.read_source.id, 'namespace': self.namespace, 'chat_el': chat_el} for chat_el in chats_el)
-            for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
-                progress(i, n)
-            pool.close()
-            pool.join()
+            if n_workers > 1:
+                pool = Pool(processes=n_workers)
+                for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
+                    progress(i, n)
+                pool.close()
+                pool.join()
+            else:
+                for i, proc in enumerate(proc):
+                    chat_worker(**proc)
+                    progress(i, n)
                      
 
     def parse_sms(self):
@@ -209,12 +215,18 @@ class XmlParser(ParserBase):
             chunks_ = list(chunks(files_el, 50))
             n = len(chunks_)
             print("\nLendo arquivos")
-            pool = Pool(processes=config_manager.data['n_workers'])
+            n_workers = config_manager.n_workers
             procs = ({'read_source_id': self.read_source.id, 'namespace': self.namespace, 'chunk': chunk} for chunk in chunks_)
-            for i, _ in enumerate(pool.imap_unordered(files_worker, procs)):
-                progress(i, n)
-            pool.close()
-            pool.join()
+            if n_workers > 1:
+                pool = Pool(processes=n_workers)
+                for i, _ in enumerate(pool.imap_unordered(files_worker, procs)):
+                    progress(i, n)
+                pool.close()
+                pool.join()
+            else:
+                for i, _ in enumerate(procs):
+                    files_worker(**proc)
+                    progress(i, n)
                 
 
     def parse_user_acccounts(self):

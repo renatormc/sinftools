@@ -33,7 +33,7 @@
                         <p>{{ file.size|filesize }}</p>
                     </td>
                 </tr>
-                {% if file.message_id %}
+                {% if file.chat_included %}
                 <tr>
                     <td>
                         <a href="chat{{ file.message.chat.id }}_page_{{ file.message.page_renderized }}.html#men-{{file.message_id}}">Ver

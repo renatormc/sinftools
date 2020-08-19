@@ -48,9 +48,15 @@ class ThumbVideo:
         print("\nGerando thumbs dos vídeos")
         chunks_ = list(chunks(files, 2))
         n = len(chunks_)
-        pool = Pool(processes=config_manager.data['n_workers'])
+        n_workers = config_manager.n_workers
         procs = ((thumbs_generator, chunk) for chunk in chunks_)
-        for i, _ in enumerate(pool.imap_unordered(worker, procs)):
-            progress(i, n)
-        pool.close()
-        pool.join()
+        if n_workers > 1:
+            pool = Pool(processes=n_workers)
+            for i, _ in enumerate(pool.imap_unordered(worker, procs)):
+                progress(i, n)
+            pool.close()
+            pool.join()
+        else:
+            for i, proc in enumerate(procs):
+                worker(proc)
+                progress(i, n)

@@ -370,7 +370,8 @@ class Window(QMainWindow):
 
     def update_table(self):
         try:
-            self.update_table_worker(raise_except=True)
+            self.scheduler.periodic()
+            # self.update_table_worker(raise_except=True)
         except Exception as e:
             self.show_error(e)
 
@@ -448,6 +449,7 @@ class Window(QMainWindow):
             self.toggle_blocking_queue)
         # self.blo.triggered.connect(self.open_logfile)
         self.tbw_process.selectionModel().currentRowChanged.connect(self.update_console)
+        self.tbw_process.clicked.connect(self.update_console)
         self.new_script_action.triggered.connect(self.create_new_script)
         self.tbw_process.doubleClicked.connect(self.edit_process)
 

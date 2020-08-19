@@ -9,9 +9,9 @@ def add_chat_included(files):
     # filters = get_config("filters")
     for file_ in files:
         if file_.message_id is None:
-            file_.message_id = False
+            file_.chat_included = False
             continue
-        file_.message_id = file_.message.checked
+        file_.chat_included = file_.message.checked
     return files
 
 

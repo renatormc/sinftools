@@ -47,11 +47,17 @@ class FileDuplicates:
             File.message_id != None, File.read_source_id == self.read_source.id).all()
         chunks_ = list(chunks(attachments, 100))
         n = len(chunks_)
-        pool = Pool(processes=config_manager.data['n_workers'])
-        for i, _ in enumerate(pool.imap_unordered(worker,chunks_)):
-            progress(i, n)
-        pool.close()
-        pool.join()
+        n_workers = config_manager.n_workers
+        if n_workers > 1:
+            pool = Pool(processes=n_workers)
+            for i, _ in enumerate(pool.imap_unordered(worker,chunks_)):
+                progress(i, n)
+            pool.close()
+            pool.join()
+        else:
+            for i, chunk in enumerate(chunks_):
+                worker(chunk)
+                progress(i, n)
         # n = len(attachments)
         # for i, attachment in enumerate(attachments):
         #     progress(i, n)

@@ -95,9 +95,9 @@ class WordManager(object):
                 shape.Select
 
                 tabela.Cell(
-                    1, i + 1).Range.Paragraphs(1).Alignment = win32.constants.wdAlignParagraphCenter
+                    1, i + 1).Range.Paragraphs(1).Alignment = 1
                 caption = shape.Range.InsertCaption(
-                    Label="Foto", Title=" - " + pic['caption'], Position=win32.constants.wdCaptionPositionAbove)
+                    Label="Foto", Title=" - " + pic['caption'], Position=0) #win32.constants.wdCaptionPositionAbove
             tabela.Select()
             self.word.Selection.Collapse(0)
             self.word.Selection.TypeParagraph()

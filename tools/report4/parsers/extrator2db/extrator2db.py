@@ -42,13 +42,19 @@ class ExtratorParser(ParserBase):
         self.lista = self.getChatsFolders()
         n = len(self.lista)
         print("Lendo chats")
-        pool = Pool(processes=config_manager.data['n_workers'])
-
+        n_workers = config_manager.n_workers
         procs = ({'read_source_id': self.read_source.id, 'exp': self.exp, 'folder': f} for f in self.lista)
-        for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
-            progress(i, n)
-        pool.close()
-        pool.join()
+        if n_workers > 1:
+            pool = Pool(processes=n_workers)
+            for i, _ in enumerate(pool.imap_unordered(chat_worker, procs)):
+                progress(i, n)
+            pool.close()
+            pool.join()
+        else:
+            for i, proc in enumerate(procs):
+                chat_worker(**proc)
+                progress(i, n)
+        
 
     def getChatsFolders(self):
         return [entry for entry in self.extrator_folder.iterdir() if entry.is_dir()]
