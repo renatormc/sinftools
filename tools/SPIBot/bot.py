@@ -42,7 +42,7 @@ class Bot:
                 textViews = vc.findViewsWithAttribute("class", "android.widget.TextView")
                 listaAtualizada = False
                 if self.verbose:
-                    print_safe(f"{len(textViews)} views encontradas")
+                    print_safe(f"{len(textViews)} views encontradas de todos os tipos")
                 for texView in textViews:
                     if(texView.getId() == 'com.whatsapp:id/conversations_row_contact_name'):
                         contato = texView.getText()
@@ -68,39 +68,59 @@ class Bot:
                             texView.touch()
                             vc.sleep(1)
                             vc.dump(window=-1)
+                            if self.verbose:
+                                print_safe(f"Agora vou clicar em \"Mais opções\"")
                             vc.findViewWithContentDescriptionOrRaise(u'''Mais opções''').touch()
                             vc.dump(window=-1)
                             vc.findViewWithTextOrRaise(self.MENU_MAIS).touch()
                             vc.dump(window=-1)
                             try:
+                                if self.verbose:
+                                        print_safe(f"Agora vou clicar em \"{self.EXPORTAR}\"")
                                 vc.findViewWithTextOrRaise(self.EXPORTAR).touch()
                                 vc.sleep(1)
                                 vc.dump(window=-1)
                                 try:
+                                    if self.verbose:
+                                        print_safe(f"Agora vou clicar em \"{self.INCLUIR_MIDIA}\"")
                                     vc.findViewWithTextOrRaise(self.INCLUIR_MIDIA).touch()
                                     vc.sleep(3)
                                 except:
                                     print("Contato sem mídias ")
                                 try:
                                     vc.dump(window=-1)
+                                    if self.verbose:
+                                        print_safe(f"Agora vou clicar em \"{self.APP_NAME}\"")
                                     vc.findViewWithTextOrRaise(self.APP_NAME).touch()
                                 except:
                                     # A exportação pode ser demorada
                                     vc.sleep(15)
                                     vc.dump(window=-1)
+                                    if self.verbose:
+                                        print_safe(f"Agora vou clicar em \"{self.APP_NAME}\"")
                                     vc.findViewWithTextOrRaise(self.APP_NAME).touch()
                                     print("Exportação demorando mais que o normal ")
                                 vc.sleep(1)
                                 vc.dump(window=-1)
+                                if self.verbose:
+                                    print_safe(f"Agora vou clicar em \"{self.SALVAR}\"")
                                 vc.findViewWithTextOrRaise(self.SALVAR).touch()
                                 vc.sleep(2)
+                                if self.verbose:
+                                    print_safe(f"Agora vou clicar em \"{self.VOLTAR}\"")
                                 device.press(self.VOLTAR)
                                 vc.sleep(1)
+                                if self.verbose:
+                                    print_safe(f"Agora vou clicar em \"{self.VOLTAR}\"")
                                 device.press(self.VOLTAR)
                             except Exception as e:
                                 print("Opção de enviar por e-mail não encontrada! ")
+                                if self.verbose:
+                                    print_safe(f"Agora vou clicar em \"{self.VOLTAR}\"")
                                 device.press(self.VOLTAR)
                                 vc.sleep(1)
+                                if self.verbose:
+                                    print_safe(f"Agora vou clicar em \"{self.VOLTAR}\"")
                                 device.press(self.VOLTAR)
                                 print(e)
                         except Exception as e:
@@ -111,6 +131,8 @@ class Bot:
                 if not listaAtualizada:
                     repeticoes = repeticoes + 1
                 for i in range(self.ROLAR_N_VEZES):
+                    if self.verbose:
+                        print_safe(f"Agora vou clicar em \"KEYCODE_DPAD_DOWN\"")
                     device.press('KEYCODE_DPAD_DOWN')
                 if finalizar:
                     break

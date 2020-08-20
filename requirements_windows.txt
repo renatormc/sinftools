@@ -75,11 +75,14 @@ pyperclip==1.8.0
 PyQt5==5.15.0
 PyQt5-sip==12.8.0
 pyqt5-tools==5.15.0.1.7
+PyRect==0.1.4
+PyScreeze==0.1.26
 PySimpleGUI==4.24.0
 python-dateutil==2.8.1
 python-docx==0.8.10
 python-dotenv==0.14.0
 python-telegram-bot==12.8
+PyTweening==1.0.3
 pytz==2020.1
 pywin32==228
 PyYAML==5.3.1
