@@ -114,7 +114,7 @@ class SPIParser(ParserBase):
         self.lista = self.getChatsFilename()
         n = len(self.lista)
         print("Lendo chats")
-        n_workers = config.n_workers            
+        n_workers = config_manager.n_workers            
         procs = ({'read_source_id': self.read_source.id, 'exp': self.exp,
                 'chats_path': self.chats_path, 'att_path': self.att_path, 'filename': f} for f in self.lista)
         if n_workers > 1:

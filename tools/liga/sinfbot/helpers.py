@@ -3,6 +3,7 @@ import sinf_requests
 from requests.exceptions import ConnectionError
 from database import db_session
 from models import *
+from sinf_requests import Requester
 
 
 class ContactNotRegistered(Exception):
@@ -21,8 +22,7 @@ def get_contact_name(chat_id):
 
 def bot_send_message(name, text):
     try:
-        url = f"{config.config_local['sinfbot_url']}/send-message"
-        req = sinf_requests.Requester(config.SINF_TOKEN)
-        req.post(url, json={'name': name, 'text': text})
+        requester = Requester()
+        return requester.send_telegram(name, message)
     except ConnectionError:
         return "Não foi possível se conectar ao bot"

@@ -182,7 +182,23 @@ def list_drives():
     print("ATENÇÃO: Para listar todos os discos é necessário executar como administrador.\n")
     os.system("s-ftkimager --list-drives")
 
-
+@cli.command("send-telegram")
+@click.argument("username")
+@click.argument("message")
+def send_telegram(username, message):
+    requester = Requester()
+    try:
+        err = requester.send_telegram(username, message)
+        if err:
+            print(err)
+        else:
+            print("Mensagem enviada")
+    except ConnectionError:
+        print("Não foi possível se conectar ao serviço no servidor.")
+    except TokenExpiredException:
+        print("Token expirado. Acesse o Sinfweb no menu \"Usuário\" para um novo.")
+    except TokenNoFoundException:
+        print("Para maior segurança o acesso remoto aos servidores exigem um token de acesso, que não foi encontrado em sua máquina. \nAcesse o Sinfweb no menu \"Usuário\" para obter seu token de acesso.")
 # @cli.command("gen-system-token")
 # def gen_system_token():
     
