@@ -21,8 +21,9 @@ class Bot:
         self.VOLTAR = "KEYCODE_BACK"
         self.ROLAR_N_VEZES = 5
         self.parte_ultimo_chat = "#$dfge&&¨qq"
+        self.verbose = False
 
-
+    
     def extract(self):
         device, serialno = ViewClient.connectToDeviceOrExit()
         ViewClient.sleep(2)
@@ -40,18 +41,26 @@ class Bot:
                 vc.dump(window=-1)
                 textViews = vc.findViewsWithAttribute("class", "android.widget.TextView")
                 listaAtualizada = False
-                
+                if self.verbose:
+                    print_safe(f"{len(textViews)} views encontradas")
                 for texView in textViews:
                     if(texView.getId() == 'com.whatsapp:id/conversations_row_contact_name'):
                         contato = texView.getText()
+                        if self.verbose:
+                            print_safe(f"Encontrada view de chat com texto \"{contato}\"")
                         if contato in listContatos:
                             if self.parte_ultimo_chat in contato:
                                 print("Ultimo chat encontrado. Finalizando.")
                                 finalizar = True
                                 break
                             else:
+                                if self.verbose:
+                                    print_safe(f"Pulando contato \"{contato}\" porque já consta como já extraido anteriormente")
                                 continue
                         listContatos.append(texView.getText())
+                        if self.verbose:
+                            print_safe(f"Salvando arquivo de extraidos. {path}")
+                        path.write_text("\n".join(listContatos))
                         print_safe(f"Exportando dados do contato: {contato}")
                         listaAtualizada = True
                         try:
@@ -97,6 +106,8 @@ class Bot:
                         except Exception as e:
                             print_safe(f"View não encontrada: {contato}")
                             print(e)
+                    elif self.verbose:
+                        print_safe(f"Enontrada uma view que não é de chat com id \"{texView.getId()}\"")
                 if not listaAtualizada:
                     repeticoes = repeticoes + 1
                 for i in range(self.ROLAR_N_VEZES):
