@@ -28,7 +28,7 @@ def update(directory, onlyextras, upload):
         ]
 
         answers = prompt(questions, style=custom_style_2)
-        directory = r'\\10.129.3.14\compartilhada\SOFTWARE\sinftools_stavel' if answers['versao'] == 'Estável' else r'\\10.129.3.14\compartilhada\SOFTWARE\sinftools_beta'
+        directory = r'\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2' if answers['versao'] == 'Estável' else r'\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2_beta'
 
     from_, to_ = ('%SINFTOOLS%', directory) if upload else (directory, '%SINFTOOLS%')
     template = "config_files/server2local_extras_template.ffs_gui" if onlyextras else "config_files/server2local_template.ffs_gui"
