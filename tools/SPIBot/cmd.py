@@ -3,7 +3,7 @@ import subprocess
 import config
 import shutil
 import os
-
+from database import *
 
 windows_path = os.getenv("PATH")
 adb_folder = config.sinftools_dir / "extras/ADB"
@@ -31,6 +31,7 @@ def install(app):
 def extract():
     shutil.copy(config.app_dir / "bot.py", "bot.py")
     shutil.copy(config.app_dir / "extrair.py", "extrair.py")
+    shutil.copy(config.app_dir / "database.py", "database.py")
     args = ['s-idlex', "extrair.py"]
     subprocess.run(args)
 
@@ -39,6 +40,19 @@ def apk():
     shutil.copy(config.app_dir / "EXTRATOR_0.4.apk", "EXTRATOR_0.4.apk")
     shutil.copy(config.app_dir / "EXTRATOR_0.4.apk", 'spitools-1.2.apk')
 
+
+@cli.command()
+def log():
+    chats = get_not_extracted()
+    if chats:
+        print("\nCHATS NÃO EXTRAIDOS: ")
+        for i, chat in enumerate(chats):
+            print(f"{i} - {chat.name}")
+    chats = get_extracted()
+    if chats:
+        print("\nCHATS EXTRAIDOS: ")
+        for i, chat in enumerate(chats):
+            print(f"{i} - {chat.name}")
 
 if __name__ == '__main__':
     cli(obj={})

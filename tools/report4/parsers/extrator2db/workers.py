@@ -8,15 +8,16 @@ from pathlib import Path
 
 
 def chat_worker(kargs):
-    obj = ChatWorker(read_source_id=kargs['read_source_id'],  exp=kargs['exp'])
+    obj = ChatWorker(read_source_id=kargs['read_source_id'],  exp=kargs['exp'], map_files=kargs['map_files'])
     obj.run(kargs['folder'])
 
 
 class ChatWorker:
 
-    def __init__(self, read_source_id,  exp):
+    def __init__(self, read_source_id,  exp, map_files):
         self.read_source_id = read_source_id
         self.exp = exp
+        self.map_files = map_files
        
 
     def add(self, obj):
@@ -66,10 +67,18 @@ class ChatWorker:
             if validate:
                 validate = validate.string
                 validate = validate.strip()
-                validate = validate[1:]
-                validate = folder / validate if validate else None
-                if validate and validate.exists():
-                    return validate
+                filename = validate[1:]
+                path = Path(self.read_source.folder) / "EXTRATOR" / folder.name / filename if filename else None
+                if not path or not path.exists():
+                    try:
+                        ret = Path(self.map_files[filename])
+                        print(f"DEBUG OUTRA PASTA: Encontrado arquivo em outra pasta \"{ret}\"")
+                        return ret
+                    except KeyError:
+                        return
+                else:
+                    return path.relative_to(self.read_source.folder)
+
 
     def __get_chat_name(self, folder):
         folder = Path(folder)
@@ -79,6 +88,8 @@ class ChatWorker:
             return lines[1].replace("Conversa do WhatsApp com", "").strip()
         except (FileNotFoundError, IndexError):
             return folder.name.replace("Conversa do WhatsApp com", "").strip()
+
+    
 
     def run(self, folder: Path):
         self.engine, self.db_session = db_connect()
@@ -114,9 +125,9 @@ class ChatWorker:
             attach = self.get_attachment(folder, msg.body)
             if attach:
                 attachment = File()
-                attachment.extracted_path = str(attach.relative_to(self.read_source.folder))
+                attachment.extracted_path = str(attach)
                 attachment.filename = os.path.basename(attachment.extracted_path)
-                attachment.size = os.path.getsize(attach)
+                attachment.size = os.path.getsize(Path(self.read_source.folder) / attach)
                 self.add(attachment)
                 msg.attachments.append(attachment)
         

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-res = Path("D:\\teste_report2").glob('**/*/*/sinf_thumbs')
-for item in res:
-    print(item)
+p = Path(r'D:\laudos\trabalhando\D\midia\dados\celular\WhatsApp\EXTRATOR')
+for i in p.glob('**/*'):
+     print(i)
 
