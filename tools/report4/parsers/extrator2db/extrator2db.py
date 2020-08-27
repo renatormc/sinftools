@@ -38,7 +38,6 @@ class ExtratorParser(ParserBase):
         self.map_files = {}
         ref_folder = Path(self.read_source.folder).absolute()
         for p in self.media_folder.rglob("*"):
-            
             try:
                 self.map_files[p.name] = str(p.absolute().relative_to(ref_folder))
             except ValueError:
@@ -51,6 +50,7 @@ class ExtratorParser(ParserBase):
         self.extrator_folder = Path(self.read_source.folder) / "EXTRATOR"
         self.media_folder = Path(self.read_source.folder) / "Media"
         if not self.media_folder.exists():
+            print("Pasta Media não encontrada")
             self.media_folder = None
         if not self.extrator_folder.exists():
             msgs.append("Não foi encontrada uma pasta de nome EXTRATOR")

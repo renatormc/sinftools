@@ -72,7 +72,6 @@ class ChatWorker:
                 if not path or not path.exists():
                     try:
                         ret = Path(self.map_files[filename])
-                        print(f"DEBUG OUTRA PASTA: Encontrado arquivo em outra pasta \"{ret}\"")
                         return ret
                     except KeyError:
                         return
@@ -123,10 +122,11 @@ class ChatWorker:
             msg.body = result['body']
             msg.deleted_state = "Intact"
             attach = self.get_attachment(folder, msg.body)
+            
             if attach:
                 attachment = File()
                 attachment.extracted_path = str(attach)
-                attachment.filename = os.path.basename(attachment.extracted_path)
+                attachment.filename = attach.name
                 attachment.size = os.path.getsize(Path(self.read_source.folder) / attach)
                 self.add(attachment)
                 msg.attachments.append(attachment)
