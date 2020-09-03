@@ -129,6 +129,7 @@ if answers:
 
     print("Iniciando compressão")
     if answers['type'] == '7zip':
+        print("Comprimindo 7zip")
         level_dict = {
             0: 0,
             1: 1,
@@ -176,6 +177,7 @@ if answers:
                 shutil.copy(f"{script_dir}\\tutorial_renderizado.html",
                             f"{dir_}\\Como vizualizar os dados.html")
     elif answers['type'] == 'rar':
+        print("Comprimindo rar")
         winrarexe = f'{dir_sinftools}\\tools\\winrar\\Rar.exe'
         if os.path.exists(output_folder):
             shutil.rmtree(output_folder)
@@ -203,6 +205,7 @@ if answers:
                 shutil.copy(f"{script_dir}\\tutorial_renderizado.html",
                             f"{dir_}\\Instruções.html")
     elif answers['type'] == 'sinf':
+        print("Comprimindo custom sinf")
         level_dict = {
             0: 0,
             1: 1,
@@ -239,66 +242,79 @@ if answers:
                                     'midias': midias, 'n_midias': len(midias)})
 
            
-        midias = {1: []}
-        dir_ = f"{output_folder}\\1\\.sinf"
-        if not os.path.exists(dir_):
-            os.makedirs(dir_)
-        files = [file for file in os.listdir(output_folder) if "dados." in file]
-        for file in files:
-            if os.path.isdir(f"{output_folder}\\{file}"):
-                continue
-            if file.endswith("exe"):
-                midias[1].append(file)
-                dir_ = f"{output_folder}\\1"
-                shutil.move(f"{output_folder}\\{file}", f"{dir_}\\{file}")
-            else:
-                number = int(file.split(".")[-1])
-                if number in midias.keys():
-                    midias[number].append(file)
+            midias = {1: []}
+            dir_ = f"{output_folder}\\1\\.sinf"
+            if not os.path.exists(dir_):
+                os.makedirs(dir_)
+            files = [file for file in os.listdir(output_folder) if "dados." in file]
+            for file in files:
+                if os.path.isdir(f"{output_folder}\\{file}"):
+                    continue
+                if file.endswith("exe"):
+                    midias[1].append(file)
+                    dir_ = f"{output_folder}\\1"
+                    shutil.move(f"{output_folder}\\{file}", f"{dir_}\\{file}")
                 else:
-                    midias[number] = [file]
-                dir_ = f"{output_folder}\\{number}"
-                if not os.path.exists(dir_):
-                    os.makedirs(dir_)
-                shutil.move(f"{output_folder}\\{file}", f"{dir_}\\{file}")
-
-
-        for key, value in midias.items():
-            lines = [",".join(value) for value in midias.values()]
-            text = "\n".join(lines)
-            hidden_folder = Path(output_folder, str(key), ".sinf")
-            if not hidden_folder.exists():
-                os.makedirs(hidden_folder)
-            with (hidden_folder / "midias.txt").open("w") as f:
-                f.write(text)
-            # with codecs.open(os.path.join(output_folder, str(key), ".sinf", "config.json"), "w", "utf-8") as file_:
-            #     file_.write(json.dumps(midias, ensure_ascii=False, indent=4))
-            with open(f"{output_folder}\\{key}\\.sinf\\current_midia.txt", "w") as f:
-                f.write(str(key))
-            shutil.copy(os.path.join(script_dir, "launcher_unzipper", "launcher_unzipper.exe"),
-                        os.path.join(output_folder, str(key), "Cique aqui para extrair os dados.exe"))
-            shutil.copy(Path(script_dir, "copier_rad/Win32/Debug/SinfCopier.exe"), Path(output_folder, f"{key}/.sinf/sinf_copier.exe"))
-
-        for key, value in midias.items():
-            for file in value:
-                if not file.endswith("exe"):
                     number = int(file.split(".")[-1])
+                    if number in midias.keys():
+                        midias[number].append(file)
+                    else:
+                        midias[number] = [file]
                     dir_ = f"{output_folder}\\{number}"
-                    shutil.copy(f"{script_dir}\\tutorial_renderizado.html",
-                                f"{dir_}\\Instruções.html")
+                    if not os.path.exists(dir_):
+                        os.makedirs(dir_)
+                    shutil.move(f"{output_folder}\\{file}", f"{dir_}\\{file}")
 
-        #ocultar os diretório .sinf
-        p = Path(output_folder)
-        for entry in p.iterdir():
-            if entry.is_dir():
-                p2 = entry / ".sinf"
-                if p2.exists():
-                    os.system(f"attrib +h \"{p2}\"")
-        f = Figlet()
-        print(f.renderText("Atencao"))
-        print("\n--------ATENÇÃO---------")
-        print("Existe uma pasta oculta de nome \".sinf\" dentro da pasta de cada mídia para gravação. Esta pasta deve ser gravada na mídia também. Caso você tenha costume de trabalhar com o Windows configurado para não mostrar pastas ocultas altere suas configurações antes de gravar as mídias.")
-        print("\nGrave cada mídia sem criar nenhuma subpasta. Grave a mídia 1 colocando os arquivos existentes na pasta 1, a mídia 2 com os arquivos existentes na pasta 2, etc.")
-        input()
+
+            for key, value in midias.items():
+                lines = [",".join(value) for value in midias.values()]
+                text = "\n".join(lines)
+                hidden_folder = Path(output_folder, str(key), ".sinf")
+                if not hidden_folder.exists():
+                    os.makedirs(hidden_folder)
+                with (hidden_folder / "midias.txt").open("w") as f:
+                    f.write(text)
+                # with codecs.open(os.path.join(output_folder, str(key), ".sinf", "config.json"), "w", "utf-8") as file_:
+                #     file_.write(json.dumps(midias, ensure_ascii=False, indent=4))
+                with open(f"{output_folder}\\{key}\\.sinf\\current_midia.txt", "w") as f:
+                    f.write(str(key))
+                shutil.copy(os.path.join(script_dir, "launcher_unzipper", "launcher_unzipper.exe"),
+                            os.path.join(output_folder, str(key), "Cique aqui para extrair os dados.exe"))
+                shutil.copy(Path(script_dir, "copier_rad/Win32/Debug/SinfCopier.exe"), Path(output_folder, f"{key}/.sinf/sinf_copier.exe"))
+
+            for key, value in midias.items():
+                for file in value:
+                    if not file.endswith("exe"):
+                        number = int(file.split(".")[-1])
+                        dir_ = f"{output_folder}\\{number}"
+                        shutil.copy(f"{script_dir}\\tutorial_renderizado.html",
+                                    f"{dir_}\\Instruções.html")
+
+            #ocultar os diretório .sinf
+            p = Path(output_folder)
+            for entry in p.iterdir():
+                if entry.is_dir():
+                    p2 = entry / ".sinf"
+                    if p2.exists():
+                        os.system(f"attrib +h \"{p2}\"")
+            f = Figlet()
+            print(f.renderText("Atencao"))
+            print("\n--------ATENÇÃO---------")
+            print("Existe uma pasta oculta de nome \".sinf\" dentro da pasta de cada mídia para gravação. Esta pasta deve ser gravada na mídia também. Caso você tenha costume de trabalhar com o Windows configurado para não mostrar pastas ocultas altere suas configurações antes de gravar as mídias.")
+            print("\nGrave cada mídia sem criar nenhuma subpasta. Grave a mídia 1 colocando os arquivos existentes na pasta 1, a mídia 2 com os arquivos existentes na pasta 2, etc.")
+            input("Pressione algo para finalizar...")
+        else:
+            output_folder = Path(output_folder)
+            dir_ = output_folder / "1"
+            if not dir_.exists():
+                dir_.mkdir(parents=True)
+            shutil.move(output_folder / "dados.exe",output_folder / "dados.exe")
+            shutil.move( output_folder / "dados.7z.001", output_folder / "dados.7z.001")
+            shutil.copy(f"{script_dir}\\tutorial_midia_unica.html",
+                                    f"{dir_}\\Instruções.html")
+
+            print(f"Grave o conteúdo da pasta \"{dir_.resolve()}\" na mídia.")
+            input("Pressione algo para finalizar...")
+
      
       
