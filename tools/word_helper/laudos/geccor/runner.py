@@ -13,6 +13,7 @@ def run(context):
     wm.replace("#ocorrencia_odin#", context['ocorrencia_odin'])
     wm.replace("#inicio_exame#", context['inicio_exame'])
     wm.replace("#autoridade#", context['autoridade'])
+    wm.replace("#rai#", context['rai'])
     wm.replace("#data_odin#", cv.data_mes_extenso(context['data_odin']))
     wm.replace("#data_recebimento#", cv.data_mes_extenso(context['data_recebimento']))
     wm.goto("#pessoas_envolvidas#")

@@ -4,6 +4,7 @@ import config
 import shutil
 import os
 from database import *
+from replacer import adjust_timestamp
 
 windows_path = os.getenv("PATH")
 adb_folder = config.sinftools_dir / "extras/ADB"
@@ -53,6 +54,15 @@ def log():
         print("\nCHATS EXTRAIDOS: ")
         for i, chat in enumerate(chats):
             print(f"{i} - {chat.name}")
+
+@cli.command()
+def media():
+    os.system("s-adb pull /sdcard/Whatsapp/Media Media")
+
+
+@cli.command("adjust-timestamp")
+def adjust_timestamp_():
+    adjust_timestamp()
 
 if __name__ == '__main__':
     cli(obj={})
