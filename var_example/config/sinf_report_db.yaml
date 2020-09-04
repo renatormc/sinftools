@@ -1,0 +1,4 @@
+user: <usuario>
+password: <senha>
+postgres_bin_folder: C:\\Program Files\\PostgreSQL\\12\bin
+mysql_bin_folder: C:\\Program Files\\MariaDB 10.4\\bin

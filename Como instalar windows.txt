@@ -6,4 +6,4 @@ Caso apareça a mensagem de que a execução de scripts está desabilitada em se
 
 	set-executionpolicy remotesigned
 
-3- Renomeie a pasta "var_example" para somente "var". Entre dentro da pasta var/config e edite os arquivos de configurações
+3- Renomeie a pasta "var_example" para somente "var".

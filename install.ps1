@@ -16,6 +16,7 @@ function Set-EnvironmentVariable {
     [System.Environment]::SetEnvironmentVariable($Name, $Value, $Target)
 }
 
+
 function Add-EnvPath {
     param(
         [Parameter(Mandatory = $true)]
@@ -94,6 +95,7 @@ function Get-EnvPath {
     [Environment]::GetEnvironmentVariable('Path', $containerType) -split ';' |
     Where-Object { $_ }
 }
+
 
 
 Set-EnvironmentVariable -Name "SINFTOOLS" -Value $PSScriptRoot -Target Machine
