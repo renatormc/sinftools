@@ -308,8 +308,8 @@ if answers:
             dir_ = output_folder / "1"
             if not dir_.exists():
                 dir_.mkdir(parents=True)
-            shutil.move(output_folder / "dados.exe",output_folder / "dados.exe")
-            shutil.move( output_folder / "dados.7z.001", output_folder / "dados.7z.001")
+            shutil.move(output_folder / "dados.exe", dir_ / "dados.exe")
+            shutil.move( output_folder / "dados.7z.001", dir_ / "dados.7z.001")
             shutil.copy(f"{script_dir}\\tutorial_midia_unica.html",
                                     f"{dir_}\\Instruções.html")
 
