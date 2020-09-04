@@ -20,7 +20,8 @@ if not sqlite_path.parent.exists():
     os.mkdir(sqlite_path.parent)
 database_url = f"sqlite:///{sqlite_path}"
 # database_url = config_local['database_url']
-iped_folder = Path(config_local['iped_folder'])
+# iped_folder = Path(config_local['iped_folder'])
+iped_folder = sinftools_dir / "extras/iped/iped-3.17-snapshot"
 output_folder = Path(config_local['output_folder'])
 ftkimager = sinftools_dir / "extras/ftkimager/ftkimager.exe"
 

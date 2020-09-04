@@ -63,7 +63,7 @@ scripts_folder = Path(os.getenv("USERPROFILE")) / "sinf_fila_scripts"
 if not scripts_folder.exists():
     os.makedirs(scripts_folder)
 
-iped_folder = Path(config_local['iped_folder'])
+iped_folder = sinftools_dir / "extras/iped/iped-3.17-snapshot"
 
 recycle_bin = sinftools_dir / "var/lixeira"
 if not recycle_bin.exists():

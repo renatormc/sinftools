@@ -50,3 +50,12 @@ def set_last(path):
         db_session.commit()
     except FileNotFoundError:
         pass
+
+
+def create_user_sinf():
+    user = db_session.query(User).filter_by(name="sinf").first()
+    if not user:
+        user = User()
+        user.name = "sinf"
+        db_session.add(user)
+        db_session.commit()

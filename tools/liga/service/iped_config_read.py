@@ -22,8 +22,3 @@ class IpedConfigReader:
             except Exception as e:
                 print(e)
         return items
-
-if __name__ == "__main__":
-    reader = IpedConfigReader(r'D:\portable\IPED-3.17\iped-3.17-snapshot')
-    temp = reader.get_temp_folder()
-    print(temp)

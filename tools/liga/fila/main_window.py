@@ -39,6 +39,7 @@ class Window(QMainWindow):
             9: ('status', 'Status')
         }
         self.setup_ui()
+        self.create_user_sinf()
         self.process_manager = ProcessManager(db_session)
         self.scheduler = Scheduler(parent=self, standalone=self.standalone)
         # self.scheduler.updated.connect(self.periodic)
@@ -57,6 +58,14 @@ class Window(QMainWindow):
             self.restart_fila_service()
         self.queue_blocked_ = False
         self.update_blocking_state()
+
+    def create_user_sinf(self):
+        user = db_session.query(User).filter_by(name="sinf").first()
+        if not user:
+            user = User()
+            user.name = "sinf"
+            db_session.add(user)
+            db_session.commit()
 
     def check_process(self):
         if self.standalone:

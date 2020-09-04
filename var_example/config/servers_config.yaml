@@ -1,5 +1,3 @@
-#Coloque aqui a pasta onde se encontra o iped que você usa
-iped_folder: D:\portable\IPED-3.17\1\iped-3.17-snapshot
 #Coloque aqui uma pasta para o Fila, caso for usar, salve os scripts que ele gera
 output_folder: C:\temp
 #Nome do servidor no qual sinftools está instalado, se não for servidor não importa, pode pular essa
