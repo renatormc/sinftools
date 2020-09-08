@@ -91,6 +91,7 @@ PyTweening==1.0.3
 pytz==2020.1
 pywin32==228
 PyYAML==5.3.1
+qrcode==6.1
 regex==2020.6.8
 requests==2.24.0
 ruamel.yaml==0.16.10
