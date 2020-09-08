@@ -25,6 +25,7 @@ filelock==3.0.12
 Flask==1.1.2
 Flask-APScheduler==1.11.0
 Flask-Bootstrap==3.3.7.1
+Flask-Cors==3.0.9
 flask-marshmallow==0.13.0
 Flask-WTF==0.14.3
 greenlet==0.4.16
