@@ -6,7 +6,7 @@ import os
 import shutil
 
 app_dir = Path(os.path.dirname(os.path.realpath(__file__)))
-apk = app_dir / "sinfpics 1.0.3.apk"
+apk = app_dir / "sinfpics 1.1.0.apk"
 
 options = {
     "Instalar aplicativo no celular via adb": "install",
