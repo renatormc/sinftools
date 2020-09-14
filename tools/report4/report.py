@@ -61,10 +61,8 @@ def cli(ctx):
 
 @cli.command()
 @click.option('--grouped/--no-grouped', default=False)
-@click.option('--dbtype', type=click.Choice(['sqlite', 'mysql', 'postgres']), default='sqlite')
-def init(grouped, dbtype):
-   
-      
+def init(grouped):
+         
     # hp.askfor_update()
     if os.path.exists(".report"):
         hp.instruct_continue(
@@ -82,6 +80,7 @@ def init(grouped, dbtype):
                                'Continuar mesmo assim. Os erros detectados são falsos.'], cancel_option=True)
         # hp.instruct_continue("")
 
+    dbtype = hp.choose_database()
     hp.reset(dbtype=dbtype)
     sleep(1)
     os.mkdir('.report')

@@ -424,6 +424,24 @@ def clear_read_source(read_source):
     
     db_session.commit()    
 
+
+def choose_database():
+    options = {
+        'Sqlite (mais simples)': 'sqlite',
+        'Postgres (mais rápido, exige instalação)': 'postgres'
+    }
+    questions = [
+        {
+            'type': 'list',
+            'message': "Qual banco de dados usar?",
+            'name': 'database',
+            'pageSize': 3,
+            'choices': list(options.keys())
+        }
+    ]
+    res = prompt(questions, style=style)
+    return options[res['database']]
+
    
 
 if __name__ == "__main__":
