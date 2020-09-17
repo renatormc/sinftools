@@ -47,7 +47,6 @@ mock==4.0.2
 mongoengine==0.20.0
 monotonic==1.5
 msgpack==0.6.2
-mysqlclient==2.0.1
 numpy==1.19.0
 opencv-python==4.2.0.34
 packaging==20.3

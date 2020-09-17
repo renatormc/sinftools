@@ -1,0 +1,3 @@
+<objects>
+    {% for obj in objects.items() %}
+</objects>
