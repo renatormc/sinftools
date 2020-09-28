@@ -1,2 +1,3 @@
 @echo off
-xcopy "%SINFTOOLS%\tools\boilerplates\laudo" .\laudo\ /E /H
+set PYTHONPATH=%SINFTOOLS%\tools\libs && ^
+"%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\report_writer\main.py" %*
