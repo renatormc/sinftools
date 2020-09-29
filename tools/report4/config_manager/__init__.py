@@ -91,7 +91,11 @@ class ConfigManager:
         if self.database_type == 'sqlite':
             return f"sqlite:///{settings.work_dir}/.report/db.db"
         if self.database_type == 'postgres':
-            return f"postgresql://{dconf['user']}:{dconf['password']}@localhost/{self.database_name}"
+            try:
+                port = dconf['postgres_port'] or 5432
+            except KeyError:
+                port = 5432
+            return f"postgresql://{dconf['user']}:{dconf['password']}@localhost:{port}/{self.database_name}"
         if self.database_type == 'mysql':
             return f"mysql://{dconf['user']}:{dconf['password']}@localhost/{self.database_name}?charset=utf8mb4"
         return f"sqlite:///{settings.work_dir}/.report/db.db"

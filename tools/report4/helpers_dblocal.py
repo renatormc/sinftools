@@ -34,17 +34,21 @@ def get_db_list_mysql(only_current_workdir=False):
 
 def get_database_info(host, dbconfig):
     user = dbconfig['user']
-    os.environ['PGPASSWORD'] = dbconfig['password']
-    executable = f"{dbconfig['postgres_bin_folder']}\psql" if os.name == 'nt' else 'psql'
+    os.environ['PGPASSWORD'] = str(dbconfig['password'])
+    executable = f"{dbconfig['postgres_bin_folder']}\\psql.exe" if os.name == 'nt' else 'psql'
     records, _ = subprocess.Popen([executable, '-lA',
                                    '-F\x02', '-R\x01', '-h', host, '-U', user], stdout=subprocess.PIPE).communicate()
     records = records.split(bytes.fromhex('01'))
-    header = records[1].split(bytes.fromhex('02'))
+    
     items = []
-    for line in records[2:-1]:
-        res = {item[0].decode('windows-1252'): item[1].decode('windows-1252')
-               for item in zip(header, line.split(bytes.fromhex('02')))}
-        items.append(res)
+    try:
+        header = records[1].split(bytes.fromhex('02'))
+        for line in records[2:-1]:
+            res = {item[0].decode('windows-1252'): item[1].decode('windows-1252')
+                for item in zip(header, line.split(bytes.fromhex('02')))}
+            items.append(res)
+    except IndexError:
+        pass
     return items
 
 

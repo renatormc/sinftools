@@ -1,3 +1,9 @@
-<objects>
-    {% for obj in objects.items() %}
-</objects>
+<dados-gerais>
+    <pericia></pericia>
+    <data-odin></data-odin>
+    <oficio></oficio>
+    <autoridade></autoridade>
+    <requisitante></requisitante>
+    <data-exame></data-exame>
+    <rai></rai>
+</dados-gerais>

@@ -111,6 +111,8 @@ class PicsDialog(QDialog):
             if not entry.is_file() or not entry.suffix.lower()  in ['.jpg', '.png']:
                 continue
             res = reg.search(entry.name)
+            if not res:
+                continue
             obj = res.group(1).upper()
             try:
                 objects[obj]['pics'].append(str(entry))
