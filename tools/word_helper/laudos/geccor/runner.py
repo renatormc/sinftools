@@ -4,6 +4,8 @@ import config
 from pathlib import Path
 
 def run(context):
+    print(context)
+    input()
     wm = WordManager()
     wm.connect()
     wm.replace("#rg#", context['rg'])

@@ -4,6 +4,7 @@ from pathlib import Path
 import tempfile
 from docxtpl import DocxTemplate
 from sinf.sinftools_config import SinfToolsConfig
+import constants
 
 sc = SinfToolsConfig()
 
@@ -46,7 +47,7 @@ class WordManager(object):
             #     self.add_element(el_)
         else:
             self.word.Selection.Collapse(
-                Direction=win32.constants.wdCollapseEnd)
+                Direction=constants.wdCollapseEnd)
 
     def insert_paragraph(self, text, enter=False, indent=True, style="Normal"):
         if enter:
@@ -69,9 +70,8 @@ class WordManager(object):
             while True:
                 myStoryRange.Find.Text = old
                 myStoryRange.Find.Replacement.Text = new
-                myStoryRange.Find.Wrap = 1  # win32.constants.wdFindContinue
-                # win32.constants.wdReplaceAll
-                myStoryRange.Find.Execute(Replace=2, Forward=True)
+                myStoryRange.Find.Wrap = constants.wdFindContinue
+                myStoryRange.Find.Execute(Replace=constants.wdReplaceAll, Forward=True)
                 myStoryRange = myStoryRange.NextStoryRange
                 if myStoryRange == None:
                     break
@@ -97,40 +97,12 @@ class WordManager(object):
                 tabela.Cell(
                     1, i + 1).Range.Paragraphs(1).Alignment = 1
                 caption = shape.Range.InsertCaption(
-                    Label="Foto", Title=" - " + pic['caption'], Position=0) #win32.constants.wdCaptionPositionAbove
+                    Label="Foto", Title=" - " + pic['caption'], Position=constants.wdCaptionPositionAbove)
             tabela.Select()
             self.word.Selection.Collapse(0)
             self.word.Selection.TypeParagraph()
 
-        # qtd = len(pics)
-        # if qtd % n_col != 0:
-        #     n_row = int(qtd/n_col) + 1
-        # else:
-        #     n_row = int(qtd/n_col)
-        # for i in range(1, n_row + 1):
-        #     # if qtd < n_col:
-        #     #     n_col = qtd
-        #     tabela = self.doc.Tables.Add(self.word.Selection.Range, 1, n_col)
-        #     tabela.Borders.InsideLineStyle = 0
-        #     tabela.Borders.OutsideLineStyle = 0
-        #     for j in range(1, n_col + 1):
-        #         k = n_col*(i-1) + j-1
-        #         if k >= qtd:
-        #             break
-        #         shape = tabela.Cell(
-        #             1, j).Range.InlineShapes.AddPicture(pics[k]['path'])
-        #         shape.LockAspectRatio = -1
-        #         if shape.Width > max_width:
-        #             shape.Width = max_width
-        #         shape.Select
-
-        #         tabela.Cell(1, j).Range.Paragraphs(
-        #             1).Alignment = win32.constants.wdAlignParagraphCenter
-        #         caption = shape.Range.InsertCaption(
-        #             Label="Foto", Title=" - " + pics[k]['caption'], Position=win32.constants.wdCaptionPositionAbove)
-        #     tabela.Select()
-        #     self.word.Selection.Collapse(0)
-        #     self.word.Selection.TypeParagraph()
+     
 
     def type_enter(self):
         self.word.Selection.TypeParagraph()

@@ -75,6 +75,8 @@ def nova_pericia():
     path_laudos.mkdir()
     shutil.copy(pasta_modelos / answers['modelo'] / "laudo.docx", path_laudos / "laudo.docx")
     shutil.copy(pasta_modelos / answers['modelo'] / "data.xlsx", path_laudos / "data.xlsx")
+    for entry in (config.app_dir / "scripts").iterdir():
+        shutil.copy(entry, path_laudos / entry.name)
     (path_laudos / "fotos").mkdir()
     (path_laudos / "modelo.txt").write_text(answers['modelo'])
     # copyanything(pasta_modelos / answers['modelo'], path_laudos)

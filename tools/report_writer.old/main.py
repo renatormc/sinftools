@@ -4,14 +4,17 @@ import subprocess
 import os
 import sys
 from renderizer import Renderizer
-from excel_handler import ExcelHandler
-from renderizer import Renderizer
 
+def run_script(name):
+    args = [str(config.python_libre), str(config.app_dir / "handler/main.py"), name]
+    p = subprocess.run(args)
+    return p.returncode
 
 @click.group()
 @click.pass_context
 def cli(ctx):
     pass
+
 
 
 @cli.command("open-data")
@@ -40,14 +43,16 @@ def replace():
 
 @cli.command()
 def scan_pics():
-    handler = ExcelHandler()
-    handler.scan_pics()
+    code = run_script("scan_pics")
+    sys.exit(code)
 
 @cli.command()
 def start_report():
+    code = run_script("read_calc")
+    if code != 0:
+        sys.exit(code)
     renderizer = Renderizer()
-    renderizer.gen_laudo()
-    input()
+    renderizer.render("./data/calc_data.json")
 
     
 

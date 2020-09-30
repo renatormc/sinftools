@@ -7,6 +7,7 @@ import helpers
 import config
 import re
 from pathlib import Path
+import json
 
 
 
@@ -159,10 +160,7 @@ class Handler:
                 if not name:
                     break
                 cell = sheet.getCellByPosition(1, i)
-                text = cell.getString()
-                
-                value = helpers.convert_data(text, sheet.getCellByPosition(2, i).getString())
-                vars[name] = value
+                vars[name] = cell.getString()
         finally:
             calc.close(False)
         return vars
@@ -170,7 +168,7 @@ class Handler:
     def get_objects_info(self):
         objs = []
         path = (self.workdir / "data/data.ods").absolute()
-        pics_folder = self.workdir / "data/fotos"
+        pics_folder = (self.workdir / "data/fotos").absolute()
         data_url = path.as_uri()
         calc = self.desktop.loadComponentFromURL(data_url ,"_blank",0, helpers.dictToProperties({"Hidden": True, "ReadOnly": True}))
         try:
@@ -182,10 +180,11 @@ class Handler:
                 if not name:
                     break
                 pics = sheet.getCellByPosition(2, i).getString().split(",")
-                pics = [(pics_folder / pic).as_uri() for pic in pics]
+                # pics = [(pics_folder / pic).as_uri() for pic in pics]
                 objs.append({'name': name, 'type': type_, 'pics': pics})
         finally:
-            calc.close(False)
+            pass
+            # calc.close(False)
         return objs
 
 
@@ -220,10 +219,10 @@ class Handler:
             table.getCellByPosition(3, row).setString(f"Evidência {item['number']}")
 
     def scan_pics(self):
-        doc = self.desktop.getCurrentComponent()
-        path = self.workdir / "data/data.ods"
-        odt_url = path.absolute().as_uri()
-        calc = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": True}))
+        calc = self.desktop.getCurrentComponent()
+        # path = self.workdir / "data/data.ods"
+        # odt_url = path.absolute().as_uri()
+        # calc = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": True}))
         try:
             objs = self.get_objects_from_pics()
             n_rows = len(objs) + 1
@@ -236,7 +235,8 @@ class Handler:
                 sheet.getCellByPosition(2, row).setString(pics)
             calc.store()
         finally:
-            calc.close(True)
+            pass
+            # calc.close(True)
 
     
     def insert_pics(self, cur, pics, doc=None):
@@ -266,5 +266,13 @@ class Handler:
                 cur.gotoEnd(False)
                 doc.Text.insertString(cur, "\n", 0)
                 self.insert_pics(cur, obj['pics'], doc=doc)
+
+
+    def read_calc(self):
+        path = self.workdir / "data/calc_data.json"
+        context = self.get_vars()
+        context['objects'] = self.get_objects_info()
+        with path.open("w", encoding="utf-8") as f:
+            f.write(json.dumps(context, ensure_ascii=False, indent=4))
 
 

@@ -35,14 +35,11 @@ def pdados():
 
 @cli.command()
 def pics():
-    try:
-        eh = ExcelHandler()
-        eh.connect_excel()
-        eh.folder = eh.workbook_path.parent
-        eh.write_pics_sheet()
-    except Exception as e:
-        print(e)
-        input()
+    eh = ExcelHandler()
+    eh.connect_excel()
+    eh.folder = eh.workbook_path.parent
+    eh.write_pics_sheet()
+   
 
 
 @cli.command()
