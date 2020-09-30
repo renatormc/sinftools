@@ -8,7 +8,8 @@ import config
 import re
 from pathlib import Path
 import json
-
+import constants
+from com.sun.star.beans import PropertyValue
 
 
 class Handler:
@@ -159,6 +160,7 @@ class Handler:
                 name = sheet.getCellByPosition(0, i).getString().strip()
                 if not name:
                     break
+                type_ = sheet.getCellByPosition(2, i).getString().strip()
                 cell = sheet.getCellByPosition(1, i)
                 vars[name] = cell.getString()
         finally:
@@ -274,5 +276,52 @@ class Handler:
         context['objects'] = self.get_objects_info()
         with path.open("w", encoding="utf-8") as f:
             f.write(json.dumps(context, ensure_ascii=False, indent=4))
+
+
+    def print_all(self, printer_name, n_copies=2, print_media=False):
+        doc = self.desktop.getCurrentComponent()
+        printer = doc.getPrinter()
+        printer[0].Value = printer_name
+        doc.setPrinter(printer)
+
+        #Imprimir capa
+        path = self.workdir / "data/capa.odt"
+        odt_url = path.absolute().as_uri()
+        doc_capa = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": True}))
+        outProps = (
+            PropertyValue( "Wait", 0, True, 0),
+            PropertyValue( "DuplexMode", 0, constants.DuplexMode.OFF, 0),
+            PropertyValue( "CopyCount", 0, 1, 0),
+        )   
+        doc_capa.print(outProps)
+        doc_capa.close(True)
+
+        #Imprimir laudo
+        outProps = (
+            PropertyValue( "Wait", 0, True, 0),
+            PropertyValue( "DuplexMode", 0, constants.DuplexMode.LONGEDGE, 0),
+            PropertyValue( "CopyCount", 0, n_copies, 0),
+        )   
+        doc.print(outProps)
+        
+        path_pdf = Path("./data/laudo.pdf").absolute()
+        helpers.save_pdf(doc, path_pdf.as_uri())
+
+        if print_media:
+            #Imprimir anexo mídias
+            path = self.workdir / "data/midia.odt"
+            odt_url = path.absolute().as_uri()
+            doc_midia = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": True}))
+            outProps = (
+                PropertyValue( "Wait", 0, True, 0),
+                PropertyValue( "DuplexMode", 0, constants.DuplexMode.OFF, 0),
+                PropertyValue( "CopyCount", 0, n_copies, 0),
+            )   
+            doc_midia.print(outProps)
+            doc_midia.close(True)
+
+
+
+       
 
 

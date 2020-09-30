@@ -4,14 +4,20 @@ import subprocess
 import os
 import sys
 from renderizer import Renderizer
-from excel_handler import ExcelHandler
-from renderizer import Renderizer
+import shutil
+from pathlib import Path
 
+def run_script(name, args=[]):
+    args_ = [str(config.python_libre), str(config.app_dir / "handler/main.py"), name]
+    args_ += args
+    p = subprocess.run(args_)
+    return p.returncode
 
 @click.group()
 @click.pass_context
 def cli(ctx):
     pass
+
 
 
 @cli.command("open-data")
@@ -40,14 +46,26 @@ def replace():
 
 @cli.command()
 def scan_pics():
-    handler = ExcelHandler()
-    handler.scan_pics()
+    code = run_script("scan_pics")
+    sys.exit(code)
 
 @cli.command()
 def start_report():
+    code = run_script("read_calc")
+    if code != 0:
+        sys.exit(code)
     renderizer = Renderizer()
-    renderizer.gen_laudo()
-    input()
+    renderizer.render("./data/calc_data.json")
+
+@cli.command("print")
+def print_():
+    code = run_script("print", ["-p", "SINF"])
+    if code != 0:
+        sys.exit(code)
+
+@cli.command()
+def init():
+    shutil.copytree(config.app_dir / "laudo", Path("./laudo"))
 
     
 

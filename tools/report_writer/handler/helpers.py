@@ -28,12 +28,22 @@ def dictToProperties(dictionary): #normally I'd just import this
     return tuple(props)
 
 def convert_data(value, type):
-    try:
-        if type == 'string':
-            return value
-        if type == 'int':
+    if type == 'string':
+        return value
+    if type == 'int':
+        try:
             return int(value)
-        if type == 'date':
+        except:
+            return 0
+    if type == 'float':
+        try:
+            return float(value)
+        except:
+            return 0.0
+    if type == 'date':
+        try:
             return datetime.strptime(value, "%d/%m/%Y")
-    except:
-        pass
+        except:
+            return None
+
+ 

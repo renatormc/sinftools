@@ -74,7 +74,7 @@ class ExcelHandler(object):
         for item in self.analise_pics():
             ws.Rows(i).RowHeight = 100
             ws.Range(f"A{i}").Value = item['name']
-            ws.Range(f"B{i}").Value = 'Outro'
+            ws.Range(f"B{i}").Value = 'Celular'
 
             ws.Range(f"E{i}").Value = f"Evidência {item['number']}"
             path = Path(item['pic']).absolute()
@@ -97,7 +97,7 @@ class ExcelHandler(object):
         ret = {}
         last_row = ws.Cells(ws.Rows.Count, "A").End(-4162).Row
         for i in range(1, last_row + 1):
-            ret[ws.Range(f"A{i}").Value] = ws.Range(f"B{i}").Value
+            ret[ws.Range(f"A{i}").Value] = ws.Range(f"B{i}").Value or ""
         ws = wb.Worksheets("objetos")
         objects = {}
         last_row = ws.Cells(ws.Rows.Count, "A").End(-4162).Row
@@ -110,9 +110,9 @@ class ExcelHandler(object):
                 nome_laudo = get_nome_laudo(ws.Range(f"A{i}").Value, ws.Range(f"B{i}").Value)
                 objects[ws.Range(f"A{i}").Value] = {
                     'pics': [{'path': ws.Range(f"C{i}").Value, 'caption': ws.Range(f"E{i}").Value}],
-                    'owner': ws.Range(f"F{i}").Value,
-                    'lacre': ws.Range(f"G{i}").Value,
-                    'type': ws.Range(f"B{i}").Value,
+                    'owner': ws.Range(f"F{i}").Value or "",
+                    'lacre': ws.Range(f"G{i}").Value or "",
+                    'type': ws.Range(f"B{i}").Value or "",
                     'nome_laudo': nome_laudo
                 }
         pics = []

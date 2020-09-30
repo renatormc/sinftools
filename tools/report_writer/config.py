@@ -6,7 +6,9 @@ stc = SinfToolsConfig()
 
 sinftools_dir = Path(os.getenv("SINFTOOLS"))
 app_dir = Path(os.path.dirname(os.path.realpath(__file__)))
-templates_dir = app_dir / "templates"
-generated_laudo = Path("./laudo.docx")
-excel_data_file = Path("./data.xlsx")
-pics_folder = Path("./data/fotos")
+libreoffice_home = stc.getprop('laudos.libreoffice_home') or "C:\\Program Files\\LibreOffice"
+libreoffice_home = Path(libreoffice_home)
+python_libre = libreoffice_home / "program/python.exe"
+printer_name = stc.getprop('laudos.printer_name') or "SINF"
+contexto_local = stc.getprop('laudos.contexto_local') or {'relator': "XXXX"}
+

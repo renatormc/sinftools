@@ -1,33 +1,42 @@
-import excel_handler
+from secretary import Renderer
 from renderizer.filters import filters
 from renderizer.env_funcs import env_funcs
 from pathlib import Path
 import json
 import config
-from docxtpl import DocxTemplate, InlineImage, Subdoc
-import jinja2
-from excel_handler import ExcelHandler
+from pre_process import pre_process
 
 class Renderizer:
     def __init__(self) -> None:
-        loader = jinja2.FileSystemLoader(str(config.templates_dir.absolute()))
-        self.jinja_env = jinja2.Environment(autoescape=True, loader=loader)
+        self.renderer = Renderer(media_path='./data/fotos')
         for filter_ in filters:
-            self.jinja_env.filters[filter_.__name__] = filter_
+            self.renderer.environment.filters[filter_.__name__] = filter_
         for function_ in env_funcs:
-            self.jinja_env.globals[function_.__name__] = function_
+            self.renderer.environment.globals[function_.__name__] = function_
 
-    def get_context(self) -> dict:
-        excel = ExcelHandler()
-        return excel.get_objects_info()
+    def read_context(self, file):
+        path = Path(file)
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
 
-    def render(self):
-        tpl_file = "laudo.docx"
-        tpl = DocxTemplate(str(tpl_file))
-        context = self.get_context()
-        tpl.render(context, self.jinja_env)
-        tpl.save(str(config.generated_laudo))
+    def render(self, context_file):
+        context = self.read_context(context_file)
+        context['contexto_local'] = config.contexto_local
+        pre_process(context)
+        
+        template = config.app_dir / "templates/laudo.odt"
+        result = self.renderer.render(template, **context)
+        with open('data/laudo.odt', 'wb') as f:
+            f.write(result)
 
-    def gen_laudo(self):
-        print(self.get_context())
+        template = config.app_dir / "templates/capa.odt"
+        result = self.renderer.render(template, **context)
+        with open('data/capa.odt', 'wb') as f:
+            f.write(result)
+
+        template = config.app_dir / "templates/midia.odt"
+        result = self.renderer.render(template, **context)
+        with open('data/midia.odt', 'wb') as f:
+            f.write(result)
 
