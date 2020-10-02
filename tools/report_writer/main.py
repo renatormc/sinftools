@@ -8,7 +8,7 @@ import shutil
 from pathlib import Path
 
 def run_script(name, args=[]):
-    args_ = [str(config.python_libre), str(config.app_dir / "handler/main.py"), name]
+    args_ = [str(config.libreoffice_python), str(config.app_dir / "handler/main.py"), name]
     args_ += args
     p = subprocess.run(args_)
     return p.returncode
@@ -66,6 +66,10 @@ def print_():
 @cli.command()
 def init():
     shutil.copytree(config.app_dir / "laudo", Path("./laudo"))
+    scripts_folder = config.app_dir / "scripts/windows" if os.name == 'nt' else config.app_dir / "scripts/linux"
+    for entry in scripts_folder.iterdir():
+        if entry.is_file():
+            shutil.copy(entry, Path("./laudo") / entry.name)
 
     
 

@@ -1,2 +1,4 @@
 #!/bin/bash
-nautilus $SINFTOOLS
+if !(nautilus $SINFTOOLS); then
+    nemo $SINFTOOLS
+fi

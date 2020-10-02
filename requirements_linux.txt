@@ -39,6 +39,7 @@ kombu==4.6.11
 lazy-object-proxy==1.4.3
 lockfile==0.12.2
 lxml==4.5.1
+markdown2==2.3.9
 MarkupSafe==1.1.1
 marshmallow==3.6.1
 marshmallow-sqlalchemy==0.23.1
@@ -86,6 +87,7 @@ requests==2.24.0
 retrying==1.3.3
 ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0
+secretary==0.2.19
 six==1.15.0
 SQLAlchemy==1.3.18
 SQLAlchemy-Utils==0.36.7

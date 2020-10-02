@@ -6,6 +6,7 @@ import json
 import config
 from pre_process import pre_process
 
+
 class Renderizer:
     def __init__(self) -> None:
         self.renderer = Renderer(media_path='./data/fotos')
@@ -24,7 +25,7 @@ class Renderizer:
         context = self.read_context(context_file)
         context['contexto_local'] = config.contexto_local
         pre_process(context)
-        
+
         template = config.app_dir / "templates/laudo.odt"
         result = self.renderer.render(template, **context)
         with open('data/laudo.odt', 'wb') as f:
@@ -39,4 +40,3 @@ class Renderizer:
         result = self.renderer.render(template, **context)
         with open('data/midia.odt', 'wb') as f:
             f.write(result)
-
