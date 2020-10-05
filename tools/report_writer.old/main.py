@@ -7,7 +7,6 @@ from renderizer import Renderizer
 import shutil
 from pathlib import Path
 import context_store
-from pre_process import pre_process
 
 
 def run_script(name, args=[]):
@@ -58,17 +57,8 @@ def write():
     code = run_script("read_calc")
     if code != 0:
         sys.exit(code)
-
-    context = context_store.read_context()
-    context['contexto_local'] = config.contexto_local
     renderizer = Renderizer()
-    pre_process(context, renderizer)
-    renderizer.render(context)
-
-    code = run_script("pos_process")
-    if code != 0:
-        sys.exit(code)
-
+    renderizer.render()
 
 
 @cli.command("print")

@@ -18,8 +18,6 @@ elif args.command == "scan_pics":
     handler.scan_pics()
 elif args.command == "read_calc":
     handler.read_calc()
-elif args.command == "pos_process":
-    handler.pos_process()
 elif args.command == "print":
     while True:
         value = input("Quantidade de cópias: ")

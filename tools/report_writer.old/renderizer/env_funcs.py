@@ -87,26 +87,26 @@ class GlobalFunctions:
 
 
 
-# class SubdocFunction:
-#     def __init__(self, renderizer):
-#         self.renderizer = renderizer
+class SubdocFunction:
+    def __init__(self, renderizer):
+        self.renderizer = renderizer
         
-#     def __call__(self, template, context):
-#         name = self.renderizer.render_subdoc(template, context)
-#         if name:
-#             return f"[subdoc({name})]"
-#         return ""
+    def __call__(self, template, context):
+        name = self.renderizer.render_subdoc(template, context)
+        if name:
+            return f"[subdoc({name})]"
+        return ""
 
-# class ObjectSpot:
-#     def __init__(self, renderizer):
-#         self.renderizer = renderizer
+class ObjectSpot:
+    def __init__(self, renderizer):
+        self.renderizer = renderizer
         
-#     def __call__(self, type_, context):
-#         template = f"objetos/{type_}.odt"
-#         name = self.renderizer.render_subdoc(template, context)
-#         if name:
-#             return f"[subdoc({name})]"
-#         return ""
+    def __call__(self, type_, context):
+        template = f"objetos/{type_}.odt"
+        name = self.renderizer.render_subdoc(template, context)
+        if name:
+            return f"[subdoc({name})]"
+        return ""
 
 
 env_funcs = [getattr(GlobalFunctions, func) for func in dir(

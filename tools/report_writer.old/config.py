@@ -30,6 +30,8 @@ tempdir = Path(gettempdir()) / "report_writer"
 if not tempdir.exists():
     tempdir.mkdir()
 context_file = tempdir / "context.json"
+print(f"Context File: {context_file}")
+# context_file = Path("./context.json")
 subdocs_temp_dir = tempdir / "subdocs"
 
 

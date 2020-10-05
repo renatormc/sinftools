@@ -11,7 +11,6 @@ import json
 from handler import constants
 from com.sun.star.beans import PropertyValue
 import context_store
-from handler.pos_processor import PosProcessor
 
 
 class Handler:
@@ -93,34 +92,24 @@ class Handler:
             tableText.insertTextContent(tableText, img, False)
 
 
-    def pos_process(self, doc=None):
-        open_doc = False
-        pos_processor = PosProcessor()
-        laudo_url = config.laudo_file.absolute().as_uri()
+    def replace_numbers(self, doc=None):
         if not doc:
-            doc = self.desktop.loadComponentFromURL(laudo_url ,"_blank",0, helpers.dictToProperties({"Hidden": True, "ReadOnly": False}))
-            open_doc = True
-        try:
-            reg = r'\[(.*)\((.{1,100}?)\)\]'
-            replace = doc.createReplaceDescriptor()
-            replace.SearchRegularExpression = True
-            replace.SearchString = reg
-            cur = doc.findFirst(replace)
-            while cur:
-                text = cur.getString()
-                res = re.search(reg, text)
-                funcname = res.group(1).strip()
-                params = res.group(2).strip()
-            
-                ok = pos_processor.exec(funcname, doc, cur, params)
-                if not ok:
-                    print(f"Pos Processing function _{funcname}_ not found")
-                cur = doc.findNext(cur.End, replace)
-            doc.storeToURL(laudo_url, ())
-        finally:
-            if open_doc:
-                doc.close(True)
-        
+            doc = self.desktop.getCurrentComponent()
+        replace = doc.createReplaceDescriptor()
+        replace.SearchRegularExpression = True
+        replace.SearchString = r'\[.*?\]'
+        selsFound = doc.findAll(replace)
+        counters = {key: 1 for key in config.numbering_items.keys()}
+        for i in range(0, selsFound.getCount()):
+            selFound = selsFound.getByIndex(i)
+            name = selFound.getString()[1:-1].strip()
+            try:
+                label = config.numbering_items[name]
+                label = f"{label} {counters[name]}"
+                selFound.setString(label)
+                counters[name] += 1
+            except KeyError:
+                pass
 
     def replace_vars(self, doc=None):
         if not doc:
@@ -328,8 +317,6 @@ class Handler:
             )   
             doc_midia.print(outProps)
             doc_midia.close(True)
-
- 
 
 
 
