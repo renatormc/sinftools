@@ -3,6 +3,7 @@ import uno
 from com.sun.star.awt import Size
 from com.sun.star.text.TextContentAnchorType import AS_CHARACTER
 from com.sun.star.awt import Point
+from com.sun.star.connection import NoConnectException
 from handler import helpers
 import config
 import re
@@ -12,21 +13,38 @@ from handler import constants
 from com.sun.star.beans import PropertyValue
 import context_store
 from handler.pos_processor import PosProcessor
+import subprocess
+import os
+import time
 
 
 class Handler:
     def __init__(self, workdir="."):
         self.workdir = Path(workdir)
 
-
     def connect(self):
         localContext = uno.getComponentContext()
         self.resolver = localContext.ServiceManager.createInstanceWithContext(
-                        "com.sun.star.bridge.UnoUrlResolver", localContext )
-        self.ctx = self.resolver.resolve( "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext" )
-        self.smgr = self.ctx.ServiceManager
-        self.desktop = self.smgr.createInstanceWithContext( "com.sun.star.frame.Desktop",self.ctx)
+            "com.sun.star.bridge.UnoUrlResolver", localContext)
+        try:
+            self.ctx = self.resolver.resolve(
+                "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext")
+        except NoConnectException:
+            vbs_file = config.app_dir / "scripts/windows/_Libreoffice.vbs"
+            os.system(str(vbs_file))
+            while True:
+                try:
+                    print("Tentando se conectar ao LibreOffice via socket")
+                    self.ctx = self.resolver.resolve(
+                        "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext")
+                    print("Conexão com LibreOffice efetuada")
+                    break
+                except NoConnectException:
+                    time.sleep(0.5)
 
+        self.smgr = self.ctx.ServiceManager
+        self.desktop = self.smgr.createInstanceWithContext(
+            "com.sun.star.frame.Desktop", self.ctx)
 
     def replace(self, var, value):
         doc = self.desktop.getCurrentComponent()
@@ -69,9 +87,9 @@ class Handler:
             spot = self.find_variable(spot, doc=doc)
         if spot:
             spot.setString("")
-            table = doc.createInstance( "com.sun.star.text.TextTable" )
-            table.initialize(n_rows,n_cols)
-            spot.Text.insertTextContent(spot, table, 0 )
+            table = doc.createInstance("com.sun.star.text.TextTable")
+            table.initialize(n_rows, n_cols)
+            spot.Text.insertTextContent(spot, table, 0)
             return table
 
     def image_in_table(self, table, path, width, height, cell, doc=None):
@@ -85,20 +103,20 @@ class Handler:
                 tableText = table.getCellByPosition(cell[1], cell[0])
             else:
                 return
-            img = doc.createInstance('com.sun.star.text.TextGraphicObject') 
+            img = doc.createInstance('com.sun.star.text.TextGraphicObject')
             path = Path(path).absolute()
             img.GraphicURL = path.as_uri()
             img.setPropertyValue('AnchorType', AS_CHARACTER)
             img.setSize(Size(width, height))
             tableText.insertTextContent(tableText, img, False)
 
-
     def pos_process(self, doc=None):
         open_doc = False
         pos_processor = PosProcessor()
         laudo_url = config.laudo_file.absolute().as_uri()
         if not doc:
-            doc = self.desktop.loadComponentFromURL(laudo_url ,"_blank",0, helpers.dictToProperties({"Hidden": True, "ReadOnly": False}))
+            doc = self.desktop.loadComponentFromURL(
+                laudo_url, "_blank", 0, helpers.dictToProperties({"Hidden": True, "ReadOnly": False}))
             open_doc = True
         try:
             reg = r'\[(.*)\((.{1,100}?)\)\]'
@@ -111,7 +129,7 @@ class Handler:
                 res = re.search(reg, text)
                 funcname = res.group(1).strip()
                 params = res.group(2).strip()
-            
+
                 ok = pos_processor.exec(funcname, doc, cur, params)
                 if not ok:
                     print(f"Pos Processing function _{funcname}_ not found")
@@ -120,7 +138,6 @@ class Handler:
         finally:
             if open_doc:
                 doc.close(True)
-        
 
     def replace_vars(self, doc=None):
         if not doc:
@@ -142,12 +159,12 @@ class Handler:
                 except (AttributeError, KeyError) as e:
                     pass
 
-
     def compile(self, hidden=True):
         doc = self.desktop.getCurrentComponent()
         odt_url, pdf_url = helpers.compile_path(doc)
         doc.storeToURL(odt_url, ())
-        doc = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": hidden}))
+        doc = self.desktop.loadComponentFromURL(
+            odt_url, "_blank", 0, helpers.dictToProperties({"Hidden": hidden}))
         try:
             self.replace_numbers(doc)
             self.replace_vars(doc=doc)
@@ -156,14 +173,13 @@ class Handler:
         finally:
             doc.close(True)
 
-
-
     def get_vars(self):
         vars = {}
         path = config.data_file.absolute()
         data_url = path.as_uri()
-        calc = self.desktop.loadComponentFromURL(data_url ,"_blank",0, helpers.dictToProperties({"Hidden": True, "ReadOnly": True}))
-        
+        calc = self.desktop.loadComponentFromURL(
+            data_url, "_blank", 0, helpers.dictToProperties({"Hidden": True, "ReadOnly": True}))
+
         try:
             # sheet = calc.Sheets[0]
             sheet = calc.Sheets["Variables"]
@@ -184,7 +200,8 @@ class Handler:
         path = config.data_file.absolute()
         pics_folder = config.pics_folder.absolute()
         data_url = path.as_uri()
-        calc = self.desktop.loadComponentFromURL(data_url ,"_blank",0, helpers.dictToProperties({"Hidden": True, "ReadOnly": True}))
+        calc = self.desktop.loadComponentFromURL(
+            data_url, "_blank", 0, helpers.dictToProperties({"Hidden": True, "ReadOnly": True}))
         try:
             sheet = calc.Sheets["Objects"]
             n_rows = sheet.getRows().getCount()
@@ -201,7 +218,6 @@ class Handler:
             # calc.close(False)
         return objs
 
-
     def get_objects_from_pics(self):
         objects = {}
         for entry in config.pics_folder.iterdir():
@@ -211,11 +227,13 @@ class Handler:
             try:
                 objects[obj]['pics'].append(entry.name)
             except KeyError:
-                objects[obj] = {'number': int(res.group(3)), 'pics': [entry.name]}
+                objects[obj] = {'number': int(
+                    res.group(3)), 'pics': [entry.name]}
         items = []
         for key, value in objects.items():
             objects[key]['pics'].sort()
-            items.append({'name': key, 'number': value['number'], 'pics': value['pics']})
+            items.append(
+                {'name': key, 'number': value['number'], 'pics': value['pics']})
         items.sort(key=lambda x: x['number'])
         return items
 
@@ -229,38 +247,39 @@ class Handler:
             table.getCellByPosition(0, row).setString(item['name'])
             table.getCellByPosition(1, row).setString(item['pic'].name)
             self.image_in_table(table, path, 2000, 2000, (row, 2))
-            table.getCellByPosition(3, row).setString(f"Evidência {item['number']}")
+            table.getCellByPosition(3, row).setString(
+                f"Evidência {item['number']}")
 
     def scan_pics(self):
-        calc = self.desktop.getCurrentComponent()
-        # path = self.workdir / "data/data.ods"
-        # odt_url = path.absolute().as_uri()
-        # calc = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": True}))
+        # calc = self.desktop.getCurrentComponent()
+        path = self.workdir / "data.ods"
+        odt_url = path.absolute().as_uri()
+        calc = self.desktop.loadComponentFromURL(
+            odt_url, "_default", 0, helpers.dictToProperties({"Hidden": False}))
         try:
             objs = self.get_objects_from_pics()
             n_rows = len(objs) + 1
             sheet = calc.Sheets['Objects']
             for i, obj in enumerate(objs):
                 row = i + 1
-                sheet.getCellByPosition(0, row).setString(f"Evidência {obj['number']}")
+                sheet.getCellByPosition(0, row).setString(
+                    f"Evidência {obj['number']}")
                 sheet.getCellByPosition(1, row).setString("Celular")
                 pics = ",".join(obj['pics'])
                 sheet.getCellByPosition(2, row).setString(pics)
             calc.store()
         finally:
-            pass
             # calc.close(True)
+            pass
 
-    
     def insert_pics(self, cur, pics, doc=None):
         n = len(pics)
-        rest = n%2
+        rest = n % 2
         n_rows = int(n/2)
         if rest != 0:
             n_rows += 1
         self.create_table(cur, n_rows, 2, doc=doc)
-            
-        
+
     def write_objects(self):
         doc = self.desktop.getCurrentComponent()
         cur = self.find_variable("objetos", doc=doc)
@@ -274,18 +293,16 @@ class Handler:
                 print(path)
                 if path.exists():
                     cur.gotoEnd(False)
-                    
+
                     cur.insertDocumentFromURL(path.as_uri(), ())
                 cur.gotoEnd(False)
                 doc.Text.insertString(cur, "\n", 0)
                 self.insert_pics(cur, obj['pics'], doc=doc)
 
-
     def read_calc(self):
         context = self.get_vars()
         context['objects'] = self.get_objects_info()
         context_store.save_context(context)
-
 
     def print_all(self, printer_name, n_copies=2, print_media=False):
         doc = self.desktop.getCurrentComponent()
@@ -293,46 +310,40 @@ class Handler:
         printer[0].Value = printer_name
         doc.setPrinter(printer)
 
-        #Imprimir capa
+        # Imprimir capa
         path = self.workdir / "data/capa.odt"
         odt_url = path.absolute().as_uri()
-        doc_capa = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": True}))
+        doc_capa = self.desktop.loadComponentFromURL(
+            odt_url, "_blank", 0, helpers.dictToProperties({"Hidden": True}))
         outProps = (
-            PropertyValue( "Wait", 0, True, 0),
-            PropertyValue( "DuplexMode", 0, constants.DuplexMode.OFF, 0),
-            PropertyValue( "CopyCount", 0, 1, 0),
-        )   
+            PropertyValue("Wait", 0, True, 0),
+            PropertyValue("DuplexMode", 0, constants.DuplexMode.OFF, 0),
+            PropertyValue("CopyCount", 0, 1, 0),
+        )
         doc_capa.print(outProps)
         doc_capa.close(True)
 
-        #Imprimir laudo
+        # Imprimir laudo
         outProps = (
-            PropertyValue( "Wait", 0, True, 0),
-            PropertyValue( "DuplexMode", 0, constants.DuplexMode.LONGEDGE, 0),
-            PropertyValue( "CopyCount", 0, n_copies, 0),
-        )   
+            PropertyValue("Wait", 0, True, 0),
+            PropertyValue("DuplexMode", 0, constants.DuplexMode.LONGEDGE, 0),
+            PropertyValue("CopyCount", 0, n_copies, 0),
+        )
         doc.print(outProps)
-        
+
         path_pdf = Path("./data/laudo.pdf").absolute()
         helpers.save_pdf(doc, path_pdf.as_uri())
 
         if print_media:
-            #Imprimir anexo mídias
+            # Imprimir anexo mídias
             path = self.workdir / "data/midia.odt"
             odt_url = path.absolute().as_uri()
-            doc_midia = self.desktop.loadComponentFromURL(odt_url ,"_blank",0, helpers.dictToProperties({"Hidden": True}))
+            doc_midia = self.desktop.loadComponentFromURL(
+                odt_url, "_blank", 0, helpers.dictToProperties({"Hidden": True}))
             outProps = (
-                PropertyValue( "Wait", 0, True, 0),
-                PropertyValue( "DuplexMode", 0, constants.DuplexMode.OFF, 0),
-                PropertyValue( "CopyCount", 0, n_copies, 0),
-            )   
+                PropertyValue("Wait", 0, True, 0),
+                PropertyValue("DuplexMode", 0, constants.DuplexMode.OFF, 0),
+                PropertyValue("CopyCount", 0, n_copies, 0),
+            )
             doc_midia.print(outProps)
             doc_midia.close(True)
-
- 
-
-
-
-       
-
-
