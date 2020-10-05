@@ -1,5 +1,5 @@
 import argparse
-from handler import Handler
+from handler.handler import Handler
 
 parser = argparse.ArgumentParser(description='Handle libreoffice.')
 parser.add_argument('command', type=str,  help='Command')

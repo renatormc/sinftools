@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from sinf.sinftools_config import SinfToolsConfig
+from tempfile import gettempdir
 
 stc = SinfToolsConfig()
 
@@ -14,10 +15,16 @@ libreoffice_python = Path(libreoffice_python)
 printer_name = stc.getprop('laudos.printer_name') or "SINF"
 contexto_local = stc.getprop('laudos.contexto_local') or {'relator': "XXXX"}
 
-pics_folder = Path("./fotos")
-laudo_file = Path("./laudo.odt")
-capa_file = Path("./capa.odt")
-midias_file = Path("./midia.odt")
-data_file = Path("./data.ods")
+workdir = Path(".")
+pics_folder = workdir / "fotos"
+laudo_file = workdir / "laudo.odt"
+capa_file = workdir / "capa.odt"
+midias_file = workdir / "midia.odt"
+data_file = workdir / "data.ods"
+context_file = Path(gettempdir()) / "context.json"
+
+numbering_items = {
+    'pic': "Foto"
+}
 
 

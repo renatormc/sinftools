@@ -3,12 +3,12 @@ import uno
 from com.sun.star.awt import Size
 from com.sun.star.text.TextContentAnchorType import AS_CHARACTER
 from com.sun.star.awt import Point
-import helpers
+from handler import helpers
 import config
 import re
 from pathlib import Path
 import json
-import constants
+from handler import constants
 from com.sun.star.beans import PropertyValue
 
 
@@ -148,7 +148,7 @@ class Handler:
 
     def get_vars(self):
         vars = {}
-        path = Path("./data/data.ods").absolute()
+        path = config.data_file.absolute()
         data_url = path.as_uri()
         calc = self.desktop.loadComponentFromURL(data_url ,"_blank",0, helpers.dictToProperties({"Hidden": True, "ReadOnly": True}))
         
@@ -169,8 +169,8 @@ class Handler:
 
     def get_objects_info(self):
         objs = []
-        path = (self.workdir / "data/data.ods").absolute()
-        pics_folder = (self.workdir / "data/fotos").absolute()
+        path = config.data_file.absolute()
+        pics_folder = config.pics_folder.absolute()
         data_url = path.as_uri()
         calc = self.desktop.loadComponentFromURL(data_url ,"_blank",0, helpers.dictToProperties({"Hidden": True, "ReadOnly": True}))
         try:
@@ -192,8 +192,7 @@ class Handler:
 
     def get_objects_from_pics(self):
         objects = {}
-        path = self.workdir / "data/fotos"
-        for entry in path.iterdir():
+        for entry in config.pics_folder.iterdir():
             reg = re.compile(r'((^[A-Za-z]+)(\d+)).*')
             res = reg.search(entry.name)
             obj = res.group(1).upper()
@@ -271,7 +270,7 @@ class Handler:
 
 
     def read_calc(self):
-        path = self.workdir / "data/calc_data.json"
+        path = config.context_file
         context = self.get_vars()
         context['objects'] = self.get_objects_info()
         with path.open("w", encoding="utf-8") as f:

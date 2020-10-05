@@ -9,7 +9,7 @@ from pathlib import Path
 from ods_handler import OdsHandler
 
 def run_script(name, args=[]):
-    args_ = [str(config.libreoffice_python), str(config.app_dir / "handler/main.py"), name]
+    args_ = [str(config.libreoffice_python), str(config.app_dir / "main_uno.py"), name]
     args_ += args
     p = subprocess.run(args_)
     return p.returncode
@@ -21,24 +21,24 @@ def cli(ctx):
 
 
 
-@cli.command("open-data")
-def open_data():
-    args = ['cmd', '/c', str(config.soffice)]
-    cmd = f""
-    os.system(str(config.soffice))
-    #soffice .\templates\data.ods --accept=socket,host=localhost,port=2002;urp
-    subprocess.Popen(args)
+# @cli.command("open-data")
+# def open_data():
+#     args = ['cmd', '/c', str(config.soffice)]
+#     cmd = f""
+#     os.system(str(config.soffice))
+#     #soffice .\templates\data.ods --accept=socket,host=localhost,port=2002;urp
+#     subprocess.Popen(args)
 
-@cli.command("compile")
-def compile():
-    code = run_script("compile")
-    sys.exit(code)
+# @cli.command("compile")
+# def compile():
+#     code = run_script("compile")
+#     sys.exit(code)
 
 
-@cli.command("replace")
-def replace():
-    code = run_script("replace")
-    sys.exit(code)
+# @cli.command("replace")
+# def replace():
+#     code = run_script("replace")
+#     sys.exit(code)
 # @cli.command("open-data")
 # @click.option('--name', '-n', default="Sem nome")
 # def hello_world(name):
@@ -56,7 +56,6 @@ def write():
     handler = OdsHandler()
     handler.read()
     context = handler.get_context()
-    print(context)
     renderizer = Renderizer()
     renderizer.render(context)
 

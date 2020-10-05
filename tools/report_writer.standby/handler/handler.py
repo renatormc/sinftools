@@ -8,7 +8,7 @@ import config
 import re
 from pathlib import Path
 import json
-import constants
+from handler import constants
 from com.sun.star.beans import PropertyValue
 
 

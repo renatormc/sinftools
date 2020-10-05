@@ -14,3 +14,6 @@ libreoffice_python = Path(libreoffice_python)
 printer_name = stc.getprop('laudos.printer_name') or "SINF"
 contexto_local = stc.getprop('laudos.contexto_local') or {'relator': "XXXX"}
 
+numbering_items = {
+    'pic': "Foto"
+}
