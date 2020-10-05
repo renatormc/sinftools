@@ -32,6 +32,9 @@
                 <Item>*\thumbs.db</Item>
                 <Item>\var\</Item>
                 <Item>\.git\</Item>
+                <Item>*\__pycache__\</Item>
+                <Item>\extras\iped\iped-3.17-snapshot\java_pid*.hprof</Item>
+                <Item>\extras\iped\iped-3.17-snapshot\log\</Item>
             </Exclude>
             <TimeSpan Type="None">0</TimeSpan>
             <SizeMin Unit="None">0</SizeMin>

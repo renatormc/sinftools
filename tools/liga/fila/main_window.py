@@ -144,6 +144,8 @@ class Window(QMainWindow):
         self.toggle_blocking_queue_action = QAction(
             "Bloquear/Desbloquear fila")
         self.file_menu.addAction(self.toggle_blocking_queue_action)
+        self.open_config_action = QAction("Configurações")
+        self.file_menu.addAction(self.open_config_action)
 
     def create_console(self):
 
@@ -451,11 +453,16 @@ class Window(QMainWindow):
     def open_logfile(self):
         self.process_manager.exec(['s-np', str(config.logfile)])
 
+    def open_config_file(self):
+        path = config.sinftools_dir / "var/config/servers_config.yaml"
+        self.process_manager.exec(['s-np', str(path)])
+
     def connections(self):
         self.open_sqlite_action.triggered.connect(self.open_sqlite)
         self.open_logfile_action.triggered.connect(self.open_logfile)
         self.toggle_blocking_queue_action.triggered.connect(
             self.toggle_blocking_queue)
+        self.open_config_action.triggered.connect(self.open_config_file)
         # self.blo.triggered.connect(self.open_logfile)
         self.tbw_process.selectionModel().currentRowChanged.connect(self.update_console)
         self.tbw_process.clicked.connect(self.update_console)
