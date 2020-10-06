@@ -8,13 +8,13 @@ import (
 
 func main() {
 	sinftools_dir := os.Getenv("SINFTOOLS")
-	script := fmt.Sprintf("%s\\\\tools\\sinf_mark_gui\\main_window.py", sinftools_dir)
+	script := fmt.Sprintf("%s\\tools\\sinf_mark_gui\\main_window.py", sinftools_dir)
 	args := []string{script}
 	for _, item := range os.Args[1:] {
 		args = append(args, item)
 	}
 
-	cmd := exec.Command(fmt.Sprintf("%s\\\\extras\\Python\\pythonw.exe", sinftools_dir), args...)
+	cmd := exec.Command(fmt.Sprintf("%s\\extras\\Python\\pythonw.exe", sinftools_dir), args...)
 	err := cmd.Start()
 
 	if err != nil {

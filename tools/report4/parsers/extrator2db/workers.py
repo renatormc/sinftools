@@ -32,8 +32,8 @@ class ChatWorker:
             Participant.identifier == identifier, Participant.name == name).first()
         if not participant:
             participant = Participant()
-            participant.identifier = identifier
-            participant.name = name
+            participant.identifier = identifier or "Desconhecido"
+            participant.name = name or "Desconhecido"
             self.add(participant)
             self.commit()
         return participant
@@ -96,13 +96,14 @@ class ChatWorker:
             ReadSource).get(self.read_source_id)
         
         txt_file = self.find_txt_file(folder)
+        print(f"Lendo arquivo \"{txt_file}\"")
         if not txt_file:
             raise Exception(f"Na pasta {folder} não foi encontrado um arquivo que começa com CHAT_ e termina com .txt")
         with txt_file.open("r", encoding="utf-8") as f:
-            text = f.read()
+            text = f.read().replace('\x00','')
         chat = Chat()
         chat.name = self.__get_chat_name(folder)
-        chat.source = self.read_source.chat_source
+        chat.source = self.read_source.chat_source or "WhatsApp_"
         chat.deleted_state = "Intact"
         self.add(chat)
 
@@ -119,14 +120,14 @@ class ChatWorker:
                 msg.from_ = p
                 if not p in chat.participants:
                     chat.participants.append(p)
-            msg.body = result['body']
+            msg.body = result['body'] or ""
             msg.deleted_state = "Intact"
             attach = self.get_attachment(folder, msg.body)
             
             if attach:
                 attachment = File()
-                attachment.extracted_path = str(attach)
-                attachment.filename = attach.name
+                attachment.extracted_path = str(attach) or ""
+                attachment.filename = attach.name or ""
                 attachment.size = os.path.getsize(Path(self.read_source.folder) / attach)
                 self.add(attachment)
                 msg.attachments.append(attachment)

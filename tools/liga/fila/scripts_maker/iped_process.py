@@ -60,7 +60,8 @@ class IpedProcessDialog(QDialog):
         db_session.commit()
 
     def write_script(self):
-        args = ['s-iped', '-profile', self.clean_data['profile'], '--nogui']
+        iped_command = 's-iped' if config.iped_defaul else 'iped'
+        args = [iped_command, '-profile', self.clean_data['profile'], '--nogui']
         if self.clean_data['portable']:
             args.append('--portable')
         for entry in self.clean_data['sources']:

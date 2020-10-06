@@ -15,3 +15,5 @@ servers:
   mulher_maravilha:
     ip: "10.129.3.120"
     port: 8002
+# Pasta que contém o iped, caso se queira utilizar outra diferente do iped padrão do sinftools. Se ficar em branco será utilizado o padrão
+iped_folder:

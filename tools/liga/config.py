@@ -3,6 +3,10 @@ from pathlib import Path
 import os
 import jwt
 from datetime import datetime
+from sinf.sinftools_config import SinfToolsConfig
+
+stc = SinfToolsConfig()
+
 
 app_dir = Path(os.path.dirname(os.path.realpath(__file__)))
 sinftools_dir = Path(os.getenv("SINFTOOLS"))
@@ -62,8 +66,15 @@ fila_scripts_template = {
 scripts_folder = Path(os.getenv("USERPROFILE")) / "sinf_fila_scripts"
 if not scripts_folder.exists():
     os.makedirs(scripts_folder)
-
-iped_folder = sinftools_dir / "extras/iped/iped-3.17-snapshot"
+iped_folder = stc.getprop("servers_config.iped_folder")
+iped_defaul = False
+try:
+    iped_folder = Path(iped_folder)
+    if not iped_folder.exists():
+        raise Exception("Iped folder path not found")
+except:
+    iped_folder = sinftools_dir / "extras/iped/iped-3.17-snapshot"
+    iped_defaul = True
 
 recycle_bin = sinftools_dir / "var/lixeira"
 if not recycle_bin.exists():
