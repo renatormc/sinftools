@@ -41,6 +41,14 @@ def zip_folder(folder_path, output_path):
     finally:
         zip_file.close()
 
+def check_autorization(alias):
+    req = Requester()
+    url = f"{config.url_sinfweb}/organizador/perito-tem-autorizacao/{alias}"
+    res = req.get(url)
+    if res.status_code == 200:
+        return True
+    elif res.status_code == 401:
+        return False
 
 def upload_fotos(folder, alias):
     tempzip = Path(tempfile.gettempdir()) / "sinfpics.zip"
@@ -49,7 +57,7 @@ def upload_fotos(folder, alias):
     req = Requester()
     url = f"{config.url_sinfweb}/organizador/upload-fotos/{alias}"
     res = req.post(url, files=files)
-    return res.status_code
+    return res.content.decode("utf-8")
    
 
 def escolher_pericia():
@@ -68,13 +76,14 @@ def escolher_pericia():
 
 class NameAnalyzer:
     def __init__(self):
-        self.reg = re.compile(r'((^[A-Za-z]+)([\d\.]+))(?:_(\d*))?')
+        self.reg =  re.compile(r'((^[A-Za-z]+)(\d+))(?:[\d\.]+)?(?:_(\d+))?$')
 
     def analise_name(self, name):
         res = self.reg.search(name)
         if not res:
             return
         ret = {
+            'obj_name': res.group(1),
             'alias': res.group(2),
             'obj_number': res.group(3),
             'pic_seq': res.group(4)
@@ -91,12 +100,12 @@ def check_pics(folder: Path):
         if entry.is_dir():
             errors.append(f"{entry.name} é um diretório. Somente arquivos são aceitos dentro da pasta de fotos.")
             continue
-        if entry.name.startswith("_"):
+        if entry.name.endswith("_"):
             continue
         if entry.suffix.lower() not in exts:
             errors.append(f"Arquivo {entry.name} é de um tipo não aceito. Somente jpg e png são aceitos.")
             continue
-        res = analyzer.analise_name(entry.name)
+        res = analyzer.analise_name(entry.stem)
         if not res:
             errors.append(f"O arquivos {entry.name} não está nomeado no padrão de nomes exigido.")
             continue

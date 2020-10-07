@@ -49,10 +49,17 @@ elif option == "upload":
             print(f"{i+1} - {err}")
         sys.exit(1)
 
-    status_code = hp.upload_fotos(folder, id_texto)
-    if status_code == 200:
-        print("Upload realizado")
-    elif status_code == 403:
-        print(f"Você não tem permissão para fazer upload de fotos para a perícia {alias}. Possíveis causas: ")
+    authorized = hp.check_autorization(alias)
+    if not authorized:
+        print(f"\nVocê não tem permissão para fazer upload de fotos para a perícia {alias}. Possíveis causas: ")
         print("1- Você não é relator dessa perícia")
         print("2- Seu token de acesso ao sinfweb do sinftools não é válido")
+        sys.exit(1)
+
+    try:
+        res = hp.upload_fotos(folder, alias)
+        print(f"Upload realizado com sucesso para a perícia \"{res}\"")
+    except Exception as e:
+        print(e)
+  
+   
