@@ -6,6 +6,7 @@ from pathlib import Path
 import os
 from PyInquirer import style_from_dict, Token, prompt, Separator
 from styles import custom_style_2
+import re
 
 
 def get_pericias():
@@ -41,24 +42,15 @@ def zip_folder(folder_path, output_path):
         zip_file.close()
 
 
-def upload_fotos(folder, pericia):
+def upload_fotos(folder, alias):
     tempzip = Path(tempfile.gettempdir()) / "sinfpics.zip"
-
     zip_folder(str(folder), str(tempzip))
-
-    # zipf = zipfile.ZipFile(tempzip, 'w', zipfile.ZIP_DEFLATED)
-    # for root, dirs, files in os.walk(folder):
-    #     for file in files:
-    #         zipf.write(os.path.join(root, file), file)
-
     files = {'file': (tempzip.name, tempzip.open("rb"), 'application/zip')}
     req = Requester()
-    url = f"{config.url_sinfweb}/organizador/upload-fotos"
-    res = req.post(url, files=files, data={'pericia': pericia})
-    if res.status_code == 200:
-        return True
-    else:
-        return False
+    url = f"{config.url_sinfweb}/organizador/upload-fotos/{alias}"
+    res = req.post(url, files=files)
+    return res.status_code
+   
 
 def escolher_pericia():
     pericias = get_pericias()
@@ -73,6 +65,48 @@ def escolher_pericia():
 
     answers = prompt(questions, style=custom_style_2)
     return answers['pericia']
+
+class NameAnalyzer:
+    def __init__(self):
+        self.reg = re.compile(r'((^[A-Za-z]+)([\d\.]+))(?:_(\d*))?')
+
+    def analise_name(self, name):
+        res = self.reg.search(name)
+        if not res:
+            return
+        ret = {
+            'alias': res.group(2),
+            'obj_number': res.group(3),
+            'pic_seq': res.group(4)
+        }
+        if ret['obj_number'] is not None:
+            return ret
+
+def check_pics(folder: Path):
+    analyzer = NameAnalyzer()
+    exts = ['.jpg', '.png']
+    alias = []
+    errors = []
+    for entry in folder.iterdir():
+        if entry.is_dir():
+            errors.append(f"{entry.name} é um diretório. Somente arquivos são aceitos dentro da pasta de fotos.")
+            continue
+        if entry.name.startswith("_"):
+            continue
+        if entry.suffix.lower() not in exts:
+            errors.append(f"Arquivo {entry.name} é de um tipo não aceito. Somente jpg e png são aceitos.")
+            continue
+        res = analyzer.analise_name(entry.name)
+        if not res:
+            errors.append(f"O arquivos {entry.name} não está nomeado no padrão de nomes exigido.")
+            continue
+        if res['alias'] not in alias:
+            alias.append(res['alias'])
+    if len(alias) > 1:
+        aux = ",".join(alias)
+        errors.append(f"Foram encontradas fotos de mais de uma perícia ({aux}). Somente é aceito uma perícia por pasta")
+    alias = alias[0] if alias else None
+    return alias, errors
 
 
 if __name__ == "__main__":

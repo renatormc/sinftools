@@ -6,6 +6,7 @@ import os
 import shutil
 import config
 import helpers as hp
+import sys
 
 app_dir = Path(os.path.dirname(os.path.realpath(__file__)))
 apk = app_dir / "sinfpics 1.1.1.apk"
@@ -38,11 +39,20 @@ elif option == "copy":
     subprocess.run(['cmd', '/c', 's-adb', 'pull',
                     '/sdcard/Pictures/sinfpics', 'sinfpics'])
 elif option == "upload":
-    pericia = hp.escolher_pericia()
-    id_texto = hp.to_text_id(pericia)
+    # pericia = hp.escolher_pericia()
+    # id_texto = hp.to_text_id(pericia)
     folder = Path(".")
-    ok = hp.upload_fotos(folder, id_texto)
-    if ok:
+    alias, errors = hp.check_pics(folder)
+    if errors:
+        print("\nHá algumas inconsistências em seus arquivos que devem ser sanadas antes de prosseguir:")
+        for i, err in enumerate(errors):
+            print(f"{i+1} - {err}")
+        sys.exit(1)
+
+    status_code = hp.upload_fotos(folder, id_texto)
+    if status_code == 200:
         print("Upload realizado")
-    else:
-        print("Houve um erro")
+    elif status_code == 403:
+        print(f"Você não tem permissão para fazer upload de fotos para a perícia {alias}. Possíveis causas: ")
+        print("1- Você não é relator dessa perícia")
+        print("2- Seu token de acesso ao sinfweb do sinftools não é válido")
