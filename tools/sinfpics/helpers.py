@@ -100,7 +100,7 @@ def check_pics(folder: Path):
         if entry.is_dir():
             errors.append(f"{entry.name} é um diretório. Somente arquivos são aceitos dentro da pasta de fotos.")
             continue
-        if entry.name.endswith("_"):
+        if entry.name.startswith("_"):
             continue
         if entry.suffix.lower() not in exts:
             errors.append(f"Arquivo {entry.name} é de um tipo não aceito. Somente jpg e png são aceitos.")

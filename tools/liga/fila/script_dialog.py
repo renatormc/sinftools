@@ -219,7 +219,7 @@ class ScriptDialog(QDialog):
                 dep.blocker_id = id
                 db_session.add(dep)
             self.proc.telegram = self.ckb_telegram.isChecked()
-            db_session.commit()
+            # db_session.commit()
             db_session.add(self.proc)
             db_session.commit()
             self.close()

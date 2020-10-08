@@ -7,6 +7,7 @@ import shutil
 import config
 import helpers as hp
 import sys
+from uteis.questions import instruct_continue
 
 app_dir = Path(os.path.dirname(os.path.realpath(__file__)))
 apk = app_dir / "sinfpics 1.1.1.apk"
@@ -32,15 +33,16 @@ answers = prompt(questions, style=custom_style_2)
 option = options[answers['option']]
 
 if option == "install":
+    instruct_continue("1- Habilite usb debug em seu aparelho\n2- Conecte o aparelho utiliando cabo usb em sua máquina\n3- Escolha \"continuar\" para prosseguir com a intalação")
     subprocess.run(['cmd', '/c', 's-adb', 'install', str(apk)])
 elif option == "apk":
     shutil.copy(apk, Path(".") / apk.name)
+    print("O arquivo apk foi copiado para sua pasta corrente. Você pode utilizá-lo para instalar o app no seu aparelho.")
 elif option == "copy":
     subprocess.run(['cmd', '/c', 's-adb', 'pull',
                     '/sdcard/Pictures/sinfpics', 'sinfpics'])
 elif option == "upload":
-    # pericia = hp.escolher_pericia()
-    # id_texto = hp.to_text_id(pericia)
+    instruct_continue("Para que este procedimento funcione é necessário que:\n1- as fotos estejam nomeadas no padrão exigido e o terminal aberto na pasta que contém as fotos. \n2- A perícia para a qual você irá fazer o upload esteja no seu nome como relator principal ou como outro relator no sinfweb.\n3- Você já tenha o token de acesso em sua máquina, caso não tenha vá até o sinfweb para obtê-lo.")
     folder = Path(".")
     alias, errors = hp.check_pics(folder)
     if errors:
