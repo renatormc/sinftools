@@ -76,7 +76,7 @@ def escolher_pericia():
 
 class NameAnalyzer:
     def __init__(self):
-        self.reg =  re.compile(r'((^[A-Za-z]+)(\d+))(?:[\d\.]+)?(?:_(\d+))?$')
+        self.reg =  re.compile(r'((^[A-Za-z]+)(\d+))(?:[\d\.\-]+)?(?:_(\d+))?$')
 
     def analise_name(self, name):
         res = self.reg.search(name)
