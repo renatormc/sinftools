@@ -7,6 +7,7 @@ import os
 from PyInquirer import style_from_dict, Token, prompt, Separator
 from styles import custom_style_2
 import re
+from sinf_pics_helpers import NameAnalyzer
 
 
 def get_pericias():
@@ -74,22 +75,6 @@ def escolher_pericia():
     answers = prompt(questions, style=custom_style_2)
     return answers['pericia']
 
-class NameAnalyzer:
-    def __init__(self):
-        self.reg =  re.compile(r'((^[A-Za-z]+)(\d+))(?:[\d\.\-]+)?(?:_(\d+))?$')
-
-    def analise_name(self, name):
-        res = self.reg.search(name)
-        if not res:
-            return
-        ret = {
-            'obj_name': res.group(1),
-            'alias': res.group(2),
-            'obj_number': res.group(3),
-            'pic_seq': res.group(4)
-        }
-        if ret['obj_number'] is not None:
-            return ret
 
 def check_pics(folder: Path):
     analyzer = NameAnalyzer()
