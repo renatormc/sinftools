@@ -18,6 +18,24 @@ import os
 import time
 
 
+class NameAnalyzer:
+    def __init__(self):
+        self.reg =  re.compile(r'((^[A-Za-z]+)(\d+))(?:[\d\.\-]+)?(?:_(\d+))?$')
+
+    def analise_name(self, name):
+        res = self.reg.search(name)
+        if not res:
+            return
+        ret = {
+            'obj_name': res.group(1),
+            'alias': res.group(2),
+            'obj_number': res.group(3),
+            'pic_seq': res.group(4)
+        }
+        if ret['obj_number'] is not None:
+            return ret
+
+
 class Handler:
     def __init__(self, workdir="."):
         self.workdir = Path(workdir)
@@ -223,15 +241,20 @@ class Handler:
 
     def get_objects_from_pics(self):
         objects = {}
+        analyzer = NameAnalyzer()
         for entry in config.pics_folder.iterdir():
-            reg = re.compile(r'((^[A-Za-z]+)(\d+)).*')
-            res = reg.search(entry.name)
-            obj = res.group(1).upper()
+            if entry.name.startswith("_"):
+                continue
+            res = analyzer.analise_name(entry.stem)
+            if not res:
+                raise Exception(f"A foto {entry.name} não está nomeada no padrão exigido")
+            
+            # res = reg.search(entry.name)
+            obj = res['obj_name']
             try:
                 objects[obj]['pics'].append(entry.name)
             except KeyError:
-                objects[obj] = {'number': int(
-                    res.group(3)), 'pics': [entry.name]}
+                objects[obj] = {'number': res['obj_number'], 'pics': [entry.name]}
         items = []
         for key, value in objects.items():
             objects[key]['pics'].sort()
