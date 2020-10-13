@@ -31,7 +31,10 @@ class Handler:
                 "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext")
         except NoConnectException:
             vbs_file = config.app_dir / "scripts/windows/_Libreoffice.vbs"
-            os.system(str(vbs_file))
+            if os.name == "nt":
+                os.system(str(vbs_file))
+            else:
+                subprocess.Popen(["soffice", "--accept='socket,host=0.0.0.0,port=2002;urp;StarOffice.Service'"])
             while True:
                 try:
                     print("Tentando se conectar ao LibreOffice via socket")

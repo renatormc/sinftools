@@ -1,4 +1,3 @@
 #!/bin/bash
-workon sinftools
 export PYTHONPATH=$SINFTOOLS/tools/libs
-python $@
+$SINFTOOLS/venv/bin/python $@
