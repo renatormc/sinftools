@@ -4,7 +4,7 @@ ATENÇÃO: No linux apenas em fase de teste. Apenas algumas ferramentas funciona
 2- Adicione as seguintes linhas ao arquivo ~/.profile:
     
     export SINFTOOLS=/path/sinftools 
-    export PATH=$PATH:$SINFTOOLS/scripts_linux
+    export PATH=$PATH:$SINFTOOLS/linux/scripts_linux
 3- Crie um ambiente virtual na pasta $SINFTOOLS
 
     virtualenv venv --python=python3
