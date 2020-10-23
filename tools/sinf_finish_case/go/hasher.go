@@ -57,7 +57,7 @@ func calculateSha512(path string) (string, error) {
 }
 
 func (hasher *Hasher) calcHashFile(path string) {
-	if filepath.Base(path) == ".sinf_mark.json" {
+	if filepath.Base(path) == ".sinf_mark.json" || path == "hash.log" || path == "hash.txt" {
 		return
 	}
 	if hasher.onlyCount {

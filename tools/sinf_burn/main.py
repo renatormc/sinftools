@@ -4,38 +4,50 @@ import os
 from pathlib import Path
 import sys
 from PyInquirer import prompt
+import argparse
 
 sinftools_dir = Path(os.getenv("SINFTOOLS"))
 cdburn_exe = sinftools_dir / "extras/cdburnerxp-portable-4-5-8-7128/cdbxpcmd.exe"
 
 
+# parser = argparse.ArgumentParser(description='Process some integers.')
+# parser.add_argument('-f', dest="folders", type=str, choices=['ask', 'one', 'many'], default='ask', help='folders')
+# args = parser.parse_args()
+
 class Burner:
-    def __init__(self, disk_name, folder=".", n_copies=1, speed=12):
+    def __init__(self, disk_name, folder=".", n_copies=1, speed=12, which_folders='ask'):
         self.device = 0
         self.speed = speed
         self.n_copies = n_copies
         self.folder = Path(folder)
         self.disks = []
         self.disk_name = disk_name
+        self.which_folders = which_folders
         self.get_disks()
         self.last = 0
+        
 
     def get_disks(self):
-        choices = {
-            "Gravar conteúdo da pasta corrente em um único disco": "one",
-            "Gravar cada subpasta em um disco diferente": "many"
-        }
-        questions = [
-            {
-                'type': 'list',
-                'name': 'what',
-                'message': 'Forma: ',
-                'choices': list(choices.keys())
+        if self.which_folders == 'ask':
+            choices = {
+                "Gravar conteúdo da pasta corrente em um único disco": "one",
+                "Gravar cada subpasta em um disco diferente": "many"
             }
-        ]
-        answers = prompt(questions)
+            questions = [
+                {
+                    'type': 'list',
+                    'name': 'what',
+                    'message': 'Forma: ',
+                    'choices': list(choices.keys())
+                }
+            ]
+            answers = prompt(questions)
+            res = choices[answers['what']]
+        else:
+            res = self.which_folders
         self.disks = []
-        folders = [entry for entry in self.folder.iterdir() if entry.is_dir()] if choices[answers['what']] == 'many' else [self.folder]
+        print(self.folder)
+        folders = [entry for entry in self.folder.iterdir() if entry.is_dir()] if res == "many" else [self.folder]
         self.many = len(folders) > 1
         for entry in folders:
             if entry.is_dir():
@@ -110,7 +122,7 @@ class Burner:
 
         if self.many:
             choices = {
-                f"{disk['subfolder'].ljust(max_, ' ')} Cópia {disk['copy']}": i for i, disk in enumerate(self.disks)}
+                f"Mídia {disk['subfolder'].ljust(max_, ' ')} Cópia {disk['copy']}": i for i, disk in enumerate(self.disks)}
         else:
             choices = {
                 f"Cópia {disk['copy']}": i for i, disk in enumerate(self.disks)}
@@ -140,7 +152,8 @@ class Burner:
               help='Pasta contendo os arquivos a gravar.')
 @click.option('-n', '--ncopies', type=int, default=2,
               help='Número de cópias.')
-def burn(rg, speed, folder, ncopies):
+@click.option('-w', '--which', default="ask", help='Quais pastas')
+def burn(rg, speed, folder, ncopies, which):
     try:
         rg, ano = rg.split("/")
         rg, ano = int(rg), int(ano)
@@ -148,7 +161,7 @@ def burn(rg, speed, folder, ncopies):
     except:
         print("RG fora do formato padrão")
         sys.exit(1)
-    burner = Burner(disk_name=rg, folder=folder, n_copies=ncopies, speed=speed)
+    burner = Burner(disk_name=rg, folder=folder, n_copies=ncopies, speed=speed, which_folders=which)
     burner.burn()
     # if many:
     #     for entry in Path(folder).iterdir():

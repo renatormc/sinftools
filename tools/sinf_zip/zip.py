@@ -19,6 +19,14 @@ from pyfiglet import Figlet
 # import argparse
 
 dir_sinftools = os.getenv("SINFTOOLS")
+
+midia_sizes = {
+    'DVD': int(4300*1024*1024),
+    'CD': int(670*1024*1024),
+    'Blue Ray': int(22*1024*1024*1024),
+    'Blue Ray - Dual Layer': int(44*1024*1024*1024)
+}
+
 # parser = argparse.ArgumentParser()
 # parser.add_argument("dir", help="Dir to be zipped")
 # parser.add_argument("-t", "--type", action="store", default="7zip", choices=['7zip', 'rar', 'sinf'], help="Compress type")
@@ -68,7 +76,7 @@ config_form = {
             "type": "combo",
             "name": "midia",
             "label": "Tipo de mídia",
-            "list": ["DVD", "CD"],
+            "list": list(midia_sizes.keys()),
             "default": "DVD",
             "row": 2,
             "stretch": 1
@@ -105,14 +113,9 @@ def get_number(filename):
 
 
 if answers:
-    dvd_size = 4300*1024*1024
-    cd_size = 670*1024*1024
+  
 
-    midia_sizes = {
-        'DVD': dvd_size,
-        'CD': cd_size
-    }
-
+ 
     folder = answers['dir']
     output_folder = "..\\midias_para_gravar" if answers['dir'] == '.' else ".\\midias_para_gravar"
     max_size = midia_sizes[answers['midia']]
@@ -144,6 +147,7 @@ if answers:
             shutil.rmtree(output_folder)
         os.mkdir(output_folder)
         cmd = f"{sevenzipexe} a -v{max_size}b -mx{level_compression} -sfx7z.sfx {output_folder}\\dados.exe \"{os.path.abspath(folder)}\""
+        print(cmd)
         os.system(cmd)
         files = os.listdir(output_folder)
         n = len(files)
@@ -297,12 +301,17 @@ if answers:
                     p2 = entry / ".sinf"
                     if p2.exists():
                         os.system(f"attrib +h \"{p2}\"")
-            f = Figlet()
-            print(f.renderText("Atencao"))
-            print("\n--------ATENÇÃO---------")
-            print("Existe uma pasta oculta de nome \".sinf\" dentro da pasta de cada mídia para gravação. Esta pasta deve ser gravada na mídia também. Caso você tenha costume de trabalhar com o Windows configurado para não mostrar pastas ocultas altere suas configurações antes de gravar as mídias.")
-            print("\nGrave cada mídia sem criar nenhuma subpasta. Grave a mídia 1 colocando os arquivos existentes na pasta 1, a mídia 2 com os arquivos existentes na pasta 2, etc.")
-            input("Pressione algo para finalizar...")
+            res = input("\nDeseja já gravar as mídias utilizando s-burn? (s/N)")
+            if res.lower().strip() == 's':
+                os.chdir(output_folder)
+                os.system("s-burn -w many")
+            else:
+                f = Figlet()
+                print(f.renderText("Atencao"))
+                print("\n--------ATENÇÃO---------")
+                print("Existe uma pasta oculta de nome \".sinf\" dentro da pasta de cada mídia para gravação. Esta pasta deve ser gravada na mídia também. Caso você tenha costume de trabalhar com o Windows configurado para não mostrar pastas ocultas altere suas configurações antes de gravar as mídias.")
+                print("\nGrave cada mídia sem criar nenhuma subpasta. Grave a mídia 1 colocando os arquivos existentes na pasta 1, a mídia 2 com os arquivos existentes na pasta 2, etc.")
+                input("Pressione algo para finalizar...")
         else:
             output_folder = Path(output_folder)
             dir_ = output_folder / "1"

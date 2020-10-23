@@ -42,7 +42,7 @@ elif option == "copy":
     subprocess.run(['cmd', '/c', 's-adb', 'pull',
                     '/sdcard/Pictures/sinfpics', 'sinfpics'])
 elif option == "upload":
-    instruct_continue("Para que este procedimento funcione é necessário que:\n1- as fotos estejam nomeadas no padrão exigido e o terminal aberto na pasta que contém as fotos. \n2- A perícia para a qual você irá fazer o upload esteja no seu nome como relator principal ou como outro relator no sinfweb.\n3- Você já tenha o token de acesso em sua máquina, caso não tenha vá até o sinfweb para obtê-lo.")
+    instruct_continue("Para que este procedimento funcione é necessário que:\n1- As fotos estejam nomeadas no padrão exigido e o terminal aberto na pasta que contém as fotos. Consulte o tutorial de como nomear fotos e objetos no sinfweb.\n2- A perícia para a qual você irá fazer o upload esteja no seu nome como relator principal ou como outro relator no sinfweb.\n3- Você já tenha o token de acesso em sua máquina, caso não tenha vá até o sinfweb para obtê-lo.")
     folder = Path(".")
     alias, errors = hp.check_pics(folder)
     if errors:
