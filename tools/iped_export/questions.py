@@ -16,7 +16,8 @@ def choose_filter():
 
     options = {
         "Diretamente no arquivo query.txt": "query",
-        "No arquivo categoriesToExport.txt": "categories"
+        "No arquivo categoriesToExport.txt": "categories",
+        "No arquivo typesToExport.txt": "types",
     }
 
     questions = [

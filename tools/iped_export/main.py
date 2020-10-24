@@ -23,14 +23,19 @@ def init():
     shutil.copytree(config.app_dir / ".ipedexport", path)
 
 
+
 @cli.command()
-def export():
+@click.option('--convert', is_flag=True)
+def export(convert):
     res = questions.choose_filter()
     if res == "categories":
         categories2query()
+    elif res == "types":
+        types2query()
     elif res == "query":
         pass
-    run_export()
+    if not convert:
+        run_export()
 
 
 
