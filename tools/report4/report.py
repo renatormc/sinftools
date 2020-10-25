@@ -102,7 +102,7 @@ def init(grouped):
         hp_db.drop_orphan_databases(
             type=dbtype, exclude=[config_manager.database_name])
         n_cpu = multiprocessing.cpu_count()
-        config_manager.data['n_workers'] = n_cpu if n_cpu <= 8 else 8
+        config_manager.data['n_workers'] = n_cpu
         config_manager.save()
 
     config_manager.load_database_name()
