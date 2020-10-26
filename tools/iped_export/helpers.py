@@ -1,6 +1,7 @@
 import config
 from pathlib import Path
 import subprocess
+import questions
 
 
 def read_items(path: Path):
@@ -14,7 +15,7 @@ def read_items(path: Path):
     return items
 
 
-def categories2query():
+def categories2query(write_file=True):
     path = Path(".ipedexport/categoriesToExport.txt")
     categories = read_items(path)
     conditions = []
@@ -22,27 +23,40 @@ def categories2query():
         if " " in cat:
             aux = [item.strip() for item in cat.split(" ")]
             if len(aux) == 2:
-                conditions.append(f"(categoria:{aux[0]}* AND categoria:*{aux[1]})")
+                conditions.append(
+                    f"(categoria:{aux[0]}* AND categoria:*{aux[1]})")
         else:
             conditions.append(f"categoria:{cat}")
-    aux = " OR ".join(conditions)
-    query = f"isDir:false AND ({aux})"
-    path = Path(".ipedexport/query.txt")
-    path.write_text(query, encoding="utf-8")
+    if write_file:
+        aux = " OR ".join(conditions)
+        query = f"isDir:false AND ({aux})"
+        path = Path(".ipedexport/query.txt")
+        path.write_text(query, encoding="utf-8")
+    return conditions
 
 
-
-def types2query():
+def types2query(write_file=True):
     path = Path(".ipedexport/typesToExport.txt")
     types = read_items(path)
     conditions = []
     for type_ in types:
         conditions.append(f"tipo:{type_}")
+    if write_file:
+        aux = " OR ".join(conditions)
+        query = f"isDir:false AND ({aux})"
+        path = Path(".ipedexport/query.txt")
+        path.write_text(query, encoding="utf-8")
+    return conditions
+
+
+def cattype2query():
+    cat_cond = categories2query(write_file=False)
+    type_cond = types2query(write_file=False)
+    conditions = cat_cond + type_cond
     aux = " OR ".join(conditions)
     query = f"isDir:false AND ({aux})"
     path = Path(".ipedexport/query.txt")
     path.write_text(query, encoding="utf-8")
-
 
 
 def run_export():
@@ -50,3 +64,13 @@ def run_export():
     subprocess.run(args)
 
 
+def build_query():
+    res = questions.choose_filter()
+    if res == "categories":
+        categories2query()
+    elif res == "types":
+        types2query()
+    elif res == "cat_type":
+        cattype2query()
+    elif res == "query":
+        pass

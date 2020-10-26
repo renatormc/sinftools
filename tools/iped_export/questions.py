@@ -15,16 +15,17 @@ custom_style = style_from_dict({
 def choose_filter():
 
     options = {
-        "Diretamente no arquivo query.txt": "query",
-        "No arquivo categoriesToExport.txt": "categories",
-        "No arquivo typesToExport.txt": "types",
+        "Por categoria": "categories",
+        "Por tipo": "types",
+        "Por categoria e tipo": "cat_type",
+        "Personalizado": "query"
     }
 
     questions = [
         {
             'type': 'list',
             'name': 'filter',
-            'message': 'Onde está definido o filtro?',
+            'message': 'Escolha o tipo de filtragem:',
             'choices': list(options.keys())
         }
     ]

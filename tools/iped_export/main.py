@@ -22,19 +22,16 @@ def init():
     shutil.copytree(config.app_dir / ".ipedexport", path)
 
 
+@cli.command("build-query")
+def build_query_():
+    build_query()
+    print("Query gerada no arquivo .ipedexport/query.txt")
+   
 
 @cli.command()
-@click.option('--convert', is_flag=True)
-def export(convert):
-    res = questions.choose_filter()
-    if res == "categories":
-        categories2query()
-    elif res == "types":
-        types2query()
-    elif res == "query":
-        pass
-    if not convert:
-        run_export()
+def export():
+    build_query()
+    run_export()
 
 
 
