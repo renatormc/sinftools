@@ -25,7 +25,6 @@ class Burner:
         self.which_folders = which_folders
         self.get_disks()
         self.last = 0
-        
 
     def get_disks(self):
         if self.which_folders == 'ask':
@@ -47,23 +46,24 @@ class Burner:
             res = self.which_folders
         self.disks = []
         print(self.folder)
-        folders = [entry for entry in self.folder.iterdir() if entry.is_dir()] if res == "many" else [self.folder]
+        folders = [entry for entry in self.folder.iterdir(
+        ) if entry.is_dir()] if res == "many" else [self.folder]
         self.many = len(folders) > 1
         for entry in folders:
             if entry.is_dir():
                 for i in range(self.n_copies):
                     self.disks.append({'subfolder': entry.name, 'copy': i + 1})
-       
 
     def burn_one(self, index):
         disk = self.disks[index]
         folder = self.folder / disk['subfolder']
-        
+
         name = self.disk_name.strip().replace(" ", "_")
         if self.many:
             name = f"{name}_{disk['subfolder']}"
         name = name[:16]
-        print(f"Iniciando gravação do conteúdo da pasta \"{folder}\", cópia {disk['copy']}, nome do disco: {name}")
+        print(
+            f"Iniciando gravação do conteúdo da pasta \"{folder}\", cópia {disk['copy']}, nome do disco: {name}")
         folder = self.folder / disk['subfolder']
         args = [
             str(cdburn_exe),
@@ -87,6 +87,11 @@ class Burner:
             if index != self.last:
                 self.last = index
             self.burn_one(index)
+            self.eject()
+
+    def eject(self):
+        cmd = [str(cdburn_exe), "--eject", f"-device:{self.device}"]
+        subprocess.run(cmd)
 
     def get_device(self):
         cmd = [str(cdburn_exe), "--list-drives"]
@@ -112,13 +117,12 @@ class Burner:
         return int(answers['device'].split(":")[0].strip())
 
     def what_disk(self):
-        #chek what is the bigger size
+        # chek what is the bigger size
         max_ = 0
         for disk in self.disks:
             n = len(disk['subfolder'])
             if n > max_:
                 max_ = n
-
 
         if self.many:
             choices = {
@@ -141,8 +145,6 @@ class Burner:
         return choices[answers['what']]
 
 
-
-
 @click.command()
 @click.option('-r', '--rg', prompt='RG do caso (ex: 12345/2020)',
               help='RG do caso.')
@@ -161,7 +163,8 @@ def burn(rg, speed, folder, ncopies, which):
     except:
         print("RG fora do formato padrão")
         sys.exit(1)
-    burner = Burner(disk_name=rg, folder=folder, n_copies=ncopies, speed=speed, which_folders=which)
+    burner = Burner(disk_name=rg, folder=folder,
+                    n_copies=ncopies, speed=speed, which_folders=which)
     burner.burn()
     # if many:
     #     for entry in Path(folder).iterdir():
