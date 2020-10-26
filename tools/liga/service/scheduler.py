@@ -7,6 +7,8 @@ import shutil
 from sqlalchemy import or_
 from helpers.process_manager import ProcessManager
 import config as config_
+from helpers import user_manage
+import os
 
 
 scheduler = APScheduler()
@@ -63,6 +65,14 @@ def check_processes():
         engine.dispose()
 
 
+def kick_anonimous():
+    print("Checando login anônimo")
+    who = user_manage.who_is_connected()
+    if not who or not who['timestamp']:
+        return
+    if (who['name'] == 'Alguém' and datetime.now() - who['timestamp']  > timedelta(minutes=1)):
+        os.system("tsdiscon")
+
 
 
 class SchedulerConfig(object):
@@ -82,6 +92,12 @@ class SchedulerConfig(object):
         {
             'id': 'check_process',
             'func': check_processes,
+            'trigger': 'interval',
+            'seconds': 30
+        },
+        {
+            'id': 'kick_anonimous',
+            'func': kick_anonimous,
             'trigger': 'interval',
             'seconds': 30
         }

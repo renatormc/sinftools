@@ -5,7 +5,6 @@ import shutil
 import questions
 from helpers import *
 
-#java -jar "%SINFTOOLS%\tools\iped_export\ipedexport-1.0-SNAPSHOT.jar" %*
 
 @click.group()
 @click.pass_context

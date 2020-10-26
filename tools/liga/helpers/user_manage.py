@@ -4,6 +4,7 @@ from models import *
 from database import db_session
 import subprocess
 import config
+import os
 
 
 def get_connection_type():
@@ -24,8 +25,8 @@ def get_connection_type():
 
 def get_last_logon_time(username=None):
     username = config.config_local['shared_user']
-    # if not username:
-    #     username = os.getlogin()
+    if not username:
+        username = os.getlogin()
     users, nusers, _ = win32net.NetUserEnum(None, 2)
 
     for user in users:
