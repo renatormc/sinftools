@@ -11,6 +11,8 @@ from helpers import user_manage
 import os
 
 
+
+
 scheduler = APScheduler()
 
 def delete_output_files():
@@ -71,7 +73,9 @@ def kick_anonimous():
     if not who or not who['timestamp']:
         return
     if (who['name'] == 'Alguém' and datetime.now() - who['timestamp']  > timedelta(minutes=1)):
-        os.system("tsdiscon")
+        id = user_manage.get_session_id_local()
+        if id:
+            os.system(f"tsdiscon {id}")
 
 
 

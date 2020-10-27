@@ -36,6 +36,22 @@ def get_last_logon_time(username=None):
         except OSError:
             return
 
+def get_session_id_local():
+    cmd = "query session"
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    output, err = p.communicate()
+    p_status = p.wait()
+    text = output.decode("utf-8")
+    lines = text.split("\n")
+    for line in lines:
+        if ("Ativo" in line or "Active" in line) and ("rdp" in line or "console" in line):
+            parts = line.split()
+            try:
+                return int(parts[2])
+            except ValueError:
+                pass
+            
+
 
 def compare_timestamp(t1, t2):
     return abs(t2-t1) < timedelta(seconds=30)

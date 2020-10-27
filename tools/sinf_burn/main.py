@@ -63,7 +63,7 @@ class Burner:
             name = f"{name}_{disk['subfolder']}"
         name = name[:16]
         print(
-            f"Iniciando gravação do conteúdo da pasta \"{folder}\", cópia {disk['copy']}, nome do disco: {name}")
+            f"Iniciando gravação do conteúdo da pasta \"{folder}\", cópia {disk['copy']}, nome do disco: {name}, velocidade: {self.speed}x")
         folder = self.folder / disk['subfolder']
         args = [
             str(cdburn_exe),
@@ -72,9 +72,12 @@ class Burner:
             f"-folder[\\]:{str(folder.absolute())}",
             f"-name:{name}",
             "-verify",
-            f"-speed:{self.speed}"
+            f"-speed:{self.speed}",
+            f"-udf:1.02"
         ]
         p = subprocess.Popen(args)
+        print("\n")
+        print(" ".join(args))
         p.wait()
 
     def burn(self):
