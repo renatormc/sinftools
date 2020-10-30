@@ -1,3 +1,3 @@
 @echo off
 set PYTHONPATH=%SINFTOOLS%\tools\libs && ^
-"%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\report_writer\main.py" %*
+"%SINFTOOLS%\extras\Python\python.exe" "%SINFTOOLS%\tools\sinf_laudo\main.py" %*
