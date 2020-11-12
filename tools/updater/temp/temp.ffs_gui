@@ -43,7 +43,7 @@
         <FolderPairs>
             <Pair>
                 <Left>%SINFTOOLS%</Left>
-                <Right>\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2_beta</Right>
+                <Right>\\10.129.3.14\compartilhada\SOFTWARE\sinftools_2</Right>
             </Pair>
         </FolderPairs>
         <OnCompletion/>
