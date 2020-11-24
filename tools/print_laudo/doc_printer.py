@@ -23,7 +23,9 @@ class DocPrinter(object):
         import time
         doc = self.word.Documents.Open(str(doc.absolute()), ReadOnly=True)
         if n_copies > 0:
-            self.word.ActivePrinter = self.printers['duplex'] if duplex else self.printers['simple']
+            printer = self.printers['duplex'] if duplex else self.printers['simple']
+            self.word.ActivePrinter = printer
+            print(f"Imprimindo na impressora {printer}")
             for i in range(n_copies):
                 doc.PrintOut(Copies=1)
                 time.sleep(0.5)

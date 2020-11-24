@@ -45,6 +45,7 @@ def main(name):
     (path / "extracoes").mkdir()
     (path / "laudo").mkdir()
     (path / "midia").mkdir()
+    (path / "fotos").mkdir()
     for name, n in folders_create.items():
         for i in range(n):
             (path / f"extracoes/{name}{i+1}").mkdir()
