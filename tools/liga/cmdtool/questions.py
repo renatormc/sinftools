@@ -11,12 +11,12 @@ def get_delivery_options(answers):
     return options
 
 def choose_action():
-    options = {f"Conectar ao servidor {key}": key for key, value in config.servers.items()}
-    options['Ver quem está conectado no momento'] = 'who'
+    options = {f"Conectar ao servidor {key} ({value['ip']})": key for key, value in config.servers.items()}
+    # options['Ver quem está conectado no momento'] = 'who'
     questions = [
         {
             'type': 'list',
-            'name': 'server',
+            'name': 'action',
             'message': 'O que deseja fazer?',
             'choices': list(options.keys())
         }
@@ -24,7 +24,7 @@ def choose_action():
     
 
     answers = prompt(questions, style=custom_style_2)
-    return answers['server']
+    return answers['action']
 
 
 def mark():
