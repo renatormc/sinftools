@@ -10,20 +10,21 @@ def get_delivery_options(answers):
         options.append('helicopter')
     return options
 
-def choose_server():
+def choose_action():
+    options = {f"Conectar ao servidor {key}": key for key, value in config.servers.items()}
+    options['Ver quem está conectado no momento'] = 'who'
     questions = [
         {
             'type': 'list',
             'name': 'server',
-            'message': 'Selecione um servidor',
-            'choices': [key for key in config.servers]
+            'message': 'O que deseja fazer?',
+            'choices': list(options.keys())
         }
     ]
+    
 
     answers = prompt(questions, style=custom_style_2)
     return answers['server']
-
-
 
 
 def mark():
