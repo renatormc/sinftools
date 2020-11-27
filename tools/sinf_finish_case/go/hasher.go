@@ -197,7 +197,7 @@ func (hasher *Hasher) run() {
 	if err != nil {
 		logger.Fatalf("Failed to open hash file: %v", err)
 	}
-	fmt.Printf("Hash do hash: \n%s", res)
+	fmt.Printf("Hash do hash: \n%s\n", res)
 	logger.Infof("Finalizado")
 	logger.Infof("Hash do hash: %s", res)
 }
