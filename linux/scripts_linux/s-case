@@ -1,0 +1,2 @@
+#!/bin/bash
+s-py "$SINFTOOLS/tools/folder_scripts/open_case.py" $@

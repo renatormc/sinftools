@@ -20,7 +20,7 @@ def main(name):
         return
     path = cases_folder / name
     if path.exists():
-        os.system(f"explorer \"{path}\"")
+        os.system(f"s-file-manager \"{path}\"")
         return
     else:
         res = input("Caso inexistente. Deseja criar? (S/n): ")
@@ -49,7 +49,7 @@ def main(name):
     for name, n in folders_create.items():
         for i in range(n):
             (path / f"extracoes/{name}{i+1}").mkdir()
-    os.system(f"explorer \"{path}\"")
+    os.system(f"s-file-manager \"{path}\"")
 
 
 if __name__ == '__main__':
