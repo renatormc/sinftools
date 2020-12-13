@@ -4,7 +4,7 @@ import os
 import jwt
 from datetime import datetime
 from sinf.sinftools_config import SinfToolsConfig
-from sinf import sinf_con
+from sinf import sinf_configs
 
 stc = SinfToolsConfig()
 
@@ -33,7 +33,7 @@ if not sqlite_path.parent.exists():
 logfile = sinftools_dir / "var/fila.log"
 database_url = f"sqlite:///{sqlite_path}"
 
-servers = {key: {'url': f"http://{value['ip']}:{value['port']}", 'ip': value['ip']} for key, value in config_local['servers'].items()}
+servers = {key: {'url': f"http://{value['ip']}:{value['port']}", 'ip': value['ip']} for key, value in sinf_configs.servers.items()}
 timeout = 5
 
 this_server_config = None
