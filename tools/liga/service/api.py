@@ -1,9 +1,10 @@
+import shutil
 from flask import Blueprint, jsonify, request, abort, make_response
 from schemas import *
 from models import *
 from database import db_session
 import subprocess
-from .helpers import get_connected, set_connected
+from .helpers import get_connected, set_connected, save_profile
 from helpers.updater import Updater
 from helpers.process_manager import ProcessManager
 from markers import get_scannable_drives
@@ -150,6 +151,7 @@ def update_users():
 @api.route("/sync-iped-profiles", methods=("POST",))
 @jwt_required
 def sync_iped_profiles():
+    save_profile(request.files['file'])
     return "ok"
 
 # @api.route("/block-server/<username>")

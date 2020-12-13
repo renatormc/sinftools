@@ -5,6 +5,7 @@ import jwt
 from datetime import datetime
 from sinf.sinftools_config import SinfToolsConfig
 from sinf import sinf_configs
+import tempfile
 
 stc = SinfToolsConfig()
 
@@ -80,3 +81,7 @@ except:
 recycle_bin = sinftools_dir / "var/lixeira"
 if not recycle_bin.exists():
     recycle_bin.mkdir()
+
+TEMPFOLDER = Path(tempfile.gettempdir(), "liga")
+if not TEMPFOLDER.exists():
+    TEMPFOLDER.mkdir()
