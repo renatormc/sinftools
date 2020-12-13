@@ -1,5 +1,4 @@
 {
-    "python.pythonPath": "${env:SINFTOOLS}\\extras\\Python\\python.exe",
     "workbench.colorTheme": "Visual Studio Dark",
     "workbench.preferredDarkColorTheme": "Visual Studio Dark"
 }

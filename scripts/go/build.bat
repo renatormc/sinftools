@@ -1,1 +1,2 @@
-go build -ldflags -H=windowsgui %*
+@echo off
+s-py build.py %*

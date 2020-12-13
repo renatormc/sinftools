@@ -1,4 +1,3 @@
 {
-    "python.pythonPath": "${env:SINFTOOLS}\\extras\\Python\\python.exe",
     "workbench.colorTheme": "Solarized Dark"
 }

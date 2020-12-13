@@ -147,6 +147,11 @@ def update_users():
     return "ok"
 
 
+@api.route("/sync-iped-profiles", methods=("POST",))
+@jwt_required
+def sync_iped_profiles():
+    return "ok"
+
 # @api.route("/block-server/<username>")
 # @api.route("/block-server")
 # @jwt_required
