@@ -4,7 +4,7 @@ from database import db_connect
 from datetime import datetime, timedelta
 from helpers.logger import logging
 import shutil
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from helpers.process_manager import ProcessManager
 import config as config_
 from helpers import user_manage
@@ -34,7 +34,14 @@ def delete_old_processes():
     engine, db_session = db_connect()
     try:
         limit_date = datetime.now() - timedelta(days=7)
-        procs = db_session.query(Process).filter(Process.finish < limit_date).all()
+        procs = db_session.query(Process).filter(
+            or_(
+                Process.finish < limit_date,
+                and_(
+                    Process.status.in_(["ERRO", "CANCELADO"]),
+                    Process.start_waiting < limit_date
+                )
+            )).all()
         for proc in procs:
             script = Path(proc.script)
             try:
@@ -56,6 +63,7 @@ def delete_old_processes():
         print(e)
     finally:
         engine.dispose()
+
 
 def check_processes():
     engine, db_session = db_connect()
