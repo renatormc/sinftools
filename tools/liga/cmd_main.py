@@ -18,25 +18,25 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument('server', required=False)
-def ts(server):
+@click.argument('action', required=False)
+def ts(action):
     try:
         token_path = config.sinftools_dir / "var/sinftoken"
         requester = Requester(token=token_path)
-        if not server:
-            server = questions.choose_server()
+        if not action:
+            action = questions.choose_action()
         else:
-            if server == "ba":
-                server = "batman"
-            elif server == "sm":
-                server = "superman"
-            elif server == "mm":
-                server = "mulher_maravilha"
+            if action == "ba":
+                action = "batman"
+            elif action == "sm":
+                action = "superman"
+            elif action == "mm":
+                action = "mulher_maravilha"
             else:
-                print(f"Servidor {server} não existe. Digite ba, sm ou mm.")
+                print(f"Servidor {action} não existe. Digite ba, sm ou mm.")
                 sys.exit(1)
         
-        url = f"{config.servers[server]['url']}/who-is-connected"
+        url = f"{config.servers[action]['url']}/who-is-connected"
         response = requester.get(url)
         if response.status_code == 401:
             input("Acesso não autorizado. Problema com o token.")
@@ -48,7 +48,7 @@ def ts(server):
                 return
 
         try:
-            url = f"{config.servers[server]['url']}/blocking-user"
+            url = f"{config.servers[action]['url']}/blocking-user"
             response = requester.get(url)
             if response.status_code == 401:
                 input("Acesso não autorizado. Problema com o token.")
@@ -64,7 +64,7 @@ def ts(server):
         except json.decoder.JSONDecodeError:
             pass
 
-        url = f"{config.servers[server]['url']}/connection-intent"
+        url = f"{config.servers[action]['url']}/connection-intent"
         # who = os.getlogin()
         response = requester.post(url)
 
@@ -72,7 +72,7 @@ def ts(server):
         template = config.app_dir / "cmdtool/connection_files/template.rdp"
         rdpfile = config.app_dir / "cmdtool/connection_files/rdpfile.rdp"
         text = template.read_text(encoding="utf-16-le")
-        ip, port = parse_ip_port(config.servers[server]['url'])
+        ip, port = parse_ip_port(config.servers[action]['url'])
         text = text.replace("$server_ip", ip)
         rdpfile.write_text(text, encoding="utf-16-le")
 

@@ -24,7 +24,7 @@ def choose_action():
     
 
     answers = prompt(questions, style=custom_style_2)
-    return answers['action']
+    return options[answers['action']]
 
 
 def mark():
