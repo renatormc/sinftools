@@ -62,7 +62,9 @@ def save_profile(file):
     old = folder.parent / f"{folder.name}.old"
     if old.exists():
         shutil.rmtree(old)
-    shutil.move(folder, old)
+    if folder.exists():
+        shutil.move(folder, old)
     with zipfile.ZipFile(str(zippath)) as zip_ref:
         zip_ref.extractall(folder)
-    shutil.rmtree(old)
+    if old.exists():
+        shutil.rmtree(old)
