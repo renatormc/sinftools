@@ -13,6 +13,7 @@ func main() {
 	parser := argparse.NewParser("sinf-finish-case", "Calculates hash and other things")
 	nWorkers := parser.Int("w", "workers", &argparse.Options{Default: 4, Help: "Number of workers"})
 	hashHash := parser.Flag("s", "hh", &argparse.Options{Default: false, Help: "Only hash hash"})
+	noPortable := parser.Flag("n", "no-portable", &argparse.Options{Default: false, Help: "Do not put portable"})
 	err := parser.Parse(os.Args)
 	if err != nil {
 		fmt.Print(parser.Usage(err))
@@ -34,7 +35,7 @@ func main() {
 
 		defer logger.Init("LoggerExample", false, true, lf).Close()
 
-		hasher := Hasher{root: ".", hashFile: ".\\hash.txt", nWorkers: *nWorkers}
+		hasher := Hasher{root: ".", hashFile: ".\\hash.txt", nWorkers: *nWorkers, putPortable: !*noPortable}
 		hasher.run()
 	}
 

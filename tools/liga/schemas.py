@@ -14,5 +14,5 @@ class ProcessSchema(Schema):
     start_waiting = fields.DateTime(format="%d/%m/%Y %H:%M:%S")
     finish = fields.DateTime(format="%d/%m/%Y %H:%M:%S")
     status = fields.Str()
-    depencies = fields.Function(lambda obj: obj.dependencies_ids)
+    dependencies = fields.Function(lambda obj: obj.dependencies_ids)
     script_stem  = fields.Function(lambda obj: Path(obj.script).stem)

@@ -17,10 +17,11 @@ import (
 //Hasher df
 type Hasher struct {
 	// f         *os.File
-	onlyCount bool
-	nFiles    int64
-	root      string
-	hashFile  string
+	onlyCount   bool
+	putPortable bool
+	nFiles      int64
+	root        string
+	hashFile    string
 	// pBar      *pb.ProgressBar
 	nWorkers int
 	jobs     chan string
@@ -102,7 +103,9 @@ func (hasher *Hasher) hashFolderIpedResults(path string) {
 	if fileExists(item) {
 		hasher.calcHashFile(item)
 	}
-	putPortable(path)
+	if hasher.putPortable {
+		putPortable(path)
+	}
 
 }
 

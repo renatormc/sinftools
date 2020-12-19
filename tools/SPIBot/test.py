@@ -1,4 +1,7 @@
+from com.dtmilano.android.viewclient import ViewClient
 
-from uteis.idlex import print_safe
-
-print_safe("This works in IDLE too! \U0001F44D")
+device, serialno = ViewClient.connectToDeviceOrExit()
+ViewClient.sleep(2)
+vc = ViewClient(device, serialno)
+# vc.click(50, 1370)
+# vc.writeImageToFile("c:\\temp\\teste.png")
