@@ -1,0 +1,7 @@
+printer_name: SINF
+printer_duplex_name: SINFDUPLEX
+pasta_dados: D:\laudos\trabalhando
+pasta_laudos_trabalhando: D:\laudos\trabalhando
+libreoffice_python: C:\Program Files\LibreOffice\program\python.exe
+contexto_local:
+    relator: Renato Martins Costa
