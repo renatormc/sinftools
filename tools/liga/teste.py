@@ -1,4 +1,3 @@
-from helpers.user_manage import get_session_id_local
+import os
 
-id = get_session_id_local()
-print(id)
+print(os.name)

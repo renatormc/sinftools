@@ -24,3 +24,5 @@ ATENÇÃO: No linux apenas em fase de teste. Apenas algumas ferramentas funciona
     Adicione a linha:
         Defaults env_keep += "SINFTOOLS"
     Inclui o endereço absoluto da pasta scripts_linux em "secure_path"
+
+

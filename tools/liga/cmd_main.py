@@ -8,7 +8,7 @@ from models import *
 from sinf_requests import Requester
 from sinf_requests import TokenExpiredException, TokenNoFoundException
 import json
-from helpers.uteis import parse_ip_port
+from helpers.cmd import connect_rdp
 import sys
 
 @click.group()
@@ -67,17 +67,7 @@ def ts(action):
         url = f"{config.servers[action]['url']}/connection-intent"
         # who = os.getlogin()
         response = requester.post(url)
-
-        # Generate connection file
-        template = config.app_dir / "cmdtool/connection_files/template.rdp"
-        rdpfile = config.app_dir / "cmdtool/connection_files/rdpfile.rdp"
-        text = template.read_text(encoding="utf-16-le")
-        ip, port = parse_ip_port(config.servers[action]['url'])
-        text = text.replace("$server_ip", ip)
-        rdpfile.write_text(text, encoding="utf-16-le")
-
-        windir = os.getenv("windir")
-        Popen(f"{windir}\\system32\\mstsc.exe \"{rdpfile}\"")
+        connect_rdp(action)
     except ConnectionError:
         print("Não foi possível se conectar ao serviço no servidor.")
     except TokenExpiredException:

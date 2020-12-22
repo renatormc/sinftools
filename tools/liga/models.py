@@ -8,7 +8,6 @@ import json
 from sqlalchemy.orm import relationship
 
 
-
 class User(Base):
     __tablename__ = 'user'
     id = sa.Column(sa.Integer, primary_key=True)
@@ -23,16 +22,16 @@ class User(Base):
     def __str__(self):
         return self.name
 
-    
-
 
 class Dependecy(Base):
     __tablename__ = 'dependency'
     id = sa.Column(sa.Integer, primary_key=True)
     blocked_id = sa.Column(sa.Integer, sa.ForeignKey("process.id"))
     blocker_id = sa.Column(sa.Integer, sa.ForeignKey("process.id"))
-    blocked = relationship("Process", foreign_keys=[blocked_id], backref="dependencies_as_blocked")
-    blocker = relationship("Process", foreign_keys=[blocker_id], backref="dependencies_as_blocker")
+    blocked = relationship("Process", foreign_keys=[
+                           blocked_id], backref="dependencies_as_blocked")
+    blocker = relationship("Process", foreign_keys=[
+                           blocker_id], backref="dependencies_as_blocker")
 
     def __str__(self):
         return f"{self.blocker_id}-{self.blocked_id}"
