@@ -7,7 +7,7 @@ ATENÇÃO: No linux apenas em fase de teste. Apenas algumas ferramentas funciona
     export PATH=$PATH:$SINFTOOLS/linux/scripts_linux
 3- Crie um ambiente virtual na pasta $SINFTOOLS
 
-    virtualenv venv --python=python3
+    virtualenv --system-site-packages venv --python=python3
 
 4- Ative o ambiente virtual:
 
@@ -24,5 +24,11 @@ ATENÇÃO: No linux apenas em fase de teste. Apenas algumas ferramentas funciona
     Adicione a linha:
         Defaults env_keep += "SINFTOOLS"
     Inclui o endereço absoluto da pasta scripts_linux em "secure_path"
+
+7- Instalar uno para utilizar com libreoffice
+    sudo apt-get install libreoffice-script-provider-python
+    
+
+
 
 
