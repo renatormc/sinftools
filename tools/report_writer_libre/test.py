@@ -4,6 +4,8 @@ from uno_handler import UnoHandler
 handler = UnoHandler()
 handler.connect()
 handler.open_doc("/media/renato/linux_data/temp/laudo.odt")
+handler.pos_process()
+handler.save_close()
 
 # handler = OdtHandler("generico", folder="/media/renato/linux_data/temp")
 
