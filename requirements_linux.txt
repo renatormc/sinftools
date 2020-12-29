@@ -15,7 +15,7 @@ clipboard==0.0.4
 colorama==0.4.1
 command-not-found==0.3
 contextlib2==0.6.0
-cryptography==2.9.2
+cryptography==3.2
 cupshelpers==1.0
 dbus-python==1.2.16
 decorator==4.4.2
