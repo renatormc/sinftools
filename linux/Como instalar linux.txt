@@ -25,8 +25,9 @@ ATENÇÃO: No linux apenas em fase de teste. Apenas algumas ferramentas funciona
         Defaults env_keep += "SINFTOOLS"
     Inclui o endereço absoluto da pasta scripts_linux em "secure_path"
 
-7- Instalar uno para utilizar com libreoffice
+7- Instalar dependencias
     sudo apt-get install libreoffice-script-provider-python
+    sudo apt install android-tools-adb android-tools-fastboot
     
 
 

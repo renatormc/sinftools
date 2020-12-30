@@ -6,6 +6,7 @@ from datetime import datetime
 from secretary import Renderer
 import config
 import models
+from uno_handler import UnoHandler
 
 
 class OdtHandler:
@@ -28,7 +29,17 @@ class OdtHandler:
         destfile = self.folder / filename if filename else self.folder / f"{template.stem}.odt"
         with destfile.open("wb") as f:
             f.write(result)
+        self.pos_process(destfile)
         return destfile
+
+    def pos_process(self, path):
+        hd = UnoHandler()
+        hd.connect()
+        hd.open_doc(path)
+        hd.pos_process()
+        hd.save_close()
+
+# handler.open_doc("/media/renato/linux_data/temp/laudo.odt")
 
 
     def render(self, context):

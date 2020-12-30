@@ -87,6 +87,10 @@ class GlobalFunctions:
     def join_path(*args):
         return os.path.join(*args)
 
+    @staticmethod
+    def pic(path, width):
+        return f"@pic({path},{width})"
+
 
     
 

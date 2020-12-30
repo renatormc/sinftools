@@ -97,6 +97,7 @@ pydbus==0.6.0
 pyexcel-io==0.5.20
 pyexcel-ods==0.5.6
 pyfiglet==0.8.post1
+pygame==1.9.6
 Pygments==2.6.1
 PyGObject==3.36.0
 PyInquirer==1.0.3
