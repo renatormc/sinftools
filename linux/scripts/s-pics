@@ -1,0 +1,2 @@
+#!/bin/bash
+s-py "$SINFTOOLS/tools/sinfpics/cmd.py" $@

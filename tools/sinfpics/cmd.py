@@ -39,8 +39,9 @@ elif option == "apk":
     shutil.copy(apk, Path(".") / apk.name)
     print("O arquivo apk foi copiado para sua pasta corrente. Você pode utilizá-lo para instalar o app no seu aparelho.")
 elif option == "copy":
-    subprocess.run(['cmd', '/c', 's-adb', 'pull',
-                    '/sdcard/Pictures/sinfpics', 'sinfpics'])
+    os.system("adb pull /sdcard/Pictures/sinfpics sinfpics")
+    # subprocess.run(['adb', 'pull',
+    #                 '/sdcard/Pictures/sinfpics', 'sinfpics'], shell=True)
 elif option == "upload":
     instruct_continue("Para que este procedimento funcione é necessário que:\n1- As fotos estejam nomeadas no padrão exigido e o terminal aberto na pasta que contém as fotos. Consulte o tutorial de como nomear fotos e objetos no sinfweb.\n2- A perícia para a qual você irá fazer o upload esteja no seu nome como relator principal ou como outro relator no sinfweb.\n3- Você já tenha o token de acesso em sua máquina, caso não tenha vá até o sinfweb para obtê-lo.")
     folder = Path(".")
