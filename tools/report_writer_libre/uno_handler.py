@@ -36,7 +36,7 @@ class UnoHandler:
     def open_doc(self, path, hidden=False):
         path = Path(path)
         self.doc = self.desktop.loadComponentFromURL(
-            path.as_uri(), "_blank", 0, dictToProperties({"Hidden": hidden}))
+            path.absolute().as_uri(), "_blank", 0, dictToProperties({"Hidden": hidden}))
 
     def save_close(self):
         self.doc.storeToURL(self.doc.getURL(), ())
@@ -75,15 +75,4 @@ class UnoHandler:
             args = [arg.strip() for arg in args]
             self.replace_action(action, args, selFound)
 
-    def read_vars(self):
-        vars = {}
-        sheet = self.doc.Sheets["vars"]
-        n_rows = sheet.getRows().getCount()
-        for i in range(n_rows):
-            name = sheet.getCellByPosition(0, i).getString().strip()
-            if not name:
-                break
-            type_ = sheet.getCellByPosition(2, i).getString().strip()
-            cell = sheet.getCellByPosition(1, i)
-            vars[name] = cell.getString()
-        return vars
+   

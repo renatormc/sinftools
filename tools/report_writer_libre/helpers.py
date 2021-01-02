@@ -3,6 +3,7 @@ from pathlib import Path
 import config
 import shutil
 from sinf_pics_helpers import NameAnalyzer
+from odt_handler import OdtHandler
 
 def analize_pics():
     with open("data.yaml", 'r') as f:
@@ -41,3 +42,8 @@ def get_objects_from_pics(folder):
             {'name': key, 'report_name': f"Evidência {value['number']}",'number': value['number'], 'pics': value['pics'], 'pics_files': value['pics_files']})
     items.sort(key=lambda x: x['number'])
     return items
+
+
+def gen_laudo(context, folder="."):
+    handler = OdtHandler("generico", folder=folder)
+    handler.render(context)
