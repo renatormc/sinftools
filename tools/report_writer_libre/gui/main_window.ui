@@ -67,6 +67,46 @@
       <item row="4" column="1">
        <widget class="QLineEdit" name="ledDataEntrada"/>
       </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="ocorrNciaODINLabel">
+        <property name="text">
+         <string>Ocorrência ODIN</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="ledOcorrenciaOdin"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="autoridadeLabel">
+        <property name="text">
+         <string>Autoridade</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="ledAutoridade"/>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="dataOcorrNciaLabel">
+        <property name="text">
+         <string>Data ocorrência</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLineEdit" name="ledDataOcorrencia"/>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="rEvisorLabel">
+        <property name="text">
+         <string>Revisor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLineEdit" name="ledRevisor"/>
+      </item>
      </layout>
     </item>
     <item>

@@ -5,6 +5,7 @@ import os
 # stc = SinfToolsConfig()
 
 app_dir = Path(os.path.dirname(os.path.realpath(__file__)))
+sinftools_dir = Path(os.getenv("SINFTOOLS"))
 
 models_folder = app_dir / "models"
 

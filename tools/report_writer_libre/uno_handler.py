@@ -43,7 +43,6 @@ class UnoHandler:
         self.doc.close(True)
 
     def __add_image(self, path, width, cur):
-        print(type(cur))
         path = Path(path).absolute()
         if not path.exists():
             print(f"File {path} not existent")
