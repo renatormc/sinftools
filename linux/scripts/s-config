@@ -1,5 +1,2 @@
 #!/bin/bash
-configFolder=$SINFTOOLS/var/config
-if !(nautilus $configFolder); then
-    nemo $configFolder
-fi
+s-file-manager $SINFTOOLS/var/config

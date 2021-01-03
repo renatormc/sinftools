@@ -6,6 +6,9 @@ exists()
 if exists nautilus; then
 nautilus $1 &
 exists
+elif exists dolphin; then
+dolphin $1 &
+exists
 else
 nemo $1 &
 exists
