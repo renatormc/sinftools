@@ -1,0 +1,2 @@
+#!/bin/bash
+s-py ./gui/build.py && s-py main.py

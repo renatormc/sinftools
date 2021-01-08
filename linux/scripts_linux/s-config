@@ -1,5 +1,0 @@
-#!/bin/bash
-configFolder=$SINFTOOLS/var/config
-if !(nautilus $configFolder); then
-    nemo $configFolder
-fi
