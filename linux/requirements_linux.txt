@@ -40,7 +40,7 @@ kombu==4.6.11
 lazy-object-proxy==1.4.3
 lml==0.0.9
 lockfile==0.12.2
-lxml==4.5.1
+lxml==4.6.2
 markdown2==2.3.9
 MarkupSafe==1.1.1
 marshmallow==3.6.1
