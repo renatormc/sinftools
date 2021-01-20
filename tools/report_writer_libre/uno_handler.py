@@ -8,6 +8,8 @@ from subprocess import Popen
 import time
 import re
 from libre_helpers import *
+import config
+import constants
 
 
 class UnoHandler:
@@ -42,6 +44,9 @@ class UnoHandler:
         self.doc.storeToURL(self.doc.getURL(), ())
         self.doc.close(True)
 
+    def close(self):
+        self.doc.close(True)
+
     def __add_image(self, path, width, cur):
         path = Path(path).absolute()
         if not path.exists():
@@ -74,4 +79,25 @@ class UnoHandler:
             args = [arg.strip() for arg in args]
             self.replace_action(action, args, selFound)
 
-   
+    def print(self, n=1, duplex=False):
+        printer = self.doc.getPrinter()
+        printer[0].Value = config.printer_name
+        self.doc.setPrinter(printer)
+
+        duplex_mode = constants.DuplexMode.LONGEDGE if duplex else constants.DuplexMode.OFF
+
+        out_props = (
+            PropertyValue("Wait", 0, True, 0),
+            PropertyValue("DuplexMode", 0, duplex_mode, 0),
+            PropertyValue("CopyCount", 0, n, 0),
+        )
+
+        self.doc.print(out_props)
+
+
+    def save_pdf(self):
+        url = self.doc.getURL()
+        path = Path(url.replace("file://", ""))
+        url = path.with_suffix(".pdf").as_uri()
+        property = (PropertyValue( "FilterName" , 0, "writer_pdf_Export" , 0 ),)
+        self.doc.storeToURL(url, property)
