@@ -34,7 +34,10 @@ option = options[answers['option']]
 
 if option == "install":
     instruct_continue("1- Habilite usb debug em seu aparelho\n2- Conecte o aparelho utiliando cabo usb em sua máquina\n3- Escolha \"continuar\" para prosseguir com a intalação")
-    subprocess.run(['cmd', '/c', 's-adb', 'install', str(apk)])
+    if os.name == "nt":
+        subprocess.run(['cmd', '/c', 's-adb', 'install', str(apk)])
+    else:
+        subprocess.run(['adb', 'install', str(apk)])
 elif option == "apk":
     shutil.copy(apk, Path(".") / apk.name)
     print("O arquivo apk foi copiado para sua pasta corrente. Você pode utilizá-lo para instalar o app no seu aparelho.")

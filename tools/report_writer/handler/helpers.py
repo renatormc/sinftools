@@ -2,6 +2,7 @@ from pathlib import Path
 from com.sun.star.beans import PropertyValue
 from datetime import datetime
 
+
 def compile_path(doc):
     path = Path(doc.getURL().replace("file:///", ""))
     path = path.parent / f"compiled{path.suffix}"
@@ -11,11 +12,12 @@ def compile_path(doc):
 
 def save_pdf(doc, url):
     property = (
-    PropertyValue( "FilterName" , 0, "writer_pdf_Export" , 0 ),
+        PropertyValue("FilterName", 0, "writer_pdf_Export", 0),
     )
     doc.storeToURL(url, property)
 
-def dictToProperties(dictionary): #normally I'd just import this
+
+def dictToProperties(dictionary):  # normally I'd just import this
     """
     Utitlity to convert a dictionary to properties
     """
@@ -26,6 +28,7 @@ def dictToProperties(dictionary): #normally I'd just import this
         prop.Value = dictionary[key]
         props.append(prop)
     return tuple(props)
+
 
 def convert_data(value, type):
     if type == 'string':
@@ -45,5 +48,3 @@ def convert_data(value, type):
             return datetime.strptime(value, "%d/%m/%Y")
         except:
             return None
-
- 
