@@ -10,6 +10,8 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-m', '--max-depth', type=int, default=2,
                     help='Max depth to search e01 files in order to make iped results portable in relation of sleuth.db parent folder.')
 parser.add_argument('item', nargs='?', default=".", help='Directory or file to be hashed')
+parser.add_argument("-v", "--verbose", help="increase output verbosity",
+                    action="store_true")
 
 args = parser.parse_args()
 
@@ -17,6 +19,7 @@ config.max_depth = args.max_depth
 
 hasher = Hasher()
 hasher.root = args.item
+hasher.verbose = args.verbose
 if hasher.root.is_file():
     res = hasher.sha512(hasher.root, extra=True)
     print(res)

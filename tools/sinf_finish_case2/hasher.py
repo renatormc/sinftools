@@ -21,6 +21,7 @@ class Hasher:
         self.root = "."
         self.portable_handler = PortableHandler()
         self.pbar = None
+        self.verbose = False
 
     @property
     def root(self):
@@ -42,6 +43,8 @@ class Hasher:
             self.total += 1
             return
         hash_sha512 = hashlib.sha512()
+        if self.verbose:
+            print(f"Calculando: \"{path}\"")
         with path.open("rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_sha512.update(chunk)

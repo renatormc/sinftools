@@ -19,6 +19,6 @@ def is_e01_partial(path: Path):
     if re.match(r'.*\.[Ee]0\d+$', path.name):
         first_fragment = path.with_suffix(".E01")
         log = first_fragment.parent / f"{first_fragment.name}.txt"
-        if log.exists():
+        if log.exists() or path.with_suffix(".log"):
             return True
     return False

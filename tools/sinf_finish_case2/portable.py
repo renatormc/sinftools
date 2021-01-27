@@ -1,6 +1,5 @@
 from pathlib import Path
 import sqlite3
-import sys
 import config
 import os
 
@@ -23,7 +22,6 @@ class PortableHandler:
     def put_portable(self, folder: Path, depth=2):
         sleuth_path = folder / "sleuth.db"
         if sleuth_path.exists():
-            print(f"Tornando pasta \"{folder.absolute()}\" portable.")
             conn = sqlite3.connect(str(sleuth_path))
             cursor = conn.cursor()
             cursor.execute("SELECT name, sequence FROM tsk_image_names;")
